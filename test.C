@@ -25,50 +25,32 @@ void split(const string &s, char delim, vector<string> &elems) {
 
 
 
-void getDebutStack(string pid){
-   string commande = "cd /proc/" + pid + " && cat maps | grep '\[stack\]' | cut -d '-' -f1";
-   cout << system(commande.c_str());
+long getDebutStack(string pid){
+	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '\\[stack\\]' | cut -d \"-\" -f1").c_str(), "r");
+	char buffer[16];
+	fgets(buffer, 16, fd);
+	return buffer;  
 }
-void getFinStack(){
-   cout << system("cat maps | grep '\[stack\]' | cut -d ' ' -f1 | cut -d '-' -f2");
+long getFinStack(string pid){
+	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '\\[stack\\]' | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "");
+  
+	char buffer[16];
+	fgets(buffer, 16, fd);
+	return buffer;  
 }
- void getDebutProc(){
-   cout << system("cat maps | grep 'zsh$' | tail -1 | cut -d ' ' -f1 | cut -d '-' -f2");
+long getDebutProc(string pid){
+	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '"+fichier()+"$' | tail -1 | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
+	
+	char buffer[16];
+	fgets(buffer, 16, fd);
+	return buffer;  
 }
-void getFinProc(){
-   cout << system("cat maps | grep 'zsh$' | tail -1 | cut -d ' ' -f1 | cut -d '-' -f2");
-}
-
-void memproc(string nom, string pid, vector<string> &mem){
-   string path = "/proc/" + pid + "/maps";
-   cout << "path : " << path << endl;
-   FILE* fichier = fopen(path.c_str(), "r");
-   if (fichier != NULL) {
-    vector<string> tmp;
-    char addr[40], perms[15], offset[15],dev[15],inode[15],pathname[80];
-    char *addrdebut;
-    char * addrfin;
-    fscanf(fichier,"%s %s %s %s %s",addr,perms,offset,dev,inode);
-    fscanf(fichier,"%s",pathname);
-    printf("1&& : %s %s %s %s %s %s\n",addr,perms,offset,dev,inode,pathname);
-    addrdebut=addr;
-    split(pathname,'/',tmp);
-    cout << nom<< endl;
-    while (tmp.back()==nom) {
-      printf("%s %s %s %s %s %s\n",addr,perms,offset,dev,inode,pathname);
-      addrfin=addr;
-      tmp.clear();
-      fscanf(fichier,"%s %s %s %s %s",addr,perms,offset,dev,inode);
-      fscanf(fichier,"%s", pathname);
-      split(pathname,'/',tmp);
-    }
-    split(addrdebut,'-',tmp);
-    mem.push_back(tmp.front());
-    split(addrfin,'-',tmp);
-    mem.push_back(tmp.back());
-    cout << "start at :" << mem[0]<< " end at : "<< mem[1] << endl;
-    fclose(fichier);
-   }
+long getFinProc(string pid){
+	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '"+fichier(pid)+"$' | tail -1 | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
+	
+	char buffer[16];
+	fgets(buffer, 16, fd);
+	return buffer;  
 }
 
 string fichier(string pid) {
@@ -83,12 +65,11 @@ string fichier(string pid) {
     nom = nom.substr (1,nom.find(")")-1);
  
 
-    //vector<string> ret;// temporaire
-    //memproc(nom,pid,ret);//temporaire
     fclose(fichier);
     return nom;
   }
-  return ":'(";
+  exit(1);
+  return "";
 }
 
 void ls(){
@@ -106,14 +87,16 @@ void ls(){
 
 int main(int argc, char *argv[]){
   if(argc > 1){
-    vector<string>mem;  
-    getDebutStack(argv[1]);
-    string nom = fichier(argv[1]);
-    cout << "le nom du processus : " << fichier(argv[1])<<endl;
-    memproc(nom,argv[1],mem);
+//    vector<string>mem;  
+	string pid = argv[1];
+    cout << "str : " << getDebutStack(pid) << "\tend : " << getFinStack(pid) << endl;
+//    string nom = fichier(argv[1]);
+//    cout << "le nom du processus : " << fichier(argv[1])<<endl;
+//    memproc(nom,argv[1],mem);
   }else{
-     getDebutStack("11");
+    //getDebutStack("11");
     ls();
   }
   return 0;
 }
+
