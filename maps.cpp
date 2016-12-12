@@ -10,6 +10,7 @@
 #include <sstream>
 #include <vector>
 
+
 using namespace std;
 /*
  * split une chaine string avec un delimiter et modifie un vector
@@ -23,35 +24,6 @@ void split(const string &s, char delim, vector<string> &elems) {
    }
 }
 
-
-
-long getDebutStack(string pid){
-	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '\\[stack\\]' | cut -d \"-\" -f1").c_str(), "r");
-	char buffer[16];
-	fgets(buffer, 16, fd);
-	return buffer;  
-}
-long getFinStack(string pid){
-	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '\\[stack\\]' | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "");
-  
-	char buffer[16];
-	fgets(buffer, 16, fd);
-	return buffer;  
-}
-long getDebutProc(string pid){
-	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '"+fichier()+"$' | tail -1 | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
-	
-	char buffer[16];
-	fgets(buffer, 16, fd);
-	return buffer;  
-}
-long getFinProc(string pid){
-	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '"+fichier(pid)+"$' | tail -1 | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
-	
-	char buffer[16];
-	fgets(buffer, 16, fd);
-	return buffer;  
-}
 
 string fichier(string pid) {
   string path = "/proc/" + pid + "/stat";
@@ -72,6 +44,39 @@ string fichier(string pid) {
   return "";
 }
 
+long getDebutStack(string pid){
+	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '\\[stack\\]' | cut -d \"-\" -f1").c_str(), "r");
+	
+	char val[100]; // Stockage du df
+	fscanf(fd,"%s",val);	// recupération du df
+	return strtol(val, 0, 16);  // conversion en long depuis base 16
+}
+
+long getFinStack(string pid){
+	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '\\[stack\\]' | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
+  
+	char val[100];
+	fscanf(fd, "%s", val);
+	return strtol(val,0,16);  
+}
+
+long getDebutProc(string pid){
+	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '"+fichier(pid)+"$' | head -1 | cut -d '-' -f1").c_str(), "r");
+	
+	char val[100];
+	fscanf(fd, "%s", val);
+	return strtol(val,0,16);  
+}
+
+long getFinProc(string pid){
+	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '"+fichier(pid)+"$' | tail -1 | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
+	
+	char val[100];
+	fscanf(fd, "%s", val);
+	return strtol(val,0,16);  
+}
+
+
 void ls(){
   struct dirent *lecture;
   DIR *rep;
@@ -85,18 +90,14 @@ void ls(){
 }
 
 
+// Va disparaitre pour laisser place à un .h + .cpp
 int main(int argc, char *argv[]){
   if(argc > 1){
-//    vector<string>mem;  
 	string pid = argv[1];
-    cout << "str : " << getDebutStack(pid) << "\tend : " << getFinStack(pid) << endl;
-//    string nom = fichier(argv[1]);
-//    cout << "le nom du processus : " << fichier(argv[1])<<endl;
-//    memproc(nom,argv[1],mem);
+    cout << "stk : " << hex << getDebutStack(pid)  << "\tend : " << hex << getFinStack(pid) << endl ;
+	cout << "prg : " << hex << getDebutProc(pid) << "\tend : " << getFinProc(pid) << endl;
   }else{
-    //getDebutStack("11");
     ls();
   }
   return 0;
 }
-
