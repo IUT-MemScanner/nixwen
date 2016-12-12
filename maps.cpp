@@ -25,8 +25,8 @@ void split(const string &s, char delim, vector<string> &elems) {
 }
 
 
-string fichier(string pid) {
-  string path = "/proc/" + pid + "/stat";
+string fichier(long pid) {
+  string path = "/proc/" + to_string(pid) + "/stat";
   FILE* fichier = fopen(path.c_str(), "r");
   if (fichier != NULL) {
     char sub[50] = "";
@@ -36,7 +36,6 @@ string fichier(string pid) {
     string nom = contenu[1];
     nom = nom.substr (1,nom.find(")")-1);
  
-
     fclose(fichier);
     return nom;
   }
@@ -44,32 +43,32 @@ string fichier(string pid) {
   return "";
 }
 
-long getDebutStack(string pid){
-	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '\\[stack\\]' | cut -d \"-\" -f1").c_str(), "r");
+long getDebutStack(long pid){
+	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '\\[stack\\]' | cut -d \"-\" -f1").c_str(), "r");
 	
 	char val[100]; // Stockage du df
 	fscanf(fd,"%s",val);	// recupération du df
 	return strtol(val, 0, 16);  // conversion en long depuis base 16
 }
 
-long getFinStack(string pid){
-	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '\\[stack\\]' | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
+long getFinStack(long pid){
+	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '\\[stack\\]' | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
   
 	char val[100];
 	fscanf(fd, "%s", val);
 	return strtol(val,0,16);  
 }
 
-long getDebutProc(string pid){
-	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '"+fichier(pid)+"$' | head -1 | cut -d '-' -f1").c_str(), "r");
+long getDebutProc(long pid){
+	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '"+fichier(pid)+"$' | head -1 | cut -d '-' -f1").c_str(), "r");
 	
 	char val[100];
 	fscanf(fd, "%s", val);
 	return strtol(val,0,16);  
 }
 
-long getFinProc(string pid){
-	FILE* fd = popen(("cat /proc/"+pid+"/maps | grep '"+fichier(pid)+"$' | tail -1 | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
+long getFinProc(long pid){
+	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '"+fichier(pid)+"$' | tail -1 | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
 	
 	char val[100];
 	fscanf(fd, "%s", val);
@@ -83,7 +82,7 @@ void ls(){
   rep = opendir("/proc" );
   while ((lecture = readdir(rep))) {
     if (isdigit(lecture->d_name[0])){
-      cout << lecture->d_name << " : " << fichier(lecture->d_name) << endl;
+      cout << lecture->d_name << " : " << fichier(strtol(lecture->d_name,0,10)) << endl;
     }
   }
   closedir(rep);
@@ -91,13 +90,13 @@ void ls(){
 
 
 // Va disparaitre pour laisser place à un .h + .cpp
-int main(int argc, char *argv[]){
-  if(argc > 1){
-	string pid = argv[1];
-    cout << "stk : " << hex << getDebutStack(pid)  << "\tend : " << hex << getFinStack(pid) << endl ;
-	cout << "prg : " << hex << getDebutProc(pid) << "\tend : " << getFinProc(pid) << endl;
-  }else{
-    ls();
-  }
-  return 0;
-}
+// int main(int argc, char *argv[]){
+//  if(argc > 1){
+//	string pid = argv[1];
+//    cout << "stk : " << hex << getDebutStack(pid)  << "\tend : " << hex << getFinStack(pid) << endl ;
+//	cout << "prg : " << hex << getDebutProc(pid) << "\tend : " << getFinProc(pid) << endl;
+//  }else{
+//    ls();
+//  }
+//  return 0;
+//}
