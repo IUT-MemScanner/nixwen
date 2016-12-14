@@ -69,7 +69,7 @@ int main (int argc, char *argv[]) {
 	}else{
 		wait(NULL);
 
-		printf("%x\n",getDebutStack(pid));
+		printf("%ld\n",getDebutStack(pid));
 
 		struct user_regs_struct regs;
 		int i = -1;
@@ -80,7 +80,7 @@ int main (int argc, char *argv[]) {
 		long pos = getPos(pid);
 		long last = -1;
 
-		printf("%x", pos);
+		printf("%ld", pos);
 
 		// main loop
 		while(1){
@@ -92,7 +92,7 @@ int main (int argc, char *argv[]) {
 							waitpid(0, &status, WSTOPPED);
 							pos = getPos(pid);
 
-							printf(" (r) %d ", pos);
+							printf(" (r) %ld ", pos);
 						}
 
 						// reset the last pos
@@ -105,17 +105,17 @@ int main (int argc, char *argv[]) {
 				if(res < 0 ){ printf("\nNooooo%d\n (oob)\n", res); exit(0);}
 				waitpid(0, &status, WSTOPPED);
 				pos = getPos(pid);
-				printf(" (o) %d ", pos);
+				printf(" (o) %ld ", pos);
 			// 5a 4a3 77d
 			}
 
 
 			printf("$ ");
 			scanf("%d", &i);
-			printf("pos : 0x%x\t eax : %d\n", getPos(pid), getEax(pid));
+			printf("pos : 0x%ld\t eax : %ld\n", getPos(pid), getEax(pid));
 		}
 
-		printf("Father %d died, child was %d\n",getpid(), pid);
+		printf("Father %d died, child was %ld\n",getpid(), pid);
 	}
 
 
