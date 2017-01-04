@@ -36,8 +36,7 @@ using namespace std;
 
 long getPos(long pid){
 	struct user_regs_struct reg;
-
-	kill(pid, SIGSTOP);
+	
 	ptrace(PTRACE_GETREGS, pid, NULL, &reg);
 
 	#ifdef __x86_64__
@@ -50,7 +49,6 @@ long getPos(long pid){
 long getEax(long pid){
 	struct user_regs_struct reg;
 
-	kill(pid, SIGSTOP);
 	ptrace(PTRACE_GETREGS, pid, NULL, &reg);
 
 	#ifdef __x86_64__
@@ -70,16 +68,10 @@ int main (int argc, char *argv[]) {
 	if(pid==0){
 		int m = ptrace(PTRACE_TRACEME, 0, 0, 0);
 
-		cout << "_1";
-
 		int descF = open("nohup", O_CREAT, S_IRWXU);
-		cout << "_2";
 		if(descF == -1){ exit(255); }
-		cout << "_3";
 		close(STDOUT_FILENO);
-		cout << "_4";
 		dup2(descF, STDOUT_FILENO);
-		cout << "_5";
 		execve(prog, emp, emp);
 
 		kill(getppid(), 9); // If the child fail, kill his father
@@ -99,14 +91,14 @@ int main (int argc, char *argv[]) {
 				cout << "Entrez : ";
 				cin >> i;
 				if(i== 0){ptrace(PTRACE_CONT, pid, NULL, SIGCONT);}
-				else{ 
+				else{ // Caution ! If it happen twice, wait will be stuck ! 
 					kill(pid, SIGSTOP);
 					wait(&status);
 				 }
 
 		}
 
-		printf("Father %d died, child was %d\n",getpid(), pid);
+		cout << "Father "<< getpid() <<" died, child was "<< pid << endl,
 	}
 
 
