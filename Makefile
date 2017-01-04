@@ -8,10 +8,10 @@ EXEC=dbg
 all: $(EXEC)
 
 dbg: dbg.cpp $(OBJS)
-	$(CC) -o $@ $< $(OBJS) $(CFLAGS)
+	$(CC) -o $@ $< $(OBJS) $(LFLAGS)
 
 maps.o: maps.h
-	$(CC) -o $@ $< -c -g $(CFLAGS)
+	$(CC) -o $@ $< $(CFLAGS)
 
 clean:
 	rm -rf *.o
