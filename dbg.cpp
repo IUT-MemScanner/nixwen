@@ -98,7 +98,7 @@ int main (int argc, char *argv[]) {
 
 		}
 
-		cout << "Father "<< getpid() <<" died, child was "<< pid << endl,
+		cout << "Father "<< getpid() <<" died, child was "<< pid << endl;
 	}
 
 
