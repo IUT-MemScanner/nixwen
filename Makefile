@@ -8,8 +8,8 @@ all: $(EXEC)
 dbg: maps.o dbg.cpp
 	$(CC) -o $@ $^ $(CFLAGS)
 
-%.o: %.h
-	$(CC) -o $@ -c $< -W $(CFLAGS)
+maps.o: maps.h
+	$(CC) -o $@ $< -W $(CFLAGS)
 
 clean:
 	rm -rf *.o
