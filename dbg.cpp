@@ -16,8 +16,9 @@
  * =====================================================================================
  */
 
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
 #include <unistd.h>
 #include <sys/types.h>
 #include <wait.h>
@@ -26,7 +27,12 @@
 #include <sys/user.h>
 #include <sys/signal.h>
 
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include "maps.h"
+
+using namespace std;
 
 long getPos(long pid){
 	struct user_regs_struct reg;
@@ -63,61 +69,41 @@ int main (int argc, char *argv[]) {
 
 	if(pid==0){
 		int m = ptrace(PTRACE_TRACEME, 0, 0, 0);
-		execve(prog, emp, emp);
-		kill(getppid(), 9);
-	}else{
-		wait(NULL);
 
-		printf("%x\n",getDebutStack(pid));
+		cout << "_1";
+
+		int descF = open("nohup", O_CREAT, S_IRWXU);
+		cout << "_2";
+		if(descF == -1){ exit(255); }
+		cout << "_3";
+		close(STDOUT_FILENO);
+		cout << "_4";
+		dup2(descF, STDOUT_FILENO);
+		cout << "_5";
+		execve(prog, emp, emp);
+
+		kill(getppid(), 9); // If the child fail, kill his father
+	}else{
+		wait(&status);
+	
+		cout << "Status de wait : " << status << endl;
+
+		cout << "Stack : " << hex << getDebutStack(pid) << endl;
 
 		struct user_regs_struct regs;
 		int i = -1;
 
-		// Assert that the program have been stoped
-		printf("pid %d\n",pid);	
+		cout << "pid" << pid << endl;	
 		// main loop
 		while(1){
-			kill(pid, SIGSTOP);
-			waitpid(0, &status, WSTOPPED);
-			
+				cout << "Entrez : ";
+				cin >> i;
+				if(i== 0){ptrace(PTRACE_CONT, pid, NULL, SIGCONT);}
+				else{ 
+					kill(pid, SIGSTOP);
+					wait(&status);
+				 }
 
-			ptrace(PTRACE_GETREGS, pid, NULL, &regs);
-
-			#ifdef __x86_64__
-				printf("\nx %x %x\n", regs.rsp,ptrace(PTRACE_PEEKUSER, pid, regs.rsp,0));
-			#elif defined __i386__
-				printf("\nx %x %x\n", regs.rsp,ptrace(PTRACE_PEEKUSER, pid, regs.esp,0));
-			#endif
-
-			int res = ptrace(PTRACE_CONT, pid, NULL, NULL);
-			if(res < 0 ){ printf("\nNooooo%d\n (oob)\n", res); exit(0);}
-
-
-//						while(last == pos){
-//							int res = ptrace(PTRACE_SINGLESTEP, pid, NULL, NULL);
-//							if(res < 0 ){ printf("\nNooooo%d\n(repeat)\n", res); exit(0);}
-//							waitpid(0, &status, WSTOPPED);
-//							pos = getPos(pid);
-//
-//							printf(" (r) %d ", pos);
-//						}
-
-						// reset the last pos
-//						last = pos;
-
-			// program bounds : TODO
-			// Skip the outside
-//			while(pos < 0x400000 || pos > 0x602000){
-//				waitpid(0, &status, WSTOPPED);
-//				pos = getPos(pid);
-//				printf(" (o) %d ", pos);
-			// 5a 4a3 77d
-//			}
-
-
-			printf("$ ");
-			scanf("%d", &i);
-			printf("pos : 0x%x\t eax : %d\n", getPos(pid), getEax(pid));
 		}
 
 		printf("Father %d died, child was %d\n",getpid(), pid);
