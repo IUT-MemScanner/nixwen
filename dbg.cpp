@@ -1,20 +1,20 @@
 /*
- * =====================================================================================
- * http://www.secretmango.com/jimb/Whitepapers/ptrace/ptrace.html
- *       Filename:  dbg.c
- *
- *    Description:
- *
- *        Version:  1.0
- *        Created:  06/12/2016 15:29:55
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (),
- *   Organization:
- *
- * =====================================================================================
- */
+* =====================================================================================
+* http://www.secretmango.com/jimb/Whitepapers/ptrace/ptrace.html
+*       Filename:  dbg.c
+*
+*    Description:
+*
+*        Version:  1.0
+*        Created:  06/12/2016 15:29:55
+*       Revision:  none
+*       Compiler:  gcc
+*
+*         Author:  YOUR NAME (),
+*   Organization:
+*
+* =====================================================================================
+*/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -36,13 +36,13 @@ using namespace std;
 
 long getPos(long pid){
 	struct user_regs_struct reg;
-	
+
 	ptrace(PTRACE_GETREGS, pid, NULL, &reg);
 
 	#ifdef __x86_64__
-		return reg.rip;
+	return reg.rip;
 	#elif defined __i386__
-		return reg.eip;
+	return reg.eip;
 	#endif
 }
 
@@ -52,9 +52,9 @@ long getEax(long pid){
 	ptrace(PTRACE_GETREGS, pid, NULL, &reg);
 
 	#ifdef __x86_64__
-		return reg.rax;
+	return reg.rax;
 	#elif defined __i386__
-		return reg.eax;
+	return reg.eax;
 	#endif
 }
 
@@ -76,26 +76,36 @@ int main (int argc, char *argv[]) {
 
 		kill(getppid(), 9); // If the child fail, kill his father
 	}else{
+		int stat, res;
+		int signo;
 		wait(&status);
-	
+
 		cout << "Status de wait : " << status << endl;
 
 		cout << "Stack : " << hex << getDebutStack(pid) << endl;
-
+		signo = 0;
 		struct user_regs_struct regs;
 		int i = -1;
 
-		cout << "pid" << pid << endl;	
+		cout << "pid" << pid << endl;
 		// main loop
 		while(1){
-				cout << "Entrez : ";
-				cin >> i;
-				if(i== 0){ptrace(PTRACE_CONT, pid, NULL, SIGCONT);}
-				else{ // Caution ! If it happen twice, wait will be stuck ! 
-					kill(pid, SIGSTOP);
-					wait(&status);
-				 }
-
+			cout << "Entrez : ";
+			cin >> i;
+			//if(i== 0){ptrace(PTRACE_CONT, pid, NULL, SIGCONT);}
+			if ((res = ptrace(PTRACE_SINGLESTEP, pid, 0, signo)) < 0) {
+				perror("Ptrace singlestep error");
+				exit(1);
+			}
+			res = wait(&status);
+			
+			// else{ // Caution ! If it happen twice, wait will be stuck !
+			// 	kill(pid, SIGSTOP);
+			// 	std::cout << "msms" << std::endl;
+			// 	//wait(&status);
+			// 	std::cout << "/* message */" << std::endl;
+			// }
+			std::cout << getPos(pid) << std::endl;
 		}
 
 		cout << "Father "<< getpid() <<" died, child was "<< pid << endl;
