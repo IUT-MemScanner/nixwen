@@ -1,17 +1,21 @@
-OBJ= maps.o
+OBJ=
 CC=g++
 DEBUG = -g
-CFLAGS = -Wall -c $(DEBUG) -std=c++11
-LFLAGS = -Wall $(DEBUG)
+CFLAGS = -c -Wall  $(DEBUG) -std=c++11
+LFLAGS = -Wall $(DEBUG) -std=c++11
 EXEC=dbg
 
 all: $(EXEC)
 
-dbg: dbg.cpp $(OBJS)
-	$(CC) -o $@ $< $(OBJS) $(LFLAGS)
+dbg: dbg.o maps.o
+	$(CC) $(LFLAGS) dbg.o maps.o -o $@ 
 
-maps.o: maps.h
-	$(CC) -o $@ $< $(CFLAGS)
+
+dbg.o: dbg.cpp
+	$(CC) $(CFLAGS) -o $@ $<
+
+maps.o: maps.cpp
+	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
 	rm -rf *.o
