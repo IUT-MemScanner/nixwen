@@ -28,6 +28,9 @@
 #include <sys/user.h>
 #include <sys/signal.h>
 
+#include <list>
+#include <math.h>
+
 #include <sys/stat.h>
 #include <fcntl.h>
 
@@ -79,8 +82,11 @@ int main (int argc, char *argv[]) {
 	}else{
 		wait(&status);
 		bool running = false;
+		
 		int dataSize = 16;
 		int currentSize = 16;
+		list<void*> search = {};
+
 		cout << "Status de wait : " << status << endl;
 
 		cout << "Stack : " << hex << getDebutStack(pid) << dec << endl;
@@ -117,6 +123,8 @@ int main (int argc, char *argv[]) {
 					cout << "Entrez une valeur : ";
 					cin >> value;
 					
+// TODO:					search()
+					
 					/* remove pointers of the list that point to value different */
 					/* use currentSize */
 				}
@@ -131,7 +139,7 @@ int main (int argc, char *argv[]) {
 					int v;
 					cout << "Entrez une taille (1,2,4 ou 8) : ";
 					cin >> v;
-					if(v==8 || v==16 || v==32 || v==64) dataSize = v;
+					if(v==8 || v==16 || v==32 || v==64){ dataSize = v; }
 					/* Set the size of the searched data */
 				}
 				if( c == "alter"){
@@ -143,7 +151,7 @@ int main (int argc, char *argv[]) {
 					cout << "Entrez la valeur souhaitée : ";
 					cin >> v;
 					
-					if(v <= pow(2,currentSize)) {/* do the alteration */};
+					if(v <= pow(2,currentSize)) {/* do the alteration */}
 					else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}
 				
 				}
