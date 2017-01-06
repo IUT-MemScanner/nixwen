@@ -6,11 +6,14 @@ EXEC=dbg
 
 all: $(EXEC) clean
 
-dbg: dbg.o maps.o
+dbg: dbg.o maps.o commands.o
 	$(CC) $(LFLAGS) dbg.o maps.o -o $@
 
 dbg.o: dbg.cpp
 	$(CC) $(CFLAGS) -o $@ $<
+
+commands.o: commands.cpp
+	$(CC) $(CFLGS) -o $@ $<
 
 maps.o: maps.cpp
 	$(CC) $(CFLAGS) -o $@ $<
