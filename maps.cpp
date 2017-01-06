@@ -43,36 +43,36 @@ string fichier(long pid) {
   return "";
 }
 
-long getDebutStack(long pid){
+void * getDebutStack(long pid){
 	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '\\[stack\\]' | cut -d \"-\" -f1").c_str(), "r");
 	
 	char val[100]; // Stockage du df
 	fscanf(fd,"%s",val);	// recupération du df
-	return strtol(val, 0, 16);  // conversion en long depuis base 16
+	return (void *)strtol(val, 0, 16);  // conversion en long depuis base 16
 }
 
-long getFinStack(long pid){
+void * getFinStack(long pid){
 	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '\\[stack\\]' | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
   
 	char val[100];
 	fscanf(fd, "%s", val);
-	return strtol(val,0,16);  
+	return (void *)strtol(val,0,16);  
 }
 
-long getDebutProc(long pid){
+void * getDebutProc(long pid){
 	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '"+fichier(pid)+"$' | head -1 | cut -d '-' -f1").c_str(), "r");
 	
 	char val[100];
 	fscanf(fd, "%s", val);
-	return strtol(val,0,16);  
+	return (void *)strtol(val,0,16);  
 }
 
-long getFinProc(long pid){
+void * getFinProc(long pid){
 	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '"+fichier(pid)+"$' | tail -1 | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
 	
 	char val[100];
 	fscanf(fd, "%s", val);
-	return strtol(val,0,16);  
+	return (void *)strtol(val,0,16);  
 }
 
 

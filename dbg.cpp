@@ -1,7 +1,7 @@
 /*
  * =====================================================================================
  * http://www.secretmango.com/jimb/Whitepapers/ptrace/ptrace.html
- *       Filename:  dbg.c
+*       Filename:  dbg.c
  *
  *    Description:
  *
@@ -35,6 +35,7 @@
 #include <fcntl.h>
 
 #include "maps.h"
+#include "commands.h"
 
 using namespace std;
 
@@ -152,8 +153,7 @@ int main (int argc, char *argv[]) {
 					cin >> v;
 					
 					if(v <= pow(2,currentSize)) {/* do the alteration */}
-					else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}
-				
+					else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}	
 				}
 
 		}

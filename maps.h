@@ -13,11 +13,11 @@
 #define MAPS_H
 
 // Stack bounds 
-long getDebutStack(long pid); // debut stack proto
-long getFinStack(long pid);
+void * getDebutStack(long pid); // debut stack proto
+void * getFinStack(long pid);
 
 // Program bound
-long getDebutProc(long pid);
-long getFinProc(long pid);
+void * getDebutProc(long pid);
+void * getFinProc(long pid);
 
 #endif
