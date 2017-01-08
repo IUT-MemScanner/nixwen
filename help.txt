@@ -1,5 +1,5 @@
 cont -- reprendre l'exécution du programme
-stop -- stop l'exécution du programme
+stop -- stoper l'exécution du programme
 fsearch -- initialiser une recherche
 fuzzysearch -- initialiser une recherche fuzzy
 search -- continuer une recherche commencer avec fsearch ou fuzzysearch
