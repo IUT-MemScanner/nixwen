@@ -1,14 +1,14 @@
 /*
  * =====================================================================================
  * http://www.secretmango.com/jimb/Whitepapers/ptrace/ptrace.html
-*       Filename:  dbg.c
+ *       Filename:  main.cpp
  *
  *    Description:
  *
- *        Version:  1.0
+ *        Version:  1.2
  *        Created:  06/12/2016 15:29:55
  *       Revision:  none
- *       Compiler:  gcc
+ *       Compiler:  g++
  *
  *         Author:  YOUR NAME (),
  *   Organization:
@@ -73,10 +73,10 @@ int main (int argc, char *argv[]) {
 	if(pid==0){
 		int m = ptrace(PTRACE_TRACEME, 0, 0, 0);
 
-		int descF = open("nohup", O_CREAT, S_IRWXU);
-		if(descF == -1){ exit(255); }
-		close(STDOUT_FILENO);
-		dup2(descF, STDOUT_FILENO);
+//		int descF = open("nohup", O_CREAT, S_IRWXU);
+//		if(descF == -1){ kill(getppid(), 9); exit(255); }
+//		close(STDOUT_FILENO);
+//		dup2(descF, STDOUT_FILENO);
 		execve(prog, emp, emp);
 
 		kill(getppid(), 9); // If the child fail, kill his father
@@ -86,7 +86,7 @@ int main (int argc, char *argv[]) {
 		
 		int dataSize = 16;
 		int currentSize = 16;
-		list<void*> search = {};
+		list<void*> searchResult = {};
 
 		cout << "Status de wait : " << status << endl;
 
@@ -117,15 +117,18 @@ int main (int argc, char *argv[]) {
 					cout << "Entrez une valeur : ";
 					cin >> value;
 					currentSize = dataSize;
-					/* fill list (pointers) (first search)*/
+
+          search(value, searchResult, true, pid); // BORDER EFFECT !
+					cout << searchResult.size() << " résultats trouvés." << endl;
+          /* fill list (pointers) (first search)*/
 				}
 				if( c == "search" && !running){
 					long value;
 					cout << "Entrez une valeur : ";
 					cin >> value;
 					
-// TODO:					search()
-					
+					search(value, searchResult, false, pid);
+					cout << searchResult.size() << " résultats trouvés." << endl;
 					/* remove pointers of the list that point to value different */
 					/* use currentSize */
 				}
