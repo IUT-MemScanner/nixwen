@@ -21,7 +21,7 @@
 
 using namespace std;
 // searcher
-list<void *> search(long value, list<void *> list ,bool isnew, long pid){
+void search(long value, list<void *> list ,bool isnew, long pid){
 	void * b = getDebutStack(pid);
 	void * e = getFinStack(pid);
 	void * p = b;
@@ -34,8 +34,6 @@ list<void *> search(long value, list<void *> list ,bool isnew, long pid){
 	if(!isnew){
 			list.remove_if([&](void * o){return value != ptrace(PTRACE_PEEKDATA, pid, o, NULL); });
 	}
-		
-	return list;
 }
 
 // TODO : Fuzzy search
@@ -48,8 +46,11 @@ list<void *> search(long value, list<void *> list ,bool isnew, long pid){
 
 // list max values in the list
 void list_v(list<void *> list, int max){
-	for(int i = 0; i < max && i < list.size(); i++)
-		cout << i << " : " << list[i] << endl;
+  auto it = list.begin();
+  for(int i = 0; i < max && i < list.size(); i++){
+		cout << i << " : " << *it << endl;
+    ++it;
+  }
 }
 
 // alter a value with a new value
