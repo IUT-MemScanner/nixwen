@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 // searcher
-void search(long value, std::list<void *> l ,bool isnew, long pid);
+std::list<void *> search(long value, std::list<void *> l ,bool isnew, long pid);
 
 // TODO : Fuzzy search
 /* Fuzzy search
