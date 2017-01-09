@@ -2,14 +2,14 @@ CC=g++
 DEBUG = -g
 CFLAGS = -c -Wall  $(DEBUG) -std=c++11
 LFLAGS = -Wall $(DEBUG) -std=c++11
-EXEC=dbg
+EXEC=main
 
 all: $(EXEC) clean
 
-dbg: dbg.o maps.o commands.o
+main: main.o maps.o commands.o
 	$(CC) $(LFLAGS) dbg.o maps.o -o $@
 
-dbg.o: dbg.cpp
+main.o: main.cpp
 	$(CC) $(CFLAGS) -o $@ $<
 
 commands.o: commands.cpp
