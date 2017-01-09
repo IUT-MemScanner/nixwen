@@ -7,13 +7,13 @@ EXEC=main
 all: $(EXEC) clean
 
 main: main.o maps.o commands.o
-	$(CC) $(LFLAGS) dbg.o maps.o -o $@
+	$(CC) $(LFLAGS) $^ -o $@
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) -o $@ $<
 
 commands.o: commands.cpp
-	$(CC) $(CFLGS) -o $@ $<
+	$(CC) $(CFLAGS) -o $@ $<
 
 maps.o: maps.cpp
 	$(CC) $(CFLAGS) -o $@ $<
