@@ -29,6 +29,7 @@
 #include <sys/signal.h>
 
 #include <list>
+#include <map>
 #include <math.h>
 
 #include <sys/stat.h>
@@ -73,10 +74,12 @@ int main (int argc, char *argv[]) {
 	if(pid==0){
 		int m = ptrace(PTRACE_TRACEME, 0, 0, 0);
 
-//		int descF = open("nohup", O_CREAT, S_IRWXU);
-//		if(descF == -1){ kill(getppid(), 9); exit(255); }
-//		close(STDOUT_FILENO);
-//		dup2(descF, STDOUT_FILENO);
+		int descF = open("nohup", O_CREAT | O_TRUNC |O_WRONLY, S_IRWXU);
+		if(descF == -1){ kill(getppid(), 9); exit(255); }
+		cout << "Opened" << endl;
+		close(STDOUT_FILENO);
+		dup2(descF, STDOUT_FILENO);
+		cout << "test" << endl;
 		execve(prog, emp, emp);
 
 		kill(getppid(), 9); // If the child fail, kill his father
@@ -86,8 +89,8 @@ int main (int argc, char *argv[]) {
 		
 		int dataSize = 16;
 		int currentSize = 16;
-		list<void*> searchResult = {};
-
+		list<void*> searchResult;
+		map<void*, long> mapR;
 		cout << "Status de wait : " << status << endl;
 
 		cout << "Stack : " << hex << getDebutStack(pid) << dec << endl;
@@ -112,22 +115,30 @@ int main (int argc, char *argv[]) {
 					wait(&status);
 					running = false;
 				}
+				if( c == "fuzzysearch" && !running){
+					currentSize = dataSize;
+
+					mapR = fuzzsearch(pid, mapR); // BORDER EFFECT !
+					cout << mapR.size() << " résultats trouvés." << endl;
+			        /* fill list (pointers) (first search)*/
+				}
 				if( c == "fsearch" && !running){
 					long value;
 					cout << "Entrez une valeur : ";
 					cin >> value;
 					currentSize = dataSize;
 
-          search(value, searchResult, true, pid); // BORDER EFFECT !
-					cout << searchResult.size() << " résultats trouvés." << endl;
-          /* fill list (pointers) (first search)*/
+//					search(value, searchResult, true, pid); // BORDER EFFECT !
+//					cout << searchResult.size() << " résultats trouvés." << endl;
+					mapR = fuzzsearch(0, mapR, value, NULL, pid);
+			        /* fill list (pointers) (first search)*/
 				}
-				if( c == "search" && !running){
+				if( c == "fzsearch" && !running){
 					long value;
 					cout << "Entrez une valeur : ";
 					cin >> value;
 					
-					search(value, searchResult, false, pid);
+					searchResult = search(value, searchResult, false, pid);
 					cout << searchResult.size() << " résultats trouvés." << endl;
 					/* remove pointers of the list that point to value different */
 					/* use currentSize */
