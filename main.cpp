@@ -42,7 +42,7 @@ using namespace std;
 
 long getPos(long pid){
 	struct user_regs_struct reg;
-	
+
 	ptrace(PTRACE_GETREGS, pid, NULL, &reg);
 
 	#ifdef __x86_64__
@@ -63,6 +63,7 @@ long getEax(long pid){
 		return reg.eax;
 	#endif
 }
+string getHelp();
 
 int main (int argc, char *argv[]) {
 	int status = 0;
@@ -86,7 +87,7 @@ int main (int argc, char *argv[]) {
 	}else{
 		wait(&status);
 		bool running = false;
-		
+
 		int dataSize = 16;
 		int currentSize = 16;
 		list<void*> searchResult;
@@ -98,19 +99,19 @@ int main (int argc, char *argv[]) {
 		struct user_regs_struct regs;
 		int i = -1;
 
-		cout << "Child PID : " << pid << endl;	
+		cout << "Child PID : " << pid << endl;
 		// main loop
 		string c = "";
 		while(c != "exit"){
-				
+
 				cout << "# ";
 				cin >> c;
 				if(c == "cont"){
 					ptrace(PTRACE_CONT, pid, NULL, SIGCONT);
 					running = true;
 				}
-				if( c == "stop" && running){ 
-				// Caution ! If it happen twice, wait will be stuck ! 
+				if( c == "stop" && running){
+				// Caution ! If it happen twice, wait will be stuck !
 					kill(pid, SIGSTOP);
 					wait(&status);
 					running = false;
@@ -137,7 +138,7 @@ int main (int argc, char *argv[]) {
 					long value;
 					cout << "Entrez une valeur : ";
 					cin >> value;
-					
+
 					searchResult = search(value, searchResult, false, pid);
 					cout << searchResult.size() << " résultats trouvés." << endl;
 					/* remove pointers of the list that point to value different */
@@ -147,7 +148,7 @@ int main (int argc, char *argv[]) {
 					int size;
 					cout << "Entrez le nombre de valeurs souhaitée : ";
 					cin >> size;
-					
+
 					/* display the `size` first found values that matched last research */
 				}
 				if( c == "size"){
@@ -162,20 +163,21 @@ int main (int argc, char *argv[]) {
 					long v;
 					cout << "Entrez la position : ";
 					cin >> n;
-					
+
 					cout << "Entrez la valeur souhaitée : ";
 					cin >> v;
-					
-					if(v <= pow(2,currentSize)) {/* do the alteration */}
-					else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}	
-				}
 
+					if(v <= pow(2,currentSize)) {/* do the alteration */}
+					else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}
+				}
+				if( c == "help"){cout << getHelp() << endl;}
 		}
 		kill(pid, 9); // Be sure to kill the child mhouahahaha
 		cout << "Father "<< getpid() <<" died, child was "<< pid << endl;
 	}
-
-
-
 	return 0;
+}
+
+string getHelp(){
+	return "Commandes\n  cont -- reprendre l'exécution du programme\n  stop -- stoper l'exécution du programme\n  fsearch -- initialiser une recherche\n  fuzzysearch -- initialiser une recherche fuzzy\n  search -- continuer une recherche commencer avec fsearch ou fuzzysearch\n  list -- afficher les résultats de la recherche\n  size -- definir la taille des données à rechercher\n  alter -- modifier le contenu à une adresse choisie parmi ceux proposer parmi la commande list\n";
 }
