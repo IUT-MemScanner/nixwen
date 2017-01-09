@@ -46,6 +46,8 @@ void search(long value, list<void *> list ,bool isnew, long pid){
  * @return the list of the found values
  */
 map<void *, long> fuzzsearch(long pid, map<void *, long> m){ // init
+	cout << "zefr" <<endl;
+	
 	void * b = getDebutStack(pid);
 	void * e = getFinStack(pid);
 	void * p = b;
@@ -69,12 +71,18 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 // 6 : ><  in between comparison
 	switch(opId){
 		case 0: 
-			for(auto it = m.begin(); it != m.end(); ){
+			for(auto it = m.begin(); it != m.end(); ++it){
+				// cout << "ll " << it->first << endl;
 				long n = ptrace(PTRACE_PEEKDATA, pid, it->first, NULL);
-				if(it->second < n){ m[it->first] = n; ++it; }else{
+				if(it->second < n){ 
+					cout << "keep " << it->first << " was " << it->second << " is " << n << endl; 
+					m[it->first] = n; 
+				}else{
+					// cout << "erase " << it->first << endl;
 					m.erase(it);
 				} 
 			}
+			break;
 		default:
 			cout << "not implemented yet" << endl;
 	
@@ -84,6 +92,7 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 
 }
 
+
 // list max values in the list
 void list_v(list<void *> list, int max){
   auto it = list.begin();
@@ -92,7 +101,14 @@ void list_v(list<void *> list, int max){
     ++it;
   }
 }
-
+// list max values in the list
+void list_m(map<void *, long> list, int max){
+  auto it = list.begin();
+  for(int i = 0; i < max && i < list.size(); i++){
+		cout << i << " : " << *it << endl;
+    ++it;
+  }
+}
 // alter a value with a new value
 bool alter(void* pointer, long newvalue){
 	return true;

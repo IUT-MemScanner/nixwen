@@ -122,7 +122,18 @@ int main (int argc, char *argv[]) {
 					cout << mapR.size() << " résultats trouvés." << endl;
 			        /* fill list (pointers) (first search)*/
 				}
-				if( c == "fsearch" && !running){
+				if( c == "fzsearch" && !running){
+					int choice;
+					cin >> choice;
+					
+					switch(choice){
+						case 0:
+						case 2:
+							mapR = fuzzsearch(choice, mapR, NULL, NULL);
+							break;
+					}
+
+
 					long value;
 					cout << "Entrez une valeur : ";
 					cin >> value;
@@ -133,7 +144,7 @@ int main (int argc, char *argv[]) {
 					mapR = fuzzsearch(0, mapR, value, NULL, pid);
 			        /* fill list (pointers) (first search)*/
 				}
-				if( c == "fzsearch" && !running){
+				if( c == "fsearch" && !running){
 					long value;
 					cout << "Entrez une valeur : ";
 					cin >> value;
