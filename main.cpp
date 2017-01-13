@@ -38,6 +38,11 @@
 #include "maps.h"
 #include "commands.h"
 
+
+//add -lreadline to compiler
+#include  <readline/readline.h>
+#include  <readline/history.h>
+
 using namespace std;
 
 long getPos(long pid){
@@ -104,10 +109,17 @@ int main (int argc, char *argv[]) {
 		cout << "Child PID : " << pid << endl;
 		// main loop
 		string c = "";
-		while(c != "exit"){
+    char *line;
+		while(line = readline("> ")){
+        c = string(line);
+				if(c != ""){
+					add_history(line);
+				}
 
-				cout << "# ";
-				cin >> c;
+				if(c=="exit"){
+					break;
+				}
+
 				if(c == "cont"){
 					ptrace(PTRACE_CONT, pid, NULL, SIGCONT);
 					running = true;
@@ -127,11 +139,11 @@ int main (int argc, char *argv[]) {
 			        /* fill list (pointers) (first search)*/
 				}
 				if( c == "search" && !running){
-					if(mode){				
+					if(mode){
 						int choice;
 						cout << "Choix du mode (seul 0 est disponible)  : ";
 						cin >> choice;
-						
+
 						switch(choice){
 							case 0:
 							case 2:
@@ -147,7 +159,7 @@ int main (int argc, char *argv[]) {
 								cout << "Not implemented yet";
 						}
 
-					}else{	
+					}else{
 						int value;
 						cout << "Entrez la valeur : ";
 						cin >> value;
@@ -171,7 +183,7 @@ int main (int argc, char *argv[]) {
 					int size;
 					cout << "Entrez le nombre de valeurs souhaitée : ";
 					cin >> size;
-					
+
 					if(mode){ list_m(mapR, size, pid);
 					}else{    list_v(searchResult, size);
 					}
@@ -198,6 +210,9 @@ int main (int argc, char *argv[]) {
 					else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}
 				}
 				if( c == "help"){cout << getHelp() << endl;}
+
+				free(line);
+				line = NULL;
 		}
 		kill(pid, 9); // Be sure to kill the child mhouahahaha
 		cout << "Father "<< getpid() <<" died, child was "<< pid << endl;
