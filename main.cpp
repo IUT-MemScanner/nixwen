@@ -68,7 +68,25 @@ long getEax(long pid){
 		return reg.eax;
 	#endif
 }
+/*Prototype */
 string getHelp();
+char **commands_completion(const char *, int, int);
+char *commands_generator(const char *, int);
+
+char *commands[] = {
+    "cont",
+    "stop",
+    "exit",
+		"fsearch",
+		"fuzzysearch",
+		"search",
+		"size",
+    "alter",
+		"list",
+		"help",
+    NULL
+};
+
 
 int main (int argc, char *argv[]) {
 	int status = 0;
@@ -105,6 +123,9 @@ int main (int argc, char *argv[]) {
 
 		struct user_regs_struct regs;
 		int i = -1;
+
+		// function for customize the default autocompletion
+		rl_attempted_completion_function = commands_completion;
 
 		cout << "Child PID : " << pid << endl;
 		// main loop
@@ -221,5 +242,41 @@ int main (int argc, char *argv[]) {
 }
 
 string getHelp(){
-	return "Commandes\n  cont -- reprendre l'exécution du programme\n  stop -- stoper l'exécution du programme\n  fsearch -- initialiser une recherche\n  fuzzysearch -- initialiser une recherche fuzzy\n  search -- continuer une recherche commencer avec fsearch ou fuzzysearch\n  list -- afficher les résultats de la recherche\n  size -- definir la taille des données à rechercher\n  alter -- modifier le contenu à une adresse choisie parmi ceux proposer parmi la commande list\n";
+	return "Commandes:\n"
+	"  exit -- Quitter le programme"
+	"  cont -- reprendre l'exécution du programme\n"
+	"  stop -- stoper l'exécution du programme\n"
+	"  fsearch -- initialiser une recherche\n"
+	"  fuzzysearch -- initialiser une recherche fuzzy\n"
+	"  search -- continuer une recherche commencer avec fsearch ou fuzzysearch\n"
+	"  list -- afficher les résultats de la recherche\n"
+	"  size -- definir la taille des données à rechercher\n"
+	"  alter -- modifier le contenu à une adresse choisie parmi ceux proposer parmi la commande list\n"
+	"  help -- Afficher les commandes disponibles"
+	;
+}
+
+char **commands_completion(const char *text, int start, int end)
+{
+    rl_attempted_completion_over = 1;
+    return rl_completion_matches(text, commands_generator);
+}
+
+char *commands_generator(const char *text, int state)
+{
+    static int list_index, len;
+    char *name;
+
+    if (!state) {
+        list_index = 0;
+        len = strlen(text);
+    }
+
+    while ((name = commands[list_index++])) {
+        if (strncmp(name, text, len) == 0) {
+            return strdup(name);
+        }
+    }
+
+    return NULL;
 }
