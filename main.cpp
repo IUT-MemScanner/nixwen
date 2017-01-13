@@ -92,6 +92,8 @@ int main (int argc, char *argv[]) {
 		int currentSize = 16;
 		list<void*> searchResult;
 		map<void*, long> mapR;
+		bool mode = 0; // 0 : normal / 1 : fuzzy
+
 		cout << "Status de wait : " << status << endl;
 
 		cout << "Stack : " << hex << getDebutStack(pid) << dec << endl;
@@ -118,34 +120,44 @@ int main (int argc, char *argv[]) {
 				}
 				if( c == "fuzzysearch" && !running){
 					currentSize = dataSize;
+					mode = true; // Set to fuzzy
 
 					mapR = fuzzsearch(pid, mapR); // BORDER EFFECT !
 					cout << mapR.size() << " résultats trouvés." << endl;
 			        /* fill list (pointers) (first search)*/
 				}
-				if( c == "fzsearch" && !running){
-					int choice;
-					cin >> choice;
-					
-					switch(choice){
-						case 0:
-						case 2:
-							mapR = fuzzsearch(choice, mapR, NULL, NULL);
-							break;
+				if( c == "search" && !running){
+					if(mode){				
+						int choice;
+						cout << "Choix du mode (seul 0 est disponible)  : ";
+						cin >> choice;
+						
+						switch(choice){
+							case 0:
+							case 2:
+								mapR = fuzzsearch(choice, mapR, NULL, NULL, pid);
+								break;
+							case 1:
+							case 3:
+								long value;
+								cout << "Entrez une valeur : ";
+								// TODO
+								break;
+							default:
+								cout << "Not implemented yet";
+						}
+
+					}else{	
+						int value;
+						cout << "Entrez la valeur : ";
+						cin >> value;
+
+						search(value, searchResult, false, pid);
 					}
-
-
-					long value;
-					cout << "Entrez une valeur : ";
-					cin >> value;
-					currentSize = dataSize;
-
-//					search(value, searchResult, true, pid); // BORDER EFFECT !
-//					cout << searchResult.size() << " résultats trouvés." << endl;
-					mapR = fuzzsearch(0, mapR, value, NULL, pid);
-			        /* fill list (pointers) (first search)*/
 				}
 				if( c == "fsearch" && !running){
+					mode = false; // Set to normal mode
+
 					long value;
 					cout << "Entrez une valeur : ";
 					cin >> value;
@@ -159,6 +171,10 @@ int main (int argc, char *argv[]) {
 					int size;
 					cout << "Entrez le nombre de valeurs souhaitée : ";
 					cin >> size;
+					
+					if(mode){ list_m(mapR, size, pid);
+					}else{    list_v(searchResult, size);
+					}
 
 					/* display the `size` first found values that matched last research */
 				}
@@ -178,7 +194,7 @@ int main (int argc, char *argv[]) {
 					cout << "Entrez la valeur souhaitée : ";
 					cin >> v;
 
-					if(v <= pow(2,currentSize)) {/* do the alteration */}
+					if(v <= pow(2,currentSize)) { /* alter(searchResult); */ /* do the alteration */}
 					else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}
 				}
 				if( c == "help"){cout << getHelp() << endl;}

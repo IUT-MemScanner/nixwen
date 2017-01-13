@@ -69,6 +69,7 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 // 4 : =   the value is the same
 // 5 : /=  the value has changed
 // 6 : ><  in between comparison
+	map<void *, long> newM = {};
 	switch(opId){
 		case 0: 
 			for(auto it = m.begin(); it != m.end(); ++it){
@@ -76,10 +77,7 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 				long n = ptrace(PTRACE_PEEKDATA, pid, it->first, NULL);
 				if(it->second < n){ 
 					cout << "keep " << it->first << " was " << it->second << " is " << n << endl; 
-					m[it->first] = n; 
-				}else{
-					// cout << "erase " << it->first << endl;
-					m.erase(it);
+					newM[it->first] = n; 
 				} 
 			}
 			break;
@@ -87,8 +85,8 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 			cout << "not implemented yet" << endl;
 	
 	}
-
-	return m;
+	
+	return newM;
 
 }
 
@@ -102,15 +100,13 @@ void list_v(list<void *> list, int max){
   }
 }
 // list max values in the list
-void list_m(map<void *, long> list, int max){
-  auto it = list.begin();
-  for(int i = 0; i < max && i < list.size(); i++){
-		cout << i << " : " << *it << endl;
-    ++it;
-  }
+void list_m(map<void *, long> m, int max, long pid){
+	for(auto it = m.begin(); it != m.end(); ++it){
+		cout << it->first << " : " << it->second  << " new " << ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) << endl;
+	} 
 }
 // alter a value with a new value
-bool alter(void* pointer, long newvalue){
-	return true;
+bool alter(void* pointer, long newvalue, long pid){
+	return ptrace(PTRACE_POKEDATA, pid, pointer, newvalue) != -1;
 }
 

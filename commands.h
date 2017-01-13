@@ -18,6 +18,7 @@ std::map<void *, long> fuzzsearch(int opId, std::map<void *, long> m, long v1, l
 
 // list max values in the list
 void list_v(std::list<void *> l, int max);
+void list_m(std::map<void *, long> l, int max, long pid);
 
 // alter a value with a new value
 bool alter(void* pointer, long newvalue, long pid);
