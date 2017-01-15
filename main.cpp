@@ -44,7 +44,7 @@
 #include  <readline/history.h>
 
 using namespace std;
-
+/
 long getPos(long pid){
 	struct user_regs_struct reg;
 
@@ -73,17 +73,18 @@ string getHelp();
 char **commands_completion(const char *, int, int);
 char *commands_generator(const char *, int);
 
+// List des valeur que peu prendre l'auto complétion'
 char *commands[] = {
     "cont",
     "stop",
     "exit",
-		"fsearch",
-		"fuzzysearch",
-		"search",
-		"size",
+	"fsearch",
+	"fuzzysearch",
+	"search",
+	"size",
     "alter",
-		"list",
-		"help",
+	"list",
+	"help",
     NULL
 };
 
@@ -115,42 +116,53 @@ int main (int argc, char *argv[]) {
 		int currentSize = 16;
 		list<void*> searchResult;
 		map<void*, long> mapR;
+
+		struct user_regs_struct regs;
+		int i = -1;
 		bool mode = 0; // 0 : normal / 1 : fuzzy
+
+		// function for customize the default autocompletion
+		rl_attempted_completion_function = commands_completion;
+
+		// initialisation des variables de commande
+		string c = "";
+    	char *line;
 
 		cout << "Status de wait : " << status << endl;
 
 		cout << "Stack : " << hex << getDebutStack(pid) << dec << endl;
 
-		struct user_regs_struct regs;
-		int i = -1;
-
-		// function for customize the default autocompletion
-		rl_attempted_completion_function = commands_completion;
-
 		cout << "Child PID : " << pid << endl;
 		// main loop
-		string c = "";
-    char *line;
+		
 		while(line = readline("> ")){
-        c = string(line);
+        		c = string(line);
+
+				// Ajoute les commandes a l'historique
 				if(c != ""){
 					add_history(line);
 				}
 
+				// Commande "exit" 
 				if(c=="exit"){
 					break;
 				}
 
+				// Commande "cont" 
 				if(c == "cont"){
 					ptrace(PTRACE_CONT, pid, NULL, SIGCONT);
 					running = true;
 				}
+
+				// Commande "stop" 
 				if( c == "stop" && running){
 				// Caution ! If it happen twice, wait will be stuck !
 					kill(pid, SIGSTOP);
 					wait(&status);
 					running = false;
 				}
+
+				// Commande "fuzzysearch"
 				if( c == "fuzzysearch" && !running){
 					currentSize = dataSize;
 					mode = true; // Set to fuzzy
@@ -159,8 +171,11 @@ int main (int argc, char *argv[]) {
 					cout << mapR.size() << " résultats trouvés." << endl;
 			        /* fill list (pointers) (first search)*/
 				}
+
+				// Commande "search"
 				if( c == "search" && !running){
 					if(mode){
+
 						int choice;
 						cout << "Choix du mode (seul 0 est disponible)  : ";
 						cin >> choice;
@@ -188,6 +203,8 @@ int main (int argc, char *argv[]) {
 						search(value, searchResult, false, pid);
 					}
 				}
+
+				// Commande "fsearch"
 				if( c == "fsearch" && !running){
 					mode = false; // Set to normal mode
 
@@ -200,7 +217,10 @@ int main (int argc, char *argv[]) {
 					/* remove pointers of the list that point to value different */
 					/* use currentSize */
 				}
+
+				// Commande "fsearch"
 				if( c == "list"){
+
 					int size;
 					cout << "Entrez le nombre de valeurs souhaitée : ";
 					cin >> size;
@@ -209,8 +229,10 @@ int main (int argc, char *argv[]) {
 					}else{    list_v(searchResult, size);
 					}
 
-					/* display the `size` first found values that matched last research */
+				/* display the `size` first found values that matched last research */
 				}
+
+
 				if( c == "size"){
 					int v;
 					cout << "Entrez une taille (1,2,4 ou 8) : ";
@@ -218,6 +240,8 @@ int main (int argc, char *argv[]) {
 					if(v==8 || v==16 || v==32 || v==64){ dataSize = v; }
 					/* Set the size of the searched data */
 				}
+
+				// Commande "alter"
 				if( c == "alter"){
 					int n;
 					long v;
@@ -230,6 +254,8 @@ int main (int argc, char *argv[]) {
 					if(v <= pow(2,currentSize)) { /* alter(searchResult); */ /* do the alteration */}
 					else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}
 				}
+
+				// Commande "help"
 				if( c == "help"){cout << getHelp() << endl;}
 
 				free(line);
