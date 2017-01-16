@@ -46,7 +46,7 @@ void search(long value, list<void *> list ,bool isnew, long pid){
  * @return the list of the found values
  */
 map<void *, long> fuzzsearch(long pid, map<void *, long> m){ // init
-	cout << "zefr" <<endl;
+	cout << "Starting search..." <<endl;
 	
 	void * b = getDebutStack(pid);
 	void * e = getFinStack(pid);
@@ -56,7 +56,6 @@ map<void *, long> fuzzsearch(long pid, map<void *, long> m){ // init
 		m[p] = ptrace(PTRACE_PEEKDATA, pid, p, NULL);
 		p = p + sizeof((int)(0));
 	}
-	cout << m.size() << " S " << endl;	
 	return m;
 }
 
@@ -70,24 +69,42 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 // 5 : /=  the value has changed
 // 6 : ><  in between comparison
 	map<void *, long> newM = {};
-	switch(opId){
-		case 0: 
-			for(auto it = m.begin(); it != m.end(); ++it){
-				// cout << "ll " << it->first << endl;
-				long n = ptrace(PTRACE_PEEKDATA, pid, it->first, NULL);
-				if(it->second < n){ 
-					cout << "keep " << it->first << " was " << it->second << " is " << n << endl; 
+	for(auto it = m.begin(); it != m.end(); ++it){
+		long n = ptrace(PTRACE_PEEKDATA, pid, it->first, NULL);
+		switch(opId){
+			case 0:
+				if(it->second < n) 
 					newM[it->first] = n; 
-				} 
-			}
-			break;
-		default:
-			cout << "not implemented yet" << endl;
-	
-	}
-	
+				break;
+			case 1:
+				if(it->second + v1 == n)
+					newM[it->first] = n;
+				break;
+			case 2:
+				if(it->second > n)
+					newM[it->first] = n;
+				break;
+			case 3:
+				if(it->second - v1 == n)
+					newM[it->first] = n;
+				break;
+			case 4:
+				if(it->second == n)
+					newM[it->first] = n;
+				break;
+			case 5:
+				if(it->second != n)
+					newM[it->first] = n;
+				break;
+			case 6:
+				if(n > v1 && n < v2)
+					newM[it->first] = n;
+				break;
+			default:
+				cout << "Error..." << endl;
+		}
+	}			
 	return newM;
-
 }
 
 

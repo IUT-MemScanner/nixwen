@@ -39,12 +39,12 @@
 #include "commands.h"
 
 
-//add -lreadline to compiler
+// add -lreadline to compiler
 #include  <readline/readline.h>
 #include  <readline/history.h>
 
 using namespace std;
-/
+
 long getPos(long pid){
 	struct user_regs_struct reg;
 
@@ -68,24 +68,25 @@ long getEax(long pid){
 		return reg.eax;
 	#endif
 }
-/*Prototype */
+/* Prototype */
 string getHelp();
 char **commands_completion(const char *, int, int);
 char *commands_generator(const char *, int);
 
 // List des valeur que peu prendre l'auto complétion'
 char *commands[] = {
-    "cont",
-    "stop",
-    "exit",
-	"fsearch",
-	"fuzzysearch",
-	"search",
-	"size",
-    "alter",
-	"list",
-	"help",
-    NULL
+   (char *)"cont",
+   (char *)"stop",
+   (char *)"exit",
+   (char *)"fsearch",
+   (char *)"fuzzysearch",
+   (char *)"search",
+   (char *)"size",
+   (char *)"alter",
+   (char *)"list",
+   (char *)"help",
+   (char *)"fstart",
+   NULL
 };
 
 
@@ -98,13 +99,10 @@ int main (int argc, char *argv[]) {
 
 	if(pid==0){
 		int m = ptrace(PTRACE_TRACEME, 0, 0, 0);
-
 		int descF = open("nohup", O_CREAT | O_TRUNC |O_WRONLY, S_IRWXU);
-		if(descF == -1){ kill(getppid(), 9); exit(255); }
-		cout << "Opened" << endl;
+		if(m == -1 || descF == -1){ kill(getppid(), 9); exit(255); }
 		close(STDOUT_FILENO);
 		dup2(descF, STDOUT_FILENO);
-		cout << "test" << endl;
 		execve(prog, emp, emp);
 
 		kill(getppid(), 9); // If the child fail, kill his father
@@ -117,8 +115,6 @@ int main (int argc, char *argv[]) {
 		list<void*> searchResult;
 		map<void*, long> mapR;
 
-		struct user_regs_struct regs;
-		int i = -1;
 		bool mode = 0; // 0 : normal / 1 : fuzzy
 
 		// function for customize the default autocompletion
@@ -135,7 +131,7 @@ int main (int argc, char *argv[]) {
 		cout << "Child PID : " << pid << endl;
 		// main loop
 		
-		while(line = readline("> ")){
+		while((line = readline("> "))){
         		c = string(line);
 
 				// Ajoute les commandes a l'historique
@@ -177,19 +173,38 @@ int main (int argc, char *argv[]) {
 					if(mode){
 
 						int choice;
-						cout << "Choix du mode (seul 0 est disponible)  : ";
+						cout <<  "0 : +   the value is greater" << endl <<
+							     "1 : +?  the value is greater by"<< endl <<
+							     "2 : -   the value is lower"<< endl <<
+							     "3 : -?  the value is lower by"<< endl <<
+							     "4 : =   the value is the same"<< endl <<
+								 "5 : /=  the value has changed"<< endl <<
+								 "6 : ><  in between comparison"<< endl;
+								  
+						cout << "Choix du mode : ";
 						cin >> choice;
 
 						switch(choice){
 							case 0:
 							case 2:
-								mapR = fuzzsearch(choice, mapR, NULL, NULL, pid);
+							case 4:
+							case 5:
+								mapR = fuzzsearch(choice, mapR, 0, 0, pid);
 								break;
 							case 1:
 							case 3:
 								long value;
-								cout << "Entrez une valeur : ";
-								// TODO
+								cout << "Entrez une valeur de changement : ";
+								cin >> value;
+								mapR = fuzzsearch(choice, mapR, value, 0, pid);
+								break;
+							case 6:
+								long lbound, hbound;
+								cout << "Entrez la valeur min : ";
+								cin >> lbound;
+								cout << "Entrez la valeur max : ";
+								cin >> hbound;
+								mapR = fuzzsearch(6, mapR, lbound, hbound, pid);
 								break;
 							default:
 								cout << "Not implemented yet";
@@ -254,7 +269,22 @@ int main (int argc, char *argv[]) {
 					if(v <= pow(2,currentSize)) { /* alter(searchResult); */ /* do the alteration */}
 					else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}
 				}
+				if( c == "fstart"){
+					
+					ptrace(PTRACE_CONT, pid, NULL, SIGCONT);
+					running = true;
+					
+					sleep(1);
+					
+					if(running){
+					// Caution ! If it happen twice, wait will be stuck !
+						kill(pid, SIGSTOP);
+						wait(&status);
+						running = false;
+					}
 
+
+				}
 				// Commande "help"
 				if( c == "help"){cout << getHelp() << endl;}
 
