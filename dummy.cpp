@@ -1,4 +1,5 @@
 //sudo apt-get install libgtkmm-3.0-dev
+//Archlinux : gtkmm3
 //g++ dummy.cpp `pkg-config gtkmm-3.0 --cflags --libs`
 
 #include <iostream>
