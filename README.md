@@ -13,11 +13,13 @@
 * `alter` -- Modifier le contenu à une adresse choisi parmi celles proposées par la commande list
 * `help` -- Afficher les commandes disponibles
 
+## MAJOR TODO
+* ajouter le tas dans la recherche !!
+
 ## TODO
 * Améliorer la saisie(ex: un espace après une commande n'exécute pas la commande)
 * Implémenter size
 * Mettre en place alter dans le main
-* Pouvoir afficher les variable globals et static (pas une piorité)
 * Pouvoir spécifier un pid à attacher au lieu de lancer un nouveau programme => Imposible avec un ordinateur de l'IUT (LSM yama/ptrace_scope)
 
 ## Installation et utilisation
