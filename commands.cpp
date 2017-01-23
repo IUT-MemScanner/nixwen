@@ -53,7 +53,7 @@ map<void *, long> fuzzsearch(long pid, map<void *, long> m){ // init
 	void * p = b;
 
 	while (p < e){
-		m[p] = ptrace(PTRACE_PEEKDATA, pid, p, NULL);
+		m[p] = ptrace(PTRACE_PEEKDATA, pid, p, NULL) & 0xFFFFFFFF;
 		p = p + sizeof((int)(0));
 	}
 	return m;
@@ -70,7 +70,7 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 // 6 : ><  in between comparison
 	map<void *, long> newM = {};
 	for(auto it = m.begin(); it != m.end(); ++it){
-		long n = ptrace(PTRACE_PEEKDATA, pid, it->first, NULL);
+		long n = ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF;
 		switch(opId){
 			case 0:
 				if(it->second < n) 
@@ -119,7 +119,8 @@ void list_v(list<void *> list, int max){
 // list max values in the list
 void list_m(map<void *, long> m, int max, long pid){
 	for(auto it = m.begin(); it != m.end(); ++it){
-		cout << it->first << " : " << it->second  << " new " << ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) << endl;
+		cout << it->first << " : " << it->second  << " new " << (ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF) << endl;
+
 	} 
 }
 // alter a value with a new value
