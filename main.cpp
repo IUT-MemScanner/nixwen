@@ -28,6 +28,10 @@
 #include <sys/user.h>
 #include <sys/signal.h>
 
+#include <algorithm>
+#include <cctype>
+#include <regex>
+
 #include <list>
 #include <map>
 #include <math.h>
@@ -132,15 +136,17 @@ int main (int argc, char *argv[],char* en[]) {
 		// main loop
 		
 		while((line = readline("> "))){
-        		c = string(line);
+				c = string(line);
+
+				while(c.substr(c.size()-1, c.size()) == " "){ c.pop_back(); }
 
 				// Ajoute les commandes a l'historique
 				if(c != ""){
 					add_history(line);
 				}
 
-				// Commande "exit" 
-				if(c=="exit"){
+				// Commande "exit"
+				if( c=="exit" ){
 					break;
 				}
 
@@ -258,16 +264,21 @@ int main (int argc, char *argv[],char* en[]) {
 
 				// Commande "alter"
 				if( c == "alter"){
-					int n;
+
+					long n;
 					long v;
-					cout << "Entrez la position : ";
-					cin >> n;
-
-					cout << "Entrez la valeur souhaitée : ";
-					cin >> v;
-
-					if(v <= pow(2,currentSize)) { /* alter(searchResult); */ /* do the alteration */}
-					else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}
+					cout << "Entrez le pointeur : ";
+					cin >> hex >> n;
+					
+					if(mapR.end() != mapR.find((void*)n)){
+						cout << "Entrez la valeur souhaitée : ";
+						cin >> v;
+	
+						if(v <= pow(2,currentSize)) { alter((void*)n, v, pid); }  
+						else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}
+					}else{
+						cout << "Erreur, le pointeur n'est pas dans la liste" << endl;
+					}
 				}
 				if( c == "fstart"){
 					

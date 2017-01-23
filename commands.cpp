@@ -24,14 +24,28 @@ using namespace std;
 void search(long value, list<void *> list ,bool isnew, long pid){
 	void * b = getDebutStack(pid);
 	void * e = getFinStack(pid);
+	void * bb = getDebutHeap(pid);
+	void * ee = getFinHeap(pid);
 	void * p = b;
+	int m = 0; // 0 : stack search / 1 : heap search
 	if(isnew) list = {};
 
-	while (p < e && isnew){
-		cout << "\r" << p << "/ "<< e;
-		if(value  == ptrace(PTRACE_PEEKDATA, pid, p, NULL))
-			list.push_back(p);
-		p = p + sizeof((int)(0));
+	while (((p < e && m==0) || (p < ee && m==1)) && isnew){
+		if(m==0){
+			cout << "\r" << p << "/ "<< e;
+			if(value  == ptrace(PTRACE_PEEKDATA, pid, p, NULL))
+				list.push_back(p);
+			p = p + sizeof((int)(0));
+			if(p>=e){
+				m = 1;
+				p = bb;
+			}
+		}else{
+			cout << "\r" << p << "/ "<< ee;
+			if(value  == ptrace(PTRACE_PEEKDATA, pid, p, NULL))
+				list.push_back(p);
+			p = p + sizeof((int)(0));	
+		}
 	}
 	if(!isnew){
 			list.remove_if([&](void * o){return value != ptrace(PTRACE_PEEKDATA, pid, o, NULL); });
@@ -56,6 +70,15 @@ map<void *, long> fuzzsearch(long pid, map<void *, long> m){ // init
 		m[p] = ptrace(PTRACE_PEEKDATA, pid, p, NULL) & 0xFFFFFFFF;
 		p = p + sizeof((int)(0));
 	}
+	
+	p = getDebutHeap(pid);
+	e = getFinHeap(pid);
+
+	while (p < e){
+		m[p] = ptrace(PTRACE_PEEKDATA, pid, p, NULL) & 0xFFFFFFFF;
+		p = p + sizeof((int)(0));
+	}
+
 	return m;
 }
 
@@ -118,9 +141,10 @@ void list_v(list<void *> list, int max){
 }
 // list max values in the list
 void list_m(map<void *, long> m, int max, long pid){
-	for(auto it = m.begin(); it != m.end(); ++it){
-		cout << it->first << " : " << it->second  << " new " << (ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF) << endl;
-
+	int num = 0;
+	for(auto it = m.begin(); it != m.end() && num < max; ++it){
+		cout << num << " : (" << it->first << ") " << it->second  << " new " << (ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF) << endl;
+		num++;
 	} 
 }
 // alter a value with a new value

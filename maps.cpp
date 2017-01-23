@@ -45,6 +45,28 @@ string fichier(long pid) {
   return "";
 }
 
+/*
+* Récupère l'addresse de debut de la pile pour un pid
+*/
+void * getDebutHeap(long pid){
+	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '\\[heap\\]' | cut -d \"-\" -f1").c_str(), "r");
+	
+	char val[100]; // Stockage du df
+	fscanf(fd,"%s",val);	// recupération du df
+	return (void *)strtol(val, 0, 16);  // conversion en long depuis base 16
+}
+
+/*
+* Récupère l'addresse de fin de la pile pour un pid
+*/
+void * getFinHeap(long pid){
+	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '\\[heap\\]' | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
+  
+	char val[100];
+	fscanf(fd, "%s", val);
+	return (void *)strtol(val,0,16);  
+}
+
 
 /*
 * Récupère l'addresse de debut de la pile pour un pid

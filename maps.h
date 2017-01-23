@@ -12,9 +12,14 @@
 #ifndef MAPS_H
 #define MAPS_H
 
+
 // Stack bounds 
-void * getDebutStack(long pid); // debut stack proto
+void * getDebutStack(long pid);
 void * getFinStack(long pid);
+
+// Heap bounds 
+void * getDebutHeap(long pid);
+void * getFinHeap(long pid);
 
 // Program bound
 void * getDebutProc(long pid);
