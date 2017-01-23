@@ -90,7 +90,7 @@ char *commands[] = {
 };
 
 
-int main (int argc, char *argv[]) {
+int main (int argc, char *argv[],char* en[]) {
 	int status = 0;
 	char * prog = argv[1];
 	char *emp[] = {NULL};
@@ -103,7 +103,7 @@ int main (int argc, char *argv[]) {
 		if(m == -1 || descF == -1){ kill(getppid(), 9); exit(255); }
 		close(STDOUT_FILENO);
 		dup2(descF, STDOUT_FILENO);
-		execve(prog, emp, emp);
+		execve(prog, emp, en);
 
 		kill(getppid(), 9); // If the child fail, kill his father
 	}else{
@@ -218,8 +218,8 @@ int main (int argc, char *argv[]) {
 						search(value, searchResult, false, pid);
 					}
 				}
-
-				// Commande "fsearch"
+				
+                // Commande "fsearch"
 				if( c == "fsearch" && !running){
 					mode = false; // Set to normal mode
 
