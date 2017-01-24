@@ -13,6 +13,11 @@
 * `alter` -- Modifier le contenu à une adresse choisi parmi celles proposées par la commande list
 * `help` -- Afficher les commandes disponibles
 
+## FIXME
+* problème alter lorsqu'on veut mettre une valeur entre 0 < x < 10
+* premier search, la valeur recherchée ne s'y trouve pas
+* lors de search les premières valeurs affichés ne sont pas cohérentes
+
 ## TODO
 * Implémenter size
 * Pouvoir spécifier un pid à attacher au lieu de lancer un nouveau programme => Imposible avec un ordinateur de l'IUT (LSM yama/ptrace_scope)
