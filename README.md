@@ -35,3 +35,21 @@ Dans le dossier, saisir la commande :
 ./nixwen programme
 ```
 "programme" est le programme que vous souhaitez observer.
+
+
+## Programme de test `dummy`
+
+Aller dans le dossier ou est le programme (par defaut `nixwen/dummy/qt/`
+```bash
+cd dummy/qt/
+```
+Puis créer le Makefile avec `qmake`
+```bash
+qmake dummy.o -o Makefile
+rm .qmake.stash
+```
+Et enfin executer le makefile
+```bash
+make
+```
+Il aura pour nom dummy
