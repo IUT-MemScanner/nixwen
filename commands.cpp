@@ -142,8 +142,9 @@ void list_v(list<void *> list, int max){
 // list max values in the list
 void list_m(map<void *, long> m, int max, long pid){
 	int num = 0;
+    cout << "(pointeur) : valeur lors de la dernier recherche ==> valeur actuel"<< endl;
 	for(auto it = m.begin(); it != m.end() && num < max; ++it){
-		cout << num << " : (" << it->first << ") " << it->second  << " new " << (ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF) << endl;
+		cout << num << " : (" << it->first << ") " << it->second  << " ==> " << (ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF) << endl;
 		num++;
 	} 
 }
