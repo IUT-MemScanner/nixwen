@@ -73,7 +73,6 @@ long getEax(long pid){
 	#endif
 }
 /* Prototype */
-string getHelp();
 char **commands_completion(const char *, int, int);
 char *commands_generator(const char *, int);
 
@@ -118,6 +117,7 @@ int main (int argc, char *argv[],char* en[]) {
 		int currentSize = 16;
 		list<void*> searchResult;
 		map<void*, long> mapR;
+		map<void*, long> oldmapR;
 
 		bool mode = 0; // 0 : normal / 1 : fuzzy
 
@@ -168,9 +168,10 @@ int main (int argc, char *argv[],char* en[]) {
 				if( c == "fuzzysearch" && !running){
 					currentSize = dataSize;
 					mode = true; // Set to fuzzy
-
-					mapR = fuzzsearch(pid, mapR); // BORDER EFFECT !
-					cout << mapR.size() << " résultats trouvés." << endl;
+                    
+                    mapR = fuzzsearch(pid, mapR); // BORDER EFFECT !
+                    oldmapR = mapR;
+                    cout << mapR.size() << " résultats trouvés." << endl;
 			        /* fill list (pointers) (first search)*/
 				}
 
@@ -195,14 +196,16 @@ int main (int argc, char *argv[],char* en[]) {
 							case 2:
 							case 4:
 							case 5:
-								mapR = fuzzsearch(choice, mapR, 0, 0, pid);
+							    oldmapR = mapR;
+                                mapR = fuzzsearch(choice, mapR, 0, 0, pid);
 								break;
 							case 1:
 							case 3:
 								long value;
 								cout << "Entrez une valeur de changement : ";
 								cin >> value;
-								mapR = fuzzsearch(choice, mapR, value, 0, pid);
+                                oldmapR = mapR;
+                                mapR = fuzzsearch(choice, mapR, value, 0, pid);
 								break;
 							case 6:
 								long lbound, hbound;
@@ -210,6 +213,7 @@ int main (int argc, char *argv[],char* en[]) {
 								cin >> lbound;
 								cout << "Entrez la valeur max : ";
 								cin >> hbound;
+							    oldmapR = mapR;
 								mapR = fuzzsearch(6, mapR, lbound, hbound, pid);
 								break;
 							default:
@@ -239,15 +243,15 @@ int main (int argc, char *argv[],char* en[]) {
 					/* use currentSize */
 				}
 
-				// Commande "fsearch"
+				// Commande "list", affiche les n valeurs trouver après recherche
 				if( c == "list"){
 
 					int size;
 					cout << "Entrez le nombre de valeurs souhaitée : ";
 					cin >> size;
 
-					if(mode){ list_m(mapR, size, pid);
-					}else{    list_v(searchResult, size);
+					if(mode){ list_m(oldmapR, size, pid);
+					}else{ list_v(searchResult, size);
 					}
 
 				/* display the `size` first found values that matched last research */
@@ -297,7 +301,19 @@ int main (int argc, char *argv[],char* en[]) {
 
 				}
 				// Commande "help"
-				if( c == "help"){cout << getHelp() << endl;}
+				if( c == "help"){
+                  cout << "Commandes:\n"
+	                      "  exit -- Quitter le programme"
+                          "  cont -- reprendre l'exécution du programme\n"
+	                      "  stop -- stoper l'exécution du programme\n"
+	                      "  fsearch -- initialiser une recherche\n"
+	                      "  fuzzysearch -- initialiser une recherche fuzzy\n"
+	                      "  search -- continuer une recherche commencer avec fsearch ou fuzzysearch\n"
+	                      "  list -- afficher les résultats de la recherche\n"
+	                      "  size -- definir la taille des données à rechercher\n"
+	                      "  alter -- modifier le contenu à une adresse choisie parmi ceux proposer parmi la commande list\n"
+	                      "  help -- Afficher les commandes disponibles"  << endl;
+                }
 
 				free(line);
 				line = NULL;
@@ -306,21 +322,6 @@ int main (int argc, char *argv[],char* en[]) {
 		cout << "Father "<< getpid() <<" died, child was "<< pid << endl;
 	}
 	return 0;
-}
-
-string getHelp(){
-	return "Commandes:\n"
-	"  exit -- Quitter le programme"
-	"  cont -- reprendre l'exécution du programme\n"
-	"  stop -- stoper l'exécution du programme\n"
-	"  fsearch -- initialiser une recherche\n"
-	"  fuzzysearch -- initialiser une recherche fuzzy\n"
-	"  search -- continuer une recherche commencer avec fsearch ou fuzzysearch\n"
-	"  list -- afficher les résultats de la recherche\n"
-	"  size -- definir la taille des données à rechercher\n"
-	"  alter -- modifier le contenu à une adresse choisie parmi ceux proposer parmi la commande list\n"
-	"  help -- Afficher les commandes disponibles"
-	;
 }
 
 char **commands_completion(const char *text, int start, int end)
