@@ -117,7 +117,6 @@ int main (int argc, char *argv[],char* en[]) {
 		int currentSize = 16;
 		list<void*> searchResult;
 		map<void*, long> mapR;
-		map<void*, long> oldmapR;
 
 		bool mode = 0; // 0 : normal / 1 : fuzzy
 
@@ -170,7 +169,6 @@ int main (int argc, char *argv[],char* en[]) {
 					mode = true; // Set to fuzzy
                     
                     mapR = fuzzsearch(pid, mapR); // BORDER EFFECT !
-                    oldmapR = mapR;
                     cout << mapR.size() << " résultats trouvés." << endl;
 			        /* fill list (pointers) (first search)*/
 				}
@@ -196,7 +194,6 @@ int main (int argc, char *argv[],char* en[]) {
 							case 2:
 							case 4:
 							case 5:
-							    oldmapR = mapR;
                                 mapR = fuzzsearch(choice, mapR, 0, 0, pid);
 								break;
 							case 1:
@@ -204,7 +201,6 @@ int main (int argc, char *argv[],char* en[]) {
 								long value;
 								cout << "Entrez une valeur de changement : ";
 								cin >> value;
-                                oldmapR = mapR;
                                 mapR = fuzzsearch(choice, mapR, value, 0, pid);
 								break;
 							case 6:
@@ -213,7 +209,6 @@ int main (int argc, char *argv[],char* en[]) {
 								cin >> lbound;
 								cout << "Entrez la valeur max : ";
 								cin >> hbound;
-							    oldmapR = mapR;
 								mapR = fuzzsearch(6, mapR, lbound, hbound, pid);
 								break;
 							default:
@@ -250,7 +245,7 @@ int main (int argc, char *argv[],char* en[]) {
 					cout << "Entrez le nombre de valeurs souhaitée : ";
 					cin >> size;
 
-					if(mode){ list_m(oldmapR, size, pid);
+					if(mode){ list_m(mapR, size, pid);
 					}else{ list_v(searchResult, size);
 					}
 
