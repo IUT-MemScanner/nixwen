@@ -275,7 +275,7 @@ int main (int argc, char *argv[],char* en[]) {
 					
 					if(mapR.end() != mapR.find((void*)n)){
 						cout << "Entrez la valeur souhaitée : ";
-						cin >> v;
+						cin >> dec >> v;
 	
 						if(v <= pow(2,currentSize)) { alter((void*)n, v, pid); }  
 						else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}

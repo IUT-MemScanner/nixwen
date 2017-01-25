@@ -38,7 +38,7 @@ Dans le dossier, saisir la commande :
 
 ## Programme de test `dummy`
 
-Aller dans le dossier ou est le programme (par defaut `nixwen/dummy/qt/`)
+Aller dans le dossier contenant le programme (par défaut sous `nixwen/dummy/qt/`)
 ```bash
 cd dummy/qt/
 ```
@@ -46,8 +46,8 @@ Puis créer le Makefile avec `qmake`
 ```bash
 qmake
 ```
-Et enfin executer le makefile
+Enfin, exécuter le makefile :
 ```bash
 make
 ```
-Il aura pour nom dummy
+L'exécutable généré aura alors pour nom "dummy".
