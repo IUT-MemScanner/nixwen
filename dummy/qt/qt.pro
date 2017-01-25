@@ -1,6 +1,6 @@
 TEMPLATE = app
 QT += widgets
-TARGET = qt
+TARGET = dummy
 INCLUDEPATH += .
 SOURCES += dummy.cpp
 CONFIG += c++11
