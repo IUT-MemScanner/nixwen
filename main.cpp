@@ -175,7 +175,7 @@ int main (int argc, char *argv[],char* en[]) {
 
 			// Commande "search"
 			if( c == "search" && !running){
-				if(mode){
+				// if(mode){
 
 					int choice;
 					cout <<  "0 : +   the value is greater" << endl <<
@@ -221,13 +221,13 @@ int main (int argc, char *argv[],char* en[]) {
 						cout << "Not implemented yet";
 					}
 
-				}else{
-					int value;
-					cout << "Entrez la valeur : ";
-					cin >> value;
-
-					search(pid, value, searchResult, false);
-				}
+				// }else{
+				// 	int value;
+				// 	cout << "Entrez la valeur : ";
+				// 	cin >> value;
+				//
+				// 	search(pid, value, searchResult, false);
+				// }
 			}
 
 			// Commande "fsearch"
