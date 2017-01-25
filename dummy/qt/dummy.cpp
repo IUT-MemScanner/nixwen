@@ -1,10 +1,10 @@
-#include <QApplication>
-#include <QSizePolicy>
-#include <QPushButton>
-#include <QGridLayout>
-#include <QObject>
-#include <QString>
-#include <QLabel>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QSizePolicy>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QGridLayout>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtWidgets/QLabel>
 
 using namespace std;
 
