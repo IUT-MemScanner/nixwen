@@ -15,8 +15,7 @@
 
 ## FIXME
 * problème alter lorsqu'on veut mettre une valeur entre 0 < x < 10
-* premier search, la valeur recherchée ne s'y trouve pas
-* lors de search les premières valeurs affichés ne sont pas cohérentes
+* problem fsearch, a verifier
 
 ## TODO
 * Implémenter size
