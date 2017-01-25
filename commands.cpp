@@ -21,39 +21,40 @@
 
 using namespace std;
 // searcher
-void search (long pid, long value, list<void *> list ,bool isnew){
-	
-    void * b = getDebutStack(pid);
-	void * e = getFinStack(pid);
-	void * bb = getDebutHeap(pid);
-	void * ee = getFinHeap(pid);
-	void * p = b;
-	int m = 0; // 0 : stack search / 1 : heap search
-	if(isnew) list = {};
-
-	while (((p < e && m==0) || (p < ee && m==1)) && isnew){
-		if(m==0){
-			cout << "\r" << p << "/ "<< e;
-			if(value  == ptrace(PTRACE_PEEKDATA, pid, p, NULL))
-				list.push_back(p);
-			p = p + sizeof((int)(0));
-			if(p>=e){
-				m = 1;
-				p = bb;
-			}
-		}else{
-			cout << "\r" << p << "/ "<< ee;
-			if(value  == ptrace(PTRACE_PEEKDATA, pid, p, NULL))
-				list.push_back(p);
-			p = p + sizeof((int)(0));	
-		}
-	}
-	if(!isnew){
-			list.remove_if([&](void * o){return value != ptrace(PTRACE_PEEKDATA, pid, o, NULL); });
-	}
-
-	cout << list.size() << endl;
-}
+// weird issue now this functionnalitie is implements in fuzzsearch
+// void search (long pid, long value, list<void *> list ,bool isnew){
+//
+//     void * b = getDebutStack(pid);
+// 	void * e = getFinStack(pid);
+// 	void * bb = getDebutHeap(pid);
+// 	void * ee = getFinHeap(pid);
+// 	void * p = b;
+// 	int m = 0; // 0 : stack search / 1 : heap search
+// 	if(isnew) list = {};
+//
+// 	while (((p < e && m==0) || (p < ee && m==1)) && isnew){
+// 		if(m==0){
+// 			cout << "\r" << p << "/ "<< e;
+// 			if(value  == ptrace(PTRACE_PEEKDATA, pid, p, NULL))
+// 				list.push_back(p);
+// 			p = p + sizeof((int)(0));
+// 			if(p>=e){
+// 				m = 1;
+// 				p = bb;
+// 			}
+// 		}else{
+// 			cout << "\r" << p << "/ "<< ee;
+// 			if(value  == ptrace(PTRACE_PEEKDATA, pid, p, NULL))
+// 				list.push_back(p);
+// 			p = p + sizeof((int)(0));
+// 		}
+// 	}
+// 	if(!isnew){
+// 			list.remove_if([&](void * o){return value != ptrace(PTRACE_PEEKDATA, pid, o, NULL); });
+// 	}
+//
+// 	cout << list.size() << endl;
+// }
 
 // TODO : Fuzzy search
 /* Fuzzy search
@@ -62,7 +63,7 @@ void search (long pid, long value, list<void *> list ,bool isnew){
  */
 map<void *, long> fuzzsearch(long pid, map<void *, long> m){ // init
 	cout << "Starting search..." <<endl;
-	
+
 	void * b = getDebutStack(pid);
 	void * e = getFinStack(pid);
 	void * p = b;
@@ -71,7 +72,7 @@ map<void *, long> fuzzsearch(long pid, map<void *, long> m){ // init
 		m[p] = ptrace(PTRACE_PEEKDATA, pid, p, NULL) & 0xFFFFFFFF;
 		p = p + sizeof((int)(0));
 	}
-	
+
 	p = getDebutHeap(pid);
 	e = getFinHeap(pid);
 
@@ -83,7 +84,7 @@ map<void *, long> fuzzsearch(long pid, map<void *, long> m){ // init
 	return m;
 }
 
-map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, long pid){ // search	
+map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, long pid){ // search
 // opId codes
 // 0 : +   the value is greater
 // 1 : +?  the value is greater by
@@ -97,8 +98,8 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 		long n = ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF;
 		switch(opId){
 			case 0:
-				if(it->second < n) 
-					newM[it->first] = n; 
+				if(it->second < n)
+					newM[it->first] = n;
 				break;
 			case 1:
 				if(it->second + v1 == n)
@@ -128,11 +129,11 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
                 if(n == v1)
                   newM[it->first] = n;
                 break;
-            
+
             default:
 				cout << "Error..." << endl;
 		}
-	}			
+	}
 	return newM;
 }
 
@@ -152,10 +153,9 @@ void list_m(map<void *, long> m, int max, long pid){
 	for(auto it = m.begin(); it != m.end() && num < max; ++it){
 		cout << num << " : (" << it->first << ") " << it->second  << " ==> " << (ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF) << endl;
 		num++;
-	} 
+	}
 }
 // alter a value with a new value
 bool alter(void* pointer, long newvalue, long pid){
 	return ptrace(PTRACE_POKEDATA, pid, pointer, newvalue) != -1;
 }
-
