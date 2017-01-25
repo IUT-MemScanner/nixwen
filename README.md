@@ -37,9 +37,9 @@ Dans le dossier, saisir la commande :
 "programme" est le programme que vous souhaitez observer.
 
 
-## Programme de test `dummy`
+## Programme de test `dummy` faux :/ a revoir
 
-Aller dans le dossier ou est le programme (par defaut `nixwen/dummy/qt/`
+Aller dans le dossier ou est le programme (par defaut `nixwen/dummy/qt/`)
 ```bash
 cd dummy/qt/
 ```
