@@ -184,7 +184,8 @@ int main (int argc, char *argv[],char* en[]) {
 							     "3 : -?  the value is lower by"<< endl <<
 							     "4 : =   the value is the same"<< endl <<
 								 "5 : /=  the value has changed"<< endl <<
-								 "6 : ><  in between comparison"<< endl;
+								 "6 : ><  in between comparison"<< endl <<
+                                 "7 : is the value"<< endl;
 								  
 						cout << "Choix du mode : ";
 						cin >> choice;
@@ -198,11 +199,16 @@ int main (int argc, char *argv[],char* en[]) {
 								break;
 							case 1:
 							case 3:
+                            case 7:
 								long value;
-								cout << "Entrez une valeur de changement : ";
-								cin >> value;
+                                if (choice==7){
+                                  cout << "Entrez une valeur recherchée : ";
+                                }else{
+								  cout << "Entrez une valeur de changement : ";
+                                }
+                                cin >> value;
                                 mapR = fuzzsearch(choice, mapR, value, 0, pid);
-								break;
+                                break;
 							case 6:
 								long lbound, hbound;
 								cout << "Entrez la valeur min : ";
@@ -220,20 +226,18 @@ int main (int argc, char *argv[],char* en[]) {
 						cout << "Entrez la valeur : ";
 						cin >> value;
 
-						search(value, searchResult, false, pid);
+						search(pid, value, searchResult, false);
 					}
 				}
 				
                 // Commande "fsearch"
 				if( c == "fsearch" && !running){
 					mode = false; // Set to normal mode
-
 					long value;
 					cout << "Entrez une valeur : ";
 					cin >> value;
-
-					searchResult = search(value, searchResult, false, pid);
-					cout << searchResult.size() << " résultats trouvés." << endl;
+					searchResult = search(pid ,value, searchResult, true);
+                    cout << searchResult.size() << " résultats trouvés." << endl;
 					/* remove pointers of the list that point to value different */
 					/* use currentSize */
 				}

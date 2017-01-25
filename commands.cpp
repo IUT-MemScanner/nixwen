@@ -21,8 +21,9 @@
 
 using namespace std;
 // searcher
-void search(long value, list<void *> list ,bool isnew, long pid){
-	void * b = getDebutStack(pid);
+void search (long pid, long value, list<void *> list ,bool isnew){
+	
+    void * b = getDebutStack(pid);
 	void * e = getFinStack(pid);
 	void * bb = getDebutHeap(pid);
 	void * ee = getFinHeap(pid);
@@ -123,7 +124,12 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 				if(n > v1 && n < v2)
 					newM[it->first] = n;
 				break;
-			default:
+            case 7:
+                if(n == v1)
+                  newM[it->first] = n;
+                break;
+            
+            default:
 				cout << "Error..." << endl;
 		}
 	}			
