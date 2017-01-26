@@ -247,8 +247,13 @@ int main (int argc, char *argv[],char* en[]) {
 			if( c == "list"){
 
 				int size;
-				cout << "Entrez le nombre de valeurs souhaitée : ";
-				cin >> size;
+				if ((mapR.size() < 10))
+				{
+					size = 10;
+				}else{
+					cout << "Entrez le nombre de valeurs souhaitée : ";
+					cin >> size;
+				}
 
 				if(mode){ list_m(mapR, size, pid);
 				}else{ list_v(searchResult, size);
