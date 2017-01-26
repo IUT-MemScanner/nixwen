@@ -1,0 +1,17 @@
+fstart
+fuzzysearch
+cont
+// modifier valeur (+33)
+stop
+search -> 1 -> 33
+list  
+cont
+// modifier valeur (-1)
+stop
+search -> 2
+list
+alter pointeur
+cont
+// actualiser affichage
+exit
+
