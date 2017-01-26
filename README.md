@@ -5,11 +5,10 @@
 * `exit` -- Quitter le programme
 * `cont` -- Reprendre l'exécution du programme
 * `stop` -- Stoper l'exécution du programme
-* `fsearch` -- Initialiser une recherche
 * `fuzzysearch` -- Initialiser une recherche fuzzy
 * `search` -- Continuer une recherche commencer avec fsearch ou fuzzysearch
 * `list` -- Afficher les résultats de la recherche
-* `size` --  Definir la taille des données à rechercher
+* `fstart` -- Reprendre l'exécution du programme puis le stopper 1 seconde plus tard
 * `alter` -- Modifier le contenu à une adresse choisi parmi celles proposées par la commande list
 * `help` -- Afficher les commandes disponibles
 
