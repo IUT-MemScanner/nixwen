@@ -12,12 +12,12 @@
 * `alter` -- Modifier le contenu à une adresse choisi parmi celles proposées par la commande list
 * `help` -- Afficher les commandes disponibles
 
-## FIXME
-* problème alter lorsqu'on veut mettre une valeur entre 0 < x < 10
-* problem fsearch, a verifier
-
 ## TODO
-* Implémenter size
+* demander le format d'affichage de list (`unsign int`, `int`, `String`)
+* gérer des parramtre pour nos commandes
+* tester avec des programmes que l'on a pas cré
+* tui ncursed de nixwen
+* Implémenter size / modifier 
 * Pouvoir spécifier un pid à attacher au lieu de lancer un nouveau programme => Imposible avec un ordinateur de l'IUT (LSM yama/ptrace_scope)
 
 ## Installation et utilisation
