@@ -205,7 +205,6 @@ int main (int argc, char *argv[],char* en[]) {
 			// Commande "fuzzysearch"
 			if( commandes[0] == "fuzzysearch" && !running){
 				currentSize = dataSize;
-				mode = true; // Set to fuzzy
 
 				mapR = fuzzsearch(pid, mapR); // BORDER EFFECT !
 				cout << mapR.size() << " résultats trouvés." << endl;
