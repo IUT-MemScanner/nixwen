@@ -172,14 +172,16 @@ int main (int argc, char *argv[],char* en[]) {
 
 		while((line = readline("> "))){
 			c = string(line);
-
+			if (c=="") {
+				c = "0";
+			}
 			while(c.substr(c.size()-1, c.size()) == " "){ c.pop_back(); }
 
 			vector<string> commandes = explode(" ", c);
 
 
 			// Ajoute les commandes a l'historique
-			if(!commandes.empty()){
+			if(c != ""){
 				add_history(line);
 			}
 
@@ -302,7 +304,7 @@ int main (int argc, char *argv[],char* en[]) {
 					try{
 						long n;
 						long v;
-						cout << "Entrez le pointeur : ";
+						//scout << "Entrez le pointeur : ";
 						n = stol(commandes[1],NULL,16);
 
 						if(mapR.end() != mapR.find((void*)n)){
