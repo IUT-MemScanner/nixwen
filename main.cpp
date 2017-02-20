@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <iostream>
+#include <sstream>
 #include <unistd.h>
 #include <sys/types.h>
 #include <wait.h>
@@ -38,6 +39,8 @@
 
 #include <sys/stat.h>
 #include <fcntl.h>
+
+#include <stdexcept>
 
 #include "maps.h"
 #include "commands.h"
@@ -72,6 +75,9 @@ long getEax(long pid){
 	return reg.eax;
 	#endif
 }
+
+
+
 /* Prototype */
 char **commands_completion(const char *, int, int);
 char *commands_generator(const char *, int);
@@ -91,6 +97,37 @@ char *commands[] = {
 	(char *)"fstart",
 	NULL
 };
+
+vector<string> explode( const string &delimiter, const string &str)
+{
+    vector<string> arr;
+
+    int strleng = str.length();
+    int delleng = delimiter.length();
+    if (delleng==0)
+        return arr;//no change
+
+    int i=0;
+    int k=0;
+    while( i<strleng )
+    {
+        int j=0;
+        while (i+j<strleng && j<delleng && str[i+j]==delimiter[j])
+            j++;
+        if (j==delleng)//found delimiter
+        {
+            arr.push_back(  str.substr(k, i-k) );
+            i+=delleng;
+            k=i;
+        }
+        else
+        {
+            i++;
+        }
+    }
+    arr.push_back(  str.substr(k, i-k) );
+    return arr;
+}
 
 
 int main (int argc, char *argv[],char* en[]) {
@@ -139,24 +176,27 @@ int main (int argc, char *argv[],char* en[]) {
 
 			while(c.substr(c.size()-1, c.size()) == " "){ c.pop_back(); }
 
+			vector<string> commandes = explode(" ", c);
+
+
 			// Ajoute les commandes a l'historique
-			if(c != ""){
+			if(!commandes.empty()){
 				add_history(line);
 			}
 
 			// Commande "exit"
-			if( c=="exit" ){
+			if( commandes[0]=="exit" ){
 				break;
 			}
 
 			// Commande "cont"
-			if(c == "cont"){
+			if(commandes[0] == "cont"){
 				ptrace(PTRACE_CONT, pid, NULL, SIGCONT);
 				running = true;
 			}
 
 			// Commande "stop"
-			if( c == "stop" && running){
+			if( commandes[0] == "stop" && running){
 				// Caution ! If it happen twice, wait will be stuck !
 				kill(pid, SIGSTOP);
 				wait(&status);
@@ -164,7 +204,7 @@ int main (int argc, char *argv[],char* en[]) {
 			}
 
 			// Commande "fuzzysearch"
-			if( c == "fuzzysearch" && !running){
+			if( commandes[0] == "fuzzysearch" && !running){
 				currentSize = dataSize;
 				mode = true; // Set to fuzzy
 
@@ -174,10 +214,53 @@ int main (int argc, char *argv[],char* en[]) {
 			}
 
 			// Commande "search"
-			if( c == "search" && !running){
-				// if(mode){
-
+			if( commandes[0] == "search" && !running){
+				if (commandes.size() >= 2) {
 					int choice;
+					try{
+						choice = stoi(commandes[1]);
+						switch(choice){
+							case 0:
+							case 2:
+							case 4:
+							case 5:
+								mapR = fuzzsearch(choice, mapR, 0, 0, pid);
+								break;
+							case 1:
+							case 3:
+							case 7:
+								if (commandes.size() >= 3) {
+									long value = stol(commandes[2]);
+									mapR = fuzzsearch(choice, mapR, value, 0, pid);
+								}
+								else {
+									cerr << "search choice value" << endl;
+								}
+
+							break;
+							case 6:
+								if (commandes.size() >= 4)  {
+									long lbound, hbound;
+									lbound = stoi(commandes[2]);
+									hbound = stoi(commandes[3]);
+									mapR = fuzzsearch(6, mapR, lbound, hbound, pid);
+								}
+								else {
+									cerr << "search choice value value" << endl;
+								}
+							break;
+							default:
+							cout << "Not implemented yet";
+							}
+						}
+						catch (const invalid_argument& ia) {
+	  						cerr << "Invalid argument: " << ia.what() << endl;
+  					}
+	  				catch (const out_of_range& oor) {
+						    cerr << "Out of Range error: " << oor.what() << endl;
+					  }
+				}
+				else {
 					cout <<  "0 : +   the value is greater" << endl <<
 					"1 : +?  the value is greater by"<< endl <<
 					"2 : -   the value is lower"<< endl <<
@@ -186,115 +269,84 @@ int main (int argc, char *argv[],char* en[]) {
 					"5 : /=  the value has changed"<< endl <<
 					"6 : ><  in between comparison"<< endl <<
 					"7 : =? is the value"<< endl;
+				}
 
-					cout << "Choix du mode : ";
-					cin >> choice;
-
-					switch(choice){
-						case 0:
-						case 2:
-						case 4:
-						case 5:
-						mapR = fuzzsearch(choice, mapR, 0, 0, pid);
-						break;
-						case 1:
-						case 3:
-						case 7:
-						long value;
-						if (choice==7){
-							cout << "Entrez une valeur recherchée : ";
-						}else{
-							cout << "Entrez une valeur de changement : ";
-						}
-						cin >> value;
-						mapR = fuzzsearch(choice, mapR, value, 0, pid);
-						break;
-						case 6:
-						long lbound, hbound;
-						cout << "Entrez la valeur min : ";
-						cin >> lbound;
-						cout << "Entrez la valeur max : ";
-						cin >> hbound;
-						mapR = fuzzsearch(6, mapR, lbound, hbound, pid);
-						break;
-						default:
-						cout << "Not implemented yet";
-					}
-
-				// }else{
-				// 	int value;
-				// 	cout << "Entrez la valeur : ";
-				// 	cin >> value;
-				//
-				// 	search(pid, value, searchResult, false);
-				// }
 			}
 
-			// Commande "fsearch"
-			// weird issue now this functionnalitie is implements in fuzzsearch
-			// if( c == "fsearch" && !running){
-			// 	mode = false; // Set to normal mode
-			// 	long value;
-			// 	cout << "Entrez une valeur : ";
-			// 	cin >> value;
-			// 	searchResult = search(pid ,value, searchResult, true);
-			//             cout << searchResult.size() << " résultats trouvés." << endl;
-			// 	/* remove pointers of the list that point to value different */
-			// 	/* use currentSize */
-			// }
 
 			// Commande "list", affiche les n valeurs trouver après recherche
-			if( c == "list"){
+			if( commandes[0] == "list"){
 
-				int size;
-				if ((mapR.size() < 10))
+				int size = 10;
+				if ((commandes.size() >= 2))
 				{
-					size = 10;
-				}else{
-					cout << "Entrez le nombre de valeurs souhaitée : ";
-					cin >> size;
+					try{
+						size = stoi(commandes[1]);
+					}
+					catch (const invalid_argument& ia) {
+							//cerr << "Invalid argument: " << ia.what() << endl;
+					}
+					catch (const out_of_range& oor) {
+							//cerr << "Out of Range error: " << oor.what() << endl;
+					}
 				}
 
-				if(mode){ list_m(mapR, size, pid);
-				}else{ list_v(searchResult, size);
-				}
+				list_m(mapR, size, pid);
+
 
 				/* display the `size` first found values that matched last research */
 			}
 
-			// NOT IMPLEMENT
-			// if( c == "size"){
-			// 	int v;
-			// 	cout << "Entrez une taille (1,2,4 ou 8) : ";
-			// 	cin >> v;
-			// 	if(v==8 || v==16 || v==32 || v==64){ dataSize = v; }
-			// 	/* Set the size of the searched data */
-			// }
 
 			// Commande "alter"
-			if( c == "alter"){
+			if( commandes[0] == "alter"){
+				if (commandes.size() >= 3) {
+					try{
+						long n;
+						long v;
+						cout << "Entrez le pointeur : ";
+						n = stol(commandes[1],NULL,16);
 
-				long n;
-				long v;
-				cout << "Entrez le pointeur : ";
-				cin >> hex >> n;
+						if(mapR.end() != mapR.find((void*)n)){
+							v = stol(commandes[2],NULL,10);
 
-				if(mapR.end() != mapR.find((void*)n)){
-					cout << "Entrez la valeur souhaitée : ";
-					cin >> dec >> v;
-
-					if(v <= pow(2,currentSize)) { alter((void*)n, v, pid); }
-					else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}
-				}else{
-					cout << "Erreur, le pointeur n'est pas dans la liste" << endl;
+							if(v <= pow(2,currentSize)) { alter((void*)n, v, pid); }
+							else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}
+						}else{
+							cout << "Erreur, le pointeur n'est pas dans la liste" << endl;
+						}
+					}
+					catch (const invalid_argument& ia) {
+							cerr << "Invalid argument: " << ia.what() << endl;
+					}
+					catch (const out_of_range& oor) {
+							cerr << "Out of Range error: " << oor.what() << endl;
+					}
+				}
+				else {
+					cerr << "alter pointer value" << endl;
 				}
 			}
-			if( c == "fstart"){
+
+			if( commandes[0] == "fstart"){
 
 				ptrace(PTRACE_CONT, pid, NULL, SIGCONT);
 				running = true;
 
-				sleep(1);
+				if (commandes.size() >= 2) {
+					try{
+						sleep(stoi(commandes[1]));
+					}
+					catch (const invalid_argument& ia) {
+							cerr << "Invalid argument: " << ia.what() << endl;
+					}
+					catch (const out_of_range& oor) {
+							cerr << "Out of Range error: " << oor.what() << endl;
+					}
+				}
+				else {
+					sleep(2);
+				}
 
 				if(running){
 					// Caution ! If it happen twice, wait will be stuck !
@@ -306,7 +358,7 @@ int main (int argc, char *argv[],char* en[]) {
 
 			}
 			// Commande "help"
-			if( c == "help"){
+			if( commandes[0] == "help"){
 				cout << "Commandes:\n"
 				"  exit -- Quitter le programme"
 				"  cont -- reprendre l'exécution du programme\n"
@@ -318,7 +370,7 @@ int main (int argc, char *argv[],char* en[]) {
 				"  alter -- modifier le contenu à une adresse choisie parmi ceux proposer parmi la commande list\n"
 				"  help -- Afficher les commandes disponibles"  << endl;
 			}
-
+			commandes.clear();
 			free(line);
 			line = NULL;
 		}
