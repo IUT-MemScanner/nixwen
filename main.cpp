@@ -155,7 +155,6 @@ int main (int argc, char *argv[],char* en[]) {
 		list<void*> searchResult;
 		map<void*, long> mapR;
 
-		bool mode = 0; // 0 : normal / 1 : fuzzy
 
 		// function for customize the default autocompletion
 		rl_attempted_completion_function = commands_completion;
