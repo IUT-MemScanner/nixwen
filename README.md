@@ -13,11 +13,7 @@
 * `help` -- Afficher les commandes disponibles
 
 ## TODO
-* demander le format d'affichage de list (`unsign int`, `int`, `String`)
-* gérer des parramtre pour nos commandes
-* tester avec des programmes que l'on a pas cré
-* tui ncursed de nixwen
-* Implémenter size / modifier 
+* [voir wiki](https://github.com/IUT-MemScanner/nixwen/wiki/projet-S4)
 * Pouvoir spécifier un pid à attacher au lieu de lancer un nouveau programme => Imposible avec un ordinateur de l'IUT (LSM yama/ptrace_scope)
 
 ## Installation et utilisation
