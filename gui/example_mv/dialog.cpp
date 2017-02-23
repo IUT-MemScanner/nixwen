@@ -45,7 +45,7 @@ void Dialog::buttonsOrientationChanged(int index)
         resize(size() + QSize(newSizeHint.width(), -oldSizeHint.height()));
     }
 
-    mainLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
+    mainLayout->setSizeConstraint(QLaybuttonsOrientationChanged(int)out::SetDefaultConstraint);
 }
 
 void Dialog::rotateWidgets()
