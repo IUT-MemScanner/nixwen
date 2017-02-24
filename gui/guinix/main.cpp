@@ -3,6 +3,6 @@
 
 int main(int argc, char *argv[]){
     QApplication app(argc, argv);
-    Fenetre();
+    Fenetre() f;
     return app.exec();
 }
