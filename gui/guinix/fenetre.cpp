@@ -43,8 +43,56 @@ void Fenetre::creerHautDroite(QSplitter *splitvertical)
 	splitvertical->addWidget(hautdroite);
 	QVBoxLayout *layhautdroite = new QVBoxLayout(); //TODO remplacer le VBoxLayout par un layout approprié
 	hautdroite->setLayout(layhautdroite);
-
+	
 	//TODO partie en haut à droite
+
+
+
+	QHBoxLayout *secondlayhd = new QHBoxLayout();
+	layhautdroite->addLayout(secondlayhd);
+
+	QCheckBox *box = new QCheckBox("hex");
+	secondlayhd->addWidget(box);
+
+	QLineEdit *lineedit = new QLineEdit("");
+	secondlayhd->addWidget(lineedit);
+
+	QHBoxLayout *thirdlayhd = new QHBoxLayout();
+	layhautdroite->addLayout(thirdlayhd);
+
+
+
+	QComboBox *liste = new QComboBox();
+	QLabel *l1 = new QLabel("Search : ");
+	liste->addItem("valeur exacte");
+	liste->addItem("supérieure à");
+	thirdlayhd->addWidget(l1);
+	thirdlayhd->addWidget(liste);
+
+
+	QHBoxLayout *fourthlayhd = new QHBoxLayout();
+	layhautdroite->addLayout(fourthlayhd);
+
+	QComboBox *liste2 = new QComboBox();
+	liste2->addItem("Int");
+	liste2->addItem("String");
+	fourthlayhd->addWidget(liste2);
+
+
+	QHBoxLayout *fifthlayhd = new QHBoxLayout();
+	layhautdroite->addLayout(fifthlayhd);
+
+	QPushButton *b1 = new QPushButton("New search");
+	fifthlayhd->addWidget(b1);
+	b1->setFixedSize(100, 30);
+
+
+	QPushButton *b2 = new QPushButton("Search");
+	fifthlayhd->addWidget(b2);
+	b2->setFixedSize(100, 30);
+
+
+
 }
 
 void Fenetre::creerBas(QSplitter *splithorizontal)	
