@@ -37,7 +37,7 @@ string fichier(long pid) {
     split(sub,' ',contenu);
     string nom = contenu[1];
     nom = nom.substr (1,nom.find(")")-1);
- 
+
     fclose(fichier);
     return nom;
   }
@@ -50,7 +50,7 @@ string fichier(long pid) {
 */
 void * getDebutHeap(long pid){
 	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '\\[heap\\]' | cut -d \"-\" -f1").c_str(), "r");
-	
+
 	char val[100]; // Stockage du df
 	fscanf(fd,"%s",val);	// recupération du df
 	return (void *)strtol(val, 0, 16);  // conversion en long depuis base 16
@@ -61,10 +61,10 @@ void * getDebutHeap(long pid){
 */
 void * getFinHeap(long pid){
 	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '\\[heap\\]' | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
-  
+
 	char val[100];
 	fscanf(fd, "%s", val);
-	return (void *)strtol(val,0,16);  
+	return (void *)strtol(val,0,16);
 }
 
 
@@ -73,7 +73,7 @@ void * getFinHeap(long pid){
 */
 void * getDebutStack(long pid){
 	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '\\[stack\\]' | cut -d \"-\" -f1").c_str(), "r");
-	
+
 	char val[100]; // Stockage du df
 	fscanf(fd,"%s",val);	// recupération du df
 	return (void *)strtol(val, 0, 16);  // conversion en long depuis base 16
@@ -84,10 +84,10 @@ void * getDebutStack(long pid){
 */
 void * getFinStack(long pid){
 	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '\\[stack\\]' | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
-  
+
 	char val[100];
 	fscanf(fd, "%s", val);
-	return (void *)strtol(val,0,16);  
+	return (void *)strtol(val,0,16);
 }
 
 /*
@@ -95,10 +95,10 @@ void * getFinStack(long pid){
 */
 void * getDebutProc(long pid){
 	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '"+fichier(pid)+"$' | head -1 | cut -d '-' -f1").c_str(), "r");
-	
+
 	char val[100];
 	fscanf(fd, "%s", val);
-	return (void *)strtol(val,0,16);  
+	return (void *)strtol(val,0,16);
 }
 
 /*
@@ -106,10 +106,10 @@ void * getDebutProc(long pid){
 */
 void * getFinProc(long pid){
 	FILE* fd = popen(("cat /proc/"+to_string(pid)+"/maps | grep '"+fichier(pid)+"$' | tail -1 | cut -d ' ' -f1 | cut -d '-' -f2").c_str(), "r");
-	
+
 	char val[100];
 	fscanf(fd, "%s", val);
-	return (void *)strtol(val,0,16);  
+	return (void *)strtol(val,0,16);
 }
 
 /*

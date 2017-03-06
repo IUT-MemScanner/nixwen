@@ -28,6 +28,7 @@
 #include <sys/reg.h>
 #include <sys/user.h>
 #include <sys/signal.h>
+#include <sys/signal.h>
 
 #include <algorithm>
 #include <cctype>
@@ -44,6 +45,9 @@
 
 #include "maps.h"
 #include "commands.h"
+
+#include "langue.h"
+#include "utils.hpp"
 
 
 // add -lreadline to compiler
@@ -98,36 +102,6 @@ char *commands[] = {
 	NULL
 };
 
-vector<string> explode( const string &delimiter, const string &str)
-{
-    vector<string> arr;
-
-    int strleng = str.length();
-    int delleng = delimiter.length();
-    if (delleng==0)
-        return arr;//no change
-
-    int i=0;
-    int k=0;
-    while( i<strleng )
-    {
-        int j=0;
-        while (i+j<strleng && j<delleng && str[i+j]==delimiter[j])
-            j++;
-        if (j==delleng)//found delimiter
-        {
-            arr.push_back(  str.substr(k, i-k) );
-            i+=delleng;
-            k=i;
-        }
-        else
-        {
-            i++;
-        }
-    }
-    arr.push_back(  str.substr(k, i-k) );
-    return arr;
-}
 
 
 int main (int argc, char *argv[],char* en[]) {
@@ -170,6 +144,13 @@ int main (int argc, char *argv[],char* en[]) {
 		cout << "Child PID : " << pid << endl;
 		// main loop
 
+
+		Langue texte = Langue("fr","tui");
+		cout << texte.welcome_msg() << endl;
+
+
+
+
 		while((line = readline("> "))){
 			c = string(line);
 			if (c=="") {
@@ -177,12 +158,14 @@ int main (int argc, char *argv[],char* en[]) {
 			}
 			while(c.substr(c.size()-1, c.size()) == " "){ c.pop_back(); }
 
-			vector<string> commandes = explode(" ", c);
+			vector<string> commandes = utils::explode(c, " ");
 
 
 			// Ajoute les commandes a l'historique
 			if(c != ""){
 				add_history(line);
+			}else{
+				cout << texte.quick_help() << endl;
 			}
 
 			// Commande "exit"
@@ -209,7 +192,7 @@ int main (int argc, char *argv[],char* en[]) {
 				currentSize = dataSize;
 
 				mapR = fuzzsearch(pid, mapR); // BORDER EFFECT !
-				cout << mapR.size() << " résultats trouvés." << endl;
+				cout << mapR.size() << texte.fuzzysearch_msg() << endl;
 				/* fill list (pointers) (first search)*/
 			}
 
@@ -224,51 +207,44 @@ int main (int argc, char *argv[],char* en[]) {
 							case 2:
 							case 4:
 							case 5:
-								mapR = fuzzsearch(choice, mapR, 0, 0, pid);
-								break;
+							mapR = fuzzsearch(choice, mapR, 0, 0, pid);
+							break;
 							case 1:
 							case 3:
 							case 7:
-								if (commandes.size() >= 3) {
-									long value = stol(commandes[2]);
-									mapR = fuzzsearch(choice, mapR, value, 0, pid);
-								}
-								else {
-									cerr << "search choice value" << endl;
-								}
+							if (commandes.size() >= 3) {
+								long value = stol(commandes[2]);
+								mapR = fuzzsearch(choice, mapR, value, 0, pid);
+							}
+							else {
+								cerr << texte.missing_argument("") << endl;
+							}
 
 							break;
 							case 6:
-								if (commandes.size() >= 4)  {
-									long lbound, hbound;
-									lbound = stoi(commandes[2]);
-									hbound = stoi(commandes[3]);
-									mapR = fuzzsearch(6, mapR, lbound, hbound, pid);
-								}
-								else {
-									cerr << "search choice value value" << endl;
-								}
+							if (commandes.size() >= 4)  {
+								long lbound, hbound;
+								lbound = stoi(commandes[2]);
+								hbound = stoi(commandes[3]);
+								mapR = fuzzsearch(6, mapR, lbound, hbound, pid);
+							}
+							else {
+								cerr << texte.missing_argument("search") << endl;
+							}
 							break;
 							default:
-							cout << "Not implemented yet";
-							}
+							cout << texte.search_help() << endl;
 						}
-						catch (const invalid_argument& ia) {
-	  						cerr << "Invalid argument: " << ia.what() << endl;
-  					}
-	  				catch (const out_of_range& oor) {
-						    cerr << "Out of Range error: " << oor.what() << endl;
-					  }
+					}
+					catch (const invalid_argument& ia) {
+						std::cerr << texte.error_invalid_argument("search") << std::endl;
+					}
+					catch (const out_of_range& oor) {
+						std::cerr << texte.error_out_of_range("an integer") << std::endl;
+					}
 				}
 				else {
-					cout <<  "0 : +   the value is greater" << endl <<
-					"1 : +?  the value is greater by"<< endl <<
-					"2 : -   the value is lower"<< endl <<
-					"3 : -?  the value is lower by"<< endl <<
-					"4 : =   the value is the same"<< endl <<
-					"5 : /=  the value has changed"<< endl <<
-					"6 : ><  in between comparison"<< endl <<
-					"7 : =? is the value"<< endl;
+					cout <<  texte.search_help() << endl;
 				}
 
 			}
@@ -284,10 +260,10 @@ int main (int argc, char *argv[],char* en[]) {
 						size = stoi(commandes[1]);
 					}
 					catch (const invalid_argument& ia) {
-							//cerr << "Invalid argument: " << ia.what() << endl;
+						// std::cerr << texte.error_invalid_argument("list") << std::endl;
 					}
 					catch (const out_of_range& oor) {
-							//cerr << "Out of Range error: " << oor.what() << endl;
+						std::cerr << texte.error_out_of_range("an integer") << std::endl;
 					}
 				}
 
@@ -304,27 +280,26 @@ int main (int argc, char *argv[],char* en[]) {
 					try{
 						long n;
 						long v;
-						//scout << "Entrez le pointeur : ";
 						n = stol(commandes[1],NULL,16);
 
 						if(mapR.end() != mapR.find((void*)n)){
 							v = stol(commandes[2],NULL,10);
 
 							if(v <= pow(2,currentSize)) { alter((void*)n, v, pid); }
-							else{ cout << "La valeur est en dehors des bornes pour la taille actuelle" << endl;}
+							else{ cout << texte.alter_msg("boundary") << endl;}
 						}else{
-							cout << "Erreur, le pointeur n'est pas dans la liste" << endl;
+							cout << texte.alter_msg("not_found") << endl;
 						}
 					}
 					catch (const invalid_argument& ia) {
-							cerr << "Invalid argument: " << ia.what() << endl;
+						std::cerr << texte.error_invalid_argument("alter") << std::endl;
 					}
 					catch (const out_of_range& oor) {
-							cerr << "Out of Range error: " << oor.what() << endl;
+						std::cerr << texte.error_out_of_range("a long") << std::endl;
 					}
 				}
 				else {
-					cerr << "alter pointer value" << endl;
+					std::cout << texte.missing_argument("alter") << endl;
 				}
 			}
 
@@ -338,46 +313,40 @@ int main (int argc, char *argv[],char* en[]) {
 						sleep(stoi(commandes[1]));
 					}
 					catch (const invalid_argument& ia) {
-							cerr << "Invalid argument: " << ia.what() << endl;
+						std::cerr << texte.error_invalid_argument("fstart") << std::endl;
 					}
-					catch (const out_of_range& oor) {
-							cerr << "Out of Range error: " << oor.what() << endl;
-					}
+				catch (const out_of_range& oor) {
+					std::cerr << texte.error_out_of_range("an integer") << std::endl;
 				}
-				else {
-					sleep(2);
-				}
-
-				if(running){
-					// Caution ! If it happen twice, wait will be stuck !
-					kill(pid, SIGSTOP);
-					wait(&status);
-					running = false;
-				}
-
-
 			}
-			// Commande "help"
-			if( commandes[0] == "help"){
-				cout << "Commandes:\n"
-				"  exit -- Quitter le programme"
-				"  cont -- reprendre l'exécution du programme\n"
-				"  stop -- stoper l'exécution du programme\n"
-				"  fuzzysearch -- initialiser une recherche fuzzy\n"
-				"  search -- continuer une recherche commencer avec fsearch ou fuzzysearch\n"
-				"  list -- afficher les résultats de la recherche\n"
-				"  fstart -- reprendre l'exécution du programme puis le re stoper\n"
-				"  alter -- modifier le contenu à une adresse choisie parmi ceux proposer parmi la commande list\n"
-				"  help -- Afficher les commandes disponibles"  << endl;
+			else {
+				sleep(2);
 			}
-			commandes.clear();
-			free(line);
-			line = NULL;
+
+			if(running){
+				// Caution ! If it happen twice, wait will be stuck !
+				kill(pid, SIGSTOP);
+				wait(&status);
+				running = false;
+			}
+
+
 		}
-		kill(pid, 9); // Be sure to kill the child mhouahahaha
-		cout << "Father "<< getpid() <<" died, child was "<< pid << endl;
+		// Commande "help"
+		if( commandes[0] == "help"){
+			cout << texte.quick_help() << endl;
+		}
+
+
+		commandes.clear();
+		free(line);
+		line = NULL;
+
 	}
-	return 0;
+	kill(pid, 9); // Be sure to kill the child mhouahahaha
+	cout << "Father "<< getpid() <<" died, child was "<< pid << endl;
+}
+return 0;
 }
 
 char **commands_completion(const char *text, int start, int end)

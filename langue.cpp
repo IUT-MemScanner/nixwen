@@ -22,8 +22,6 @@ Langue::  Langue(string langue, string interface)
   {
     load("ressource/conf_fr.cfg");
   }
-
-
 }
 
 // format du fichier compris key=definition
@@ -44,7 +42,7 @@ bool Langue::load(string file)
         if(str.empty() || str[0] == COMM_CHAR)
             continue;
         // spltit à tous les carractères '=' puis si des '=' se trouve dans la parti definition (droite), les laisser
-        vect = utils::explode("=", str);
+        vect = utils::explode(str, "=");
         if (vect.size() > 2)
         {
           std::string s;
@@ -55,7 +53,7 @@ bool Langue::load(string file)
         }
         if(vect.size() == 2)
         {
-            vector<string> v = utils::explode("\\n", vect[1]);
+            vector<string> v = utils::explode(vect[1],"\\n");
             std::string s;
             std::for_each(v.begin(), v.end(), [&](const std::string &piece){ s += piece + "\n"; });
             s.pop_back();

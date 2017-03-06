@@ -28,7 +28,6 @@ public:
 private:
   string langue = "fr";
   string interface = "tui";
-  string get(string aide);
   map<string, string> conf;
   bool load(string file);
   string getString(string key, string def);

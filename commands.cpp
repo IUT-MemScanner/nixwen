@@ -20,41 +20,6 @@
 #include "maps.h"
 
 using namespace std;
-// searcher
-// weird issue now this functionnalitie is implements in fuzzsearch
-// void search (long pid, long value, list<void *> list ,bool isnew){
-//
-//     void * b = getDebutStack(pid);
-// 	void * e = getFinStack(pid);
-// 	void * bb = getDebutHeap(pid);
-// 	void * ee = getFinHeap(pid);
-// 	void * p = b;
-// 	int m = 0; // 0 : stack search / 1 : heap search
-// 	if(isnew) list = {};
-//
-// 	while (((p < e && m==0) || (p < ee && m==1)) && isnew){
-// 		if(m==0){
-// 			cout << "\r" << p << "/ "<< e;
-// 			if(value  == ptrace(PTRACE_PEEKDATA, pid, p, NULL))
-// 				list.push_back(p);
-// 			p = p + sizeof((int)(0));
-// 			if(p>=e){
-// 				m = 1;
-// 				p = bb;
-// 			}
-// 		}else{
-// 			cout << "\r" << p << "/ "<< ee;
-// 			if(value  == ptrace(PTRACE_PEEKDATA, pid, p, NULL))
-// 				list.push_back(p);
-// 			p = p + sizeof((int)(0));
-// 		}
-// 	}
-// 	if(!isnew){
-// 			list.remove_if([&](void * o){return value != ptrace(PTRACE_PEEKDATA, pid, o, NULL); });
-// 	}
-//
-// 	cout << list.size() << endl;
-// }
 
 // TODO : Fuzzy search
 /* Fuzzy search
@@ -137,15 +102,15 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 	return newM;
 }
 
+void stringSearch(map<void *, long> m, long v1, long v2, long pid) {
+	map<void *, long  > newM = {};
+	for(auto it = m.begin(); it != m.end(); ++it){
+		long n = ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF;
+		newM[it->first] = n;
 
-// list max values in the list
-void list_v(list<void *> list, int max){
-  auto it = list.begin();
-  for(int i = 0; i < max && i < list.size(); i++){
-		cout << i << " : " << *it << endl;
-    ++it;
-  }
+		}
 }
+
 // list max values in the list
 void list_m(map<void *, long> m, int max, long pid){
 	int num = 0;
