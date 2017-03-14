@@ -24,6 +24,8 @@ public:
   int getCurrenSize();
   int getPid();
   int init();
+  int getType();
+  void setType(int type);
 
 
 private:
@@ -32,6 +34,7 @@ private:
   int currentSize;
   map<void*, long> mapR;
   long pid;
+  int type;
 
 };
 

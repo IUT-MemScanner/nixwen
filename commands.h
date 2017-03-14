@@ -22,6 +22,8 @@ void list_v(std::list<void *> l, int max);
 void list_m(std::map<void *, long> l, int max, long pid);
 
 // alter a value with a new value
-bool alter(void* pointer, long newvalue, long pid);
+bool alter(void* pointer, long newvalue, long pid, int type);
+long get(void * p, int type, int pid);
+
 
 #endif

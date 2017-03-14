@@ -3,22 +3,12 @@ DEBUG = -g
 CFLAGS = -c -Wall  $(DEBUG) -std=c++11
 LFLAGS = -Wall $(DEBUG) -std=c++11
 LIB = -lreadline
-EXEC=nixwen
+EXEC=nixwen_tui
 
 all: $(EXEC) clean
 
-nixwen: main.o maps.o commands.o utils.cpp langue.cpp
+nixwen_tui: nixwen.cpp maps.cpp commands.cpp utils.cpp langue.cpp tui.cpp
 	$(CC) $(LFLAGS) $^ -o $@ $(LIB)
-
-main.o: main.cpp
-	$(CC) $(CFLAGS) -o $@ $<
-
-commands.o: commands.cpp
-	$(CC) $(CFLAGS) -o $@ $<
-
-maps.o: maps.cpp
-	$(CC) $(CFLAGS) -o $@ $<
-
 
 
 .PHONY: clean

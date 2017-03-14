@@ -27,7 +27,6 @@ using namespace std;
  * @return the list of the found values
  */
 map<void *, long> fuzzsearch(long pid, map<void *, long> m){ // init
-	cout << "Starting search..." <<endl;
 
 	void * b = getDebutStack(pid);
 	void * e = getFinStack(pid);
@@ -45,7 +44,6 @@ map<void *, long> fuzzsearch(long pid, map<void *, long> m){ // init
 		m[p] = ptrace(PTRACE_PEEKDATA, pid, p, NULL) & 0xFFFFFFFF;
 		p = p + sizeof((int)(0));
 	}
-
 	return m;
 }
 
@@ -90,13 +88,12 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 				if(n > v1 && n < v2)
 					newM[it->first] = n;
 				break;
-            case 7:
-                if(n == v1)
-                  newM[it->first] = n;
-                break;
-
-            default:
-				cout << "Error..." << endl;
+      case 7:
+          if(n == v1)
+            newM[it->first] = n;
+          break;
+    	default:
+				break;
 		}
 	}
 	return newM;
@@ -120,7 +117,55 @@ void list_m(map<void *, long> m, int max, long pid){
 		num++;
 	}
 }
+
+
+long get(void * p, int type, int pid){
+    /** id codes
+    1 : long  (64b - 8o)
+    2 : int   (32b - 4o)
+    3 : short (16b - 2o)
+    4 : char  (8b  - 1o)
+**/
+
+    switch(type){
+        case 1:
+            return ptrace(PTRACE_PEEKDATA, pid, p, NULL);
+        case 2:
+            return (long)((int)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
+        case 3:
+            return (long)((short)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
+        case 4:
+            return (long)((char)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
+        default:
+            return 0xDEADBEEF;
+    }
+}
+
+
 // alter a value with a new value
-bool alter(void* pointer, long newvalue, long pid){
-	return ptrace(PTRACE_POKEDATA, pid, pointer, newvalue) != -1;
+bool alter(void* pointer, long newvalue, long pid, int type){
+	/** id codes
+    1 : long  (64b - 8o)
+    2 : int   (32b - 4o)
+    3 : short (16b - 2o)
+    4 : char  (8b  - 1o)
+	**/
+	long curV = get(pointer, 2,pid);
+	switch(type){
+        case 1:
+            return ptrace(PTRACE_POKEDATA, pid, pointer, newvalue) != -1;
+            break;
+        case 2:
+            return ptrace(PTRACE_POKEDATA, pid, pointer, (curV & (((1 << 32)-1) << 32)) + ((unsigned int  )newvalue)) != -1;
+            break;
+        case 3:
+            return ptrace(PTRACE_POKEDATA, pid, pointer, (curV & (((1 << 48)-1) << 16)) + ((unsigned short)newvalue)) != -1;
+            break;
+        case 4:
+            return ptrace(PTRACE_POKEDATA, pid, pointer, (curV & (((1 << 56)-1) << 16)) + ((unsigned char )newvalue)) != -1;
+            break;
+        default:
+						return false;
+            break;
+    }
 }

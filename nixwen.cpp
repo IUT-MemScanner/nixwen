@@ -54,6 +54,8 @@ Nixwen::Nixwen(int argc, char *argv[], char *en[]) {
     Nixwen::running = false;
     Nixwen::dataSize = 16;
     Nixwen::currentSize = 16;
+    Nixwen::type = 1;
+    Nixwen::cont();
   }
 }
 
@@ -121,7 +123,7 @@ int Nixwen::replace(long pointer, long newValue)
       if(Nixwen::mapR.end() != Nixwen::mapR.find((void*)n)){
         v = newValue;
         if(v <= pow(2,Nixwen::currentSize)) {
-          alter((void*)n, v, Nixwen::pid); }
+          alter((void*)n, v, Nixwen::pid, Nixwen::type); }
         else{
           // cout << texte.alter_msg("boundary") << endl;
           return 3;
@@ -181,4 +183,12 @@ int Nixwen::quit(){
 
 int Nixwen::getCurrenSize(){
   return Nixwen::currentSize;
+}
+
+int Nixwen::getType(){
+  return Nixwen::type;
+}
+
+void Nixwen::setType(int type){
+  Nixwen::type = type;
 }
