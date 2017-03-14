@@ -1,6 +1,5 @@
 /*
 * =====================================================================================
-* http://www.secretmango.com/jimb/Whitepapers/ptrace/ptrace.html
 *       Filename:  main.cpp
 *
 *    Description:
