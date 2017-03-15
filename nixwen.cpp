@@ -69,7 +69,7 @@ int Nixwen::init(){
     Nixwen::mapR = fuzzsearch(Nixwen::pid, Nixwen::mapR);
     return Nixwen::mapR.size();
   }
-  return -1;
+  return -1; // fail, child is not stop
 }
 
 int Nixwen::search(int choice, long firstValue, long secondValue)
@@ -95,11 +95,11 @@ int Nixwen::search(int choice, long firstValue, long secondValue)
       Nixwen::mapR = fuzzsearch(6, Nixwen::mapR, lbound, hbound, Nixwen::pid);
       break;
       default:
-      return -1;
+      return -1; //fail, choice not found
     }
-    return 1;
+    return 1; // sucess
   }
-  return -2;
+  return -2; // fail, child is not stopped
 }
 
 map<void *, long> Nixwen::list(int length)
@@ -126,13 +126,13 @@ int Nixwen::replace(long pointer, long newValue)
           alter((void*)n, v, Nixwen::pid, Nixwen::type); }
         else{
           // cout << texte.alter_msg("boundary") << endl;
-          return 3;
+          return -2; // fail, out of boundary
           }
       }else{
 //        cout << texte.alter_msg("not_found") << endl;
-        return 2;
+        return -1; // fail, pointer not found
       }
-      return 1;
+      return 1; //sucess
 }
 
 
@@ -143,7 +143,7 @@ int Nixwen::cont()
     Nixwen::running = true;
     return 1;
   }else{
-    return -1;
+    return -1; // fail, child is not stopped
   }
 }
 
@@ -154,9 +154,9 @@ int Nixwen::stop()
     kill(Nixwen::pid, SIGSTOP);
     wait(&status);
     Nixwen::running = false;
-    return 1;
+    return 1; //sucess
   }else{
-    return -1;
+    return -1; // fail, child is stopped
   }
 }
 
@@ -173,12 +173,12 @@ int Nixwen::fstart(int time)
     wait(&status);
     Nixwen::running = false;
   }
-  return 1;
+  return 1; // sucess
 }
 
 int Nixwen::quit(){
   kill(Nixwen::pid, 9); // Be sure to kill the child
-  return 1;
+  return 1; //sucess
 }
 
 int Nixwen::getCurrenSize(){

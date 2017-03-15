@@ -13,11 +13,12 @@
 #define MAPS_H
 
 
-// Stack bounds 
+// Stack bounds
+
 void * getDebutStack(long pid);
 void * getFinStack(long pid);
 
-// Heap bounds 
+// Heap bounds
 void * getDebutHeap(long pid);
 void * getFinHeap(long pid);
 

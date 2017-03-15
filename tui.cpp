@@ -70,29 +70,18 @@ int main (int argc, char *argv[],char* en[]) {
 		string c = "";
 		char *line;
 
-		// cout << "Status de wait : " << status << endl;
-
-		// cout << "Stack : " << hex << getDebutStack(pid) << dec << endl;
-
 		cout << "Child PID : " << nix.getPid() << endl;
-		// main loop
 
-
+    //initialisation of the text
 		Langue texte = Langue("fr","tui");
+
 		cout << texte.welcome_msg() << endl;
 
-
-
-
+	   // main loop
 		while((line = readline("> "))){
 			c = string(line);
-			if (c=="") {
-				c = "0";
-			}
-			while(c.substr(c.size()-1, c.size()) == " "){ c.pop_back(); }
 
 			vector<string> commandes = utils::explode(c, " ");
-
 
 			// Ajoute les commandes a l'historique
 			if(c != ""){
@@ -108,17 +97,28 @@ int main (int argc, char *argv[],char* en[]) {
 
 			// Commande "cont"
 			if(commandes[0] == "cont"){
-        nix.cont();
+        if (-1 == nix.cont()) {
+          std::cout << texte.getString("isrunning","running") << std::endl;
+        }
 			}
 
 			// Commande "stop"
 			if( commandes[0] == "stop"){
+        if (-1 == nix.stop()) {
+          std::cout << texte.getString("isstop","stopped") << std::endl;
+        }
         nix.stop();
 			}
 
 			// Commande "fuzzysearch"
 			if( commandes[0] == "fuzzysearch"){
-				cout << nix.init() << texte.fuzzysearch_msg() << endl;
+        int ret = nix.init();
+        if(-1 == nix.init()){
+          std::cout << texte.getString("isrunning","running") << std::endl;
+        }else{
+          cout << ret << texte.fuzzysearch_msg() << endl;
+        }
+
 				/* fill list (pointers) (first search)*/
 			}
 
@@ -212,7 +212,7 @@ int main (int argc, char *argv[],char* en[]) {
 						v = stol(commandes[2],NULL,10);
 
             nix.replace(n, v) ;
-            
+
 					}
 					catch (const invalid_argument& ia) {
 						std::cerr << texte.error_invalid_argument("alter") << std::endl;

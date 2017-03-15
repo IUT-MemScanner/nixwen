@@ -17,4 +17,4 @@ clean:
 	rm -rf *.o
 
 cleanAll: clean
-	rm -rf dbg
+	rm -rf nixwen nixwen_tui
