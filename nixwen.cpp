@@ -66,7 +66,7 @@ int Nixwen::getPid(){
 int Nixwen::init(){
   if (!Nixwen::running) {
     Nixwen::currentSize = dataSize;
-    Nixwen::mapR = fuzzsearch(Nixwen::pid, Nixwen::mapR);
+    Nixwen::mapR = fuzzsearch(Nixwen::pid, Nixwen::mapR, Nixwen::type);
     return Nixwen::mapR.size();
   }
   return -1;
@@ -81,18 +81,18 @@ int Nixwen::search(int choice, long firstValue, long secondValue)
       case 2:
       case 4:
       case 5:
-      mapR = fuzzsearch(choice, Nixwen::mapR, 0, 0, Nixwen::pid);
+      mapR = fuzzsearch(choice, Nixwen::mapR, 0, 0, Nixwen::pid, Nixwen::type);
       break;
       case 1:
       case 3:
       case 7:
-      mapR = fuzzsearch(choice, Nixwen::mapR, firstValue, 0, pid);
+      mapR = fuzzsearch(choice, Nixwen::mapR, firstValue, 0, pid,Nixwen::type);
       break;
       case 6:
       long lbound, hbound;
       lbound = firstValue;
       hbound = secondValue;
-      Nixwen::mapR = fuzzsearch(6, Nixwen::mapR, lbound, hbound, Nixwen::pid);
+      Nixwen::mapR = fuzzsearch(6, Nixwen::mapR, lbound, hbound, Nixwen::pid,Nixwen::type);
       break;
       default:
       return -1;

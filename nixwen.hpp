@@ -26,7 +26,12 @@ public:
   int init();
   int getType();
   void setType(int type);
-
+/** id type
+    1 : long  (64b - 8o)
+    2 : int   (32b - 4o)
+    3 : short (16b - 2o)
+    4 : char  (8b  - 1o)
+**/
 
 private:
   bool running;

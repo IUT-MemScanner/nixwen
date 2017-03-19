@@ -82,6 +82,7 @@ int main (int argc, char *argv[],char* en[]) {
 		cout << texte.welcome_msg() << endl;
 
 
+       
 
 
 		while((line = readline("> "))){
@@ -115,6 +116,26 @@ int main (int argc, char *argv[],char* en[]) {
 			if( commandes[0] == "stop"){
         nix.stop();
 			}
+            
+            if(commandes[0] == "type"){
+              if(commandes.size() >= 2){
+                string c = commandes[1];
+                if("long"==c){
+                    nix.setType(1);
+                }else if("int"==c){
+                    nix.setType(2);
+                }else if("short"==c){
+                    nix.setType(3);
+                }else if("char"==c){
+                    nix.setType(4);
+                }
+              }else{
+                cout << texte.getString("lol","lol") << endl;
+              }
+            }
+            if(commandes[0] == "gType"){
+                cout << nix.getType()<<endl;
+            }
 
 			// Commande "fuzzysearch"
 			if( commandes[0] == "fuzzysearch"){

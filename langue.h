@@ -24,13 +24,13 @@ public:
   string fuzzysearch_msg();
   string alter_msg(string);
   string welcome_msg();
+  string getString(string key, string def);
 
 private:
   string langue = "fr";
   string interface = "tui";
   map<string, string> conf;
   bool load(string file);
-  string getString(string key, string def);
 };
 
 #endif // LANGUE_H_INCLUDED
