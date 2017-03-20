@@ -150,6 +150,8 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 	return newM;
 }
 
+
+//TODO
 void stringSearch(map<void *, long> m, long v1, long v2, long pid) {
 	map<void *, long  > newM = {};
 	for(auto it = m.begin(); it != m.end(); ++it){
@@ -159,7 +161,7 @@ void stringSearch(map<void *, long> m, long v1, long v2, long pid) {
 		}
 }
 
-// list max values in the list
+// list max values in the list useless now
 void list_m(map<void *, long> m, int max, long pid){
 	int num = 0;
     cout << "(pointeur) : valeur lors de la dernier recherche ==> valeur actuel"<< endl;

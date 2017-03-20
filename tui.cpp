@@ -79,21 +79,14 @@ int main (int argc, char *argv[],char* en[]) {
 
 
 		Langue texte = Langue("fr","tui");
-		cout << texte.welcome_msg() << endl;
-
-
-       
+		cout << texte.welcome_msg() << endl;       
 
 
 		while((line = readline("> "))){
-			c = string(line);
-			if (c=="") {
-				c = "0";
-			}
-			while(c.substr(c.size()-1, c.size()) == " "){ c.pop_back(); }
-
+     
+            c = string(line);
+		
 			vector<string> commandes = utils::explode(c, " ");
-
 
 			// Ajoute les commandes a l'historique
 			if(c != ""){
@@ -102,21 +95,39 @@ int main (int argc, char *argv[],char* en[]) {
 				cout << texte.quick_help() << endl;
 			}
 
+
 			// Commande "exit"
 			if( commandes[0]=="exit" ){
 				break;
 			}
 
-			// Commande "cont"
+ 			// Commande "cont"
 			if(commandes[0] == "cont"){
-        nix.cont();
+        if (-1 == nix.cont()) {
+          std::cout << texte.getString("isrunning","running") << std::endl;
+        }
 			}
 
 			// Commande "stop"
 			if( commandes[0] == "stop"){
+        if (-1 == nix.stop()) {
+          std::cout << texte.getString("isstop","stopped") << std::endl;
+        }
         nix.stop();
 			}
-            
+
+			// Commande "fuzzysearch"
+			if( commandes[0] == "fuzzysearch"){
+        int ret = nix.init();
+        if(-1 == nix.init()){
+          std::cout << texte.getString("isrunning","running") << std::endl;
+        }else{
+          cout << ret << texte.fuzzysearch_msg() << endl;
+        }
+				/* fill list (pointers) (first search)*/
+			}
+
+           
             if(commandes[0] == "type"){
               if(commandes.size() >= 2){
                 string c = commandes[1];
