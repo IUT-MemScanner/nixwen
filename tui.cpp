@@ -74,7 +74,6 @@ int main (int argc, char *argv[],char* en[]) {
 
     //initialisation of the text
 		Langue texte = Langue("fr","tui");
-
 		cout << texte.welcome_msg() << endl;
 
 	   // main loop
@@ -90,12 +89,13 @@ int main (int argc, char *argv[],char* en[]) {
 				cout << texte.quick_help() << endl;
 			}
 
+
 			// Commande "exit"
 			if( commandes[0]=="exit" ){
 				break;
 			}
 
-			// Commande "cont"
+ 			// Commande "cont"
 			if(commandes[0] == "cont"){
         if (-1 == nix.cont()) {
           std::cout << texte.getString("isrunning","running") << std::endl;
@@ -118,7 +118,33 @@ int main (int argc, char *argv[],char* en[]) {
         }else{
           cout << ret << texte.fuzzysearch_msg() << endl;
         }
+				/* fill list (pointers) (first search)*/
+			}
 
+
+            if(commandes[0] == "type"){
+              if(commandes.size() >= 2){
+                string c = commandes[1];
+                if("long"==c){
+                    nix.setType(1);
+                }else if("int"==c){
+                    nix.setType(2);
+                }else if("short"==c){
+                    nix.setType(3);
+                }else if("char"==c){
+                    nix.setType(4);
+                }
+              }else{
+                cout << texte.getString("lol","lol") << endl;
+              }
+            }
+            if(commandes[0] == "gType"){
+                cout << nix.getType()<<endl;
+            }
+
+			// Commande "fuzzysearch"
+			if( commandes[0] == "fuzzysearch"){
+				cout << nix.init() << texte.fuzzysearch_msg() << endl;
 				/* fill list (pointers) (first search)*/
 			}
 

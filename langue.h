@@ -31,7 +31,6 @@ private:
   string interface = "tui";
   map<string, string> conf;
   bool load(string file);
-
 };
 
 #endif // LANGUE_H_INCLUDED

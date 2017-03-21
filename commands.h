@@ -14,8 +14,8 @@
  *
  * @return the list of the found values
  */
-std::map<void *, long> fuzzsearch(long pid, std::map<void *, long> m); // init
-std::map<void *, long> fuzzsearch(int opId, std::map<void *, long> m, long v1, long v2, long pid); // search
+std::map<void *, long> fuzzsearch(long pid, std::map<void *, long> m, int type); // init
+std::map<void *, long> fuzzsearch(int opId, std::map<void *, long> m, long v1, long v2, long pid, int type); // search
 
 // list max values in the list
 void list_v(std::list<void *> l, int max);
