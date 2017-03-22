@@ -26,7 +26,6 @@ public:
   string quick_help();
   string search_help();
   string missing_argument(string commande);
-  string fuzzysearch_msg();
   string alter_msg(string);
   string welcome_msg();
   string getString(string key, string def);

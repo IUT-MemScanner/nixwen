@@ -61,7 +61,7 @@ char *commands[] = {
   (char *)"help",  //aide
   (char *)"fstart", //demarage arrêt auto après une durrée
   (char *)"type",  // definir le type de la prochaine recherche (setter)
-  (char *)"gtype"  // récupérer le type (getter)
+  (char *)"gtype",  // récupérer le type (getter)
   NULL
 };
 
@@ -119,11 +119,12 @@ int main (int argc, char *argv[],char* en[]) {
 
     //! Commande "fuzzysearch"
     if( commandes[0] == "fuzzysearch"){
-      int ret = nix.init();
-      if(-1 == ret{
+      int resultat = nix.init();
+      if(-1 == resultat){
         std::cout << texte.getString("isrunning","running") << std::endl;
       }else{
-        cout << ret << texte.fuzzysearch_msg() << endl;
+        cout << resultat<<endl;
+        std::cout << texte.getString("fuzzysearch","") << std::endl;
       }
     }
 
@@ -139,9 +140,11 @@ int main (int argc, char *argv[],char* en[]) {
           nix.setType(3);
         }else if("char"==c){
           nix.setType(4);
+        }else{
+          cout << texte.getString("wrongType","parrametre invalide") << endl;
         }
       }else{
-        cout << texte.getString("wrongType","mauvais type") << endl;
+        cout << texte.getString("typeHelp","invalide syntax") << endl;
       }
     }
 
@@ -155,15 +158,11 @@ int main (int argc, char *argv[],char* en[]) {
           break;
         case 3: type = "short";
           break;
-        case 4: type = "char"
+        case 4: type = "char";
           break;
       }
-      cout << type <<endl;
-    }
-
-    //! Commande "fuzzysearch"
-    if( commandes[0] == "fuzzysearch"){
-      cout << nix.init() << texte.fuzzysearch_msg() << endl;
+      std::cout << texte.getString("type","")<< endl;
+      cout << type << endl;
     }
 
     //! Commande "search"

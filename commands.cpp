@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include <iostream>
 #include <unistd.h>
 #include <sys/types.h>
 #include <wait.h>

@@ -10,12 +10,12 @@
 #include <map>
 #include <stdbool.h>
 
-std::map<void *, long> fuzzsearch(long pid, std::map<void *, long> m, int type); // init
-std::map<void *, long> fuzzsearch(int opId, std::map<void *, long> m, long v1, long v2, long pid, int type); // search
+std::map<void *, long> fuzzsearch(long pid, std::map<void *, long> memoire, int type); // init
+std::map<void *, long> fuzzsearch(int codeOperation, std::map<void *, long> memoire, long value1, long value2, long pid, int type); // search
 
 // alter a value with a new value
 bool alter(void* pointer, long newvalue, long pid, int type);
-long get(void * p, int type, int pid);
+long get(void * pointer, int type, int pid);
 
 
 #endif

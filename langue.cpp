@@ -161,10 +161,6 @@ string Langue::alter_msg(string msg)
   }
 }
 
-string Langue::fuzzysearch_msg()
-{
-  return getString("fuzzysearch","");
-}
 
 std::string Langue::welcome_msg()
 {
