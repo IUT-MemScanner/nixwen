@@ -26,65 +26,61 @@ using namespace std;
  *
  * @return the list of the found values
  */
-map<void *, long> fuzzsearch(long pid, map<void *, long> m, int type){ // init
+map<void *, long> fuzzsearch(long pid, map<void *, long> memoire, int type){ // init
 
 	void * b = getDebutStack(pid);
 	void * e = getFinStack(pid);
-	void * p = b;
+	void * pointer = b;
 
-	while (p < e){
+	while (pointer < e){
         switch(type){
         case 1:
-            m[p] = ptrace(PTRACE_PEEKDATA, pid, p, NULL);
-            p = p + sizeof((long)(0));
+            memoire[pointer] = ptrace(PTRACE_PEEKDATA, pid, pointer, NULL);
+            pointer = pointer + sizeof((long)(0));
             break;
         case 2:
-            m[p]  = (long)((int)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
-            p = p + sizeof((int)(0));
+            memoire[pointer]  = (long)((int)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
+            pointer = pointer + sizeof((int)(0));
             break;
         case 3:
-            m[p] = (long)((short)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
-            p = p + sizeof((short)(0));
+            memoire[pointer] = (long)((short)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
+            pointer = pointer + sizeof((short)(0));
             break;
         case 4:
-            m[p] = static_cast<long>((char)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
-            p = p + sizeof((char)(0));
+            memoire[pointer] = static_cast<long>((char)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
+            pointer = pointer + sizeof((char)(0));
             break;
         }
-//		m[p] = ptrace(PTRACE_PEEKDATA, pid, p, NULL) & 0xFFFFFFFF;
-//		p = p + sizeof((int)(0));
 	}
 
-	p = getDebutHeap(pid);
+	pointer = getDebutHeap(pid);
 	e = getFinHeap(pid);
 
-	while (p < e){
+	while (pointer < e){
         switch(type){
         case 1:
-            m[p] = ptrace(PTRACE_PEEKDATA, pid, p, NULL);
-            p = p + sizeof((long)(0));
+            memoire[pointer] = ptrace(PTRACE_PEEKDATA, pid, pointer, NULL);
+            pointer = pointer + sizeof((long)(0));
             break;
         case 2:
-            m[p]  = (long)((int)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
-            p = p + sizeof((int)(0));
+            memoire[pointer]  = (long)((int)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
+            pointer = pointer + sizeof((int)(0));
             break;
         case 3:
-            m[p] = (long)((short)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
-            p = p + sizeof((short)(0));
+            memoire[pointer] = (long)((short)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
+            pointer = pointer + sizeof((short)(0));
             break;
         case 4:
-            m[p] = static_cast<long>((char)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
-            p = p + sizeof((char)(0));
+            memoire[pointer] = static_cast<long>((char)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
+            pointer = pointer + sizeof((char)(0));
             break;
         }
-//		m[p] = ptrace(PTRACE_PEEKDATA, pid, p, NULL) & 0xFFFFFFFF;
-//		p = p + sizeof((int)(0));
 	}
-	return m;
+	return memoire;
 }
 
-map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, long pid,int type){ // search
-// opId codes
+map<void *, long> fuzzsearch(int codeOperation, map<void *, long> memoire, long value1, long value2, long pid,int type){ // search
+// codeOperation codes
 // 0 : +   the value is greater
 // 1 : +?  the value is greater by
 // 2 : -   the value is lower
@@ -94,7 +90,7 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 // 6 : ><  in between comparison
 	map<void *, long> newM = {};
     long n;
-	for(auto it = m.begin(); it != m.end(); ++it){
+	for(auto it = memoire.begin(); it != memoire.end(); ++it){
         switch(type){
         case 1:
             n = ptrace(PTRACE_PEEKDATA, pid, it->first, NULL);
@@ -109,14 +105,13 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
             n = static_cast<long>((char)ptrace(PTRACE_PEEKDATA, pid, it->first, NULL));
             break;
         }
-// long n = ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF;
-		switch(opId){
+		switch(codeOperation){
 			case 0:
 				if(it->second < n)
 					newM[it->first] = n;
 				break;
 			case 1:
-				if(it->second + v1 == n)
+				if(it->second + value1 == n)
 					newM[it->first] = n;
 				break;
 			case 2:
@@ -124,7 +119,7 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 					newM[it->first] = n;
 				break;
 			case 3:
-				if(it->second - v1 == n)
+				if(it->second - value1 == n)
 					newM[it->first] = n;
 				break;
 			case 4:
@@ -136,11 +131,11 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 					newM[it->first] = n;
 				break;
 			case 6:
-				if(n > v1 && n < v2)
+				if(n > value1 && n < value2)
 					newM[it->first] = n;
 				break;
       case 7:
-          if(n == v1)
+          if(n == value1)
             newM[it->first] = n;
           break;
     	default:
@@ -152,43 +147,30 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
 
 
 //TODO
-void stringSearch(map<void *, long> m, long v1, long v2, long pid) {
+void stringSearch(map<void *, long> memoire, long value1, long value2, long pid) {
 	map<void *, long  > newM = {};
-	for(auto it = m.begin(); it != m.end(); ++it){
+	for(auto it = memoire.begin(); it != memoire.end(); ++it){
 		long n = ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF;
 		newM[it->first] = n;
-
 		}
 }
 
-// list max values in the list useless now
-void list_m(map<void *, long> m, int max, long pid){
-	int num = 0;
-    cout << "(pointeur) : valeur lors de la dernier recherche ==> valeur actuel"<< endl;
-	for(auto it = m.begin(); it != m.end() && num < max; ++it){
-		cout << num << " : (" << it->first << ") " << it->second  << " ==> " << (ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF) << endl;
-		num++;
-	}
-}
-
-
-long get(void * p, int type, int pid){
+long get(void * pointer, int type, int pid){
     /** id codes
     1 : long  (64b - 8o)
     2 : int   (32b - 4o)
     3 : short (16b - 2o)
     4 : char  (8b  - 1o)
 **/
-
     switch(type){
         case 1:
-            return ptrace(PTRACE_PEEKDATA, pid, p, NULL);
+            return ptrace(PTRACE_PEEKDATA, pid, pointer, NULL);
         case 2:
-            return (long)((int)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
+            return (long)((int)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
         case 3:
-            return (long)((short)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
+            return (long)((short)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
         case 4:
-            return (long)((char)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
+            return (long)((char)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
         default:
             return 0xDEADBEEF;
     }
