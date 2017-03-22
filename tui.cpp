@@ -1,3 +1,8 @@
+/**
+ * \file      tui.cpp
+ * \version   2.0
+ * \brief     Interface en ligne de commande pour nixwen
+ */
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -92,19 +97,19 @@ int main (int argc, char *argv[],char* en[]) {
     }
 
 
-    // Commande "exit"
+    //! Commande "exit"
     if( commandes[0]=="exit" ){
       break;
     }
 
-    // Commande "cont"
+    //! Commande "cont"
     if(commandes[0] == "cont"){
       if (-1 == nix.cont()) {
         std::cout << texte.getString("isrunning","running") << std::endl;
       }
     }
 
-    // Commande "stop"
+    //! Commande "stop"
     if( commandes[0] == "stop"){
       if (-1 == nix.stop()) {
         std::cout << texte.getString("isstop","stopped") << std::endl;
@@ -112,7 +117,7 @@ int main (int argc, char *argv[],char* en[]) {
       nix.stop();
     }
 
-    // Commande "fuzzysearch"
+    //! Commande "fuzzysearch"
     if( commandes[0] == "fuzzysearch"){
       int ret = nix.init();
       if(-1 == ret{
@@ -122,7 +127,7 @@ int main (int argc, char *argv[],char* en[]) {
       }
     }
 
-    // commande "type"
+    //! commande "type"
     if(commandes[0] == "type"){
       if(commandes.size() >= 2){
         string c = commandes[1];
@@ -140,7 +145,7 @@ int main (int argc, char *argv[],char* en[]) {
       }
     }
 
-    // commande "gtype"
+    //! commande "gtype"
     if(commandes[0] == "gtype"){
       string type = "indéfini";
       switch (nix.getType()) {
@@ -156,17 +161,25 @@ int main (int argc, char *argv[],char* en[]) {
       cout << type <<endl;
     }
 
-    // Commande "fuzzysearch"
+    //! Commande "fuzzysearch"
     if( commandes[0] == "fuzzysearch"){
       cout << nix.init() << texte.fuzzysearch_msg() << endl;
     }
 
-    // Commande "search"
+    //! Commande "search"
     if( commandes[0] == "search"){
       if (commandes.size() >= 2) {
         int choice;
         try{
           choice = stoi(commandes[1]);
+        }
+        catch (const invalid_argument& ia) {
+          std::cerr << texte.error_invalid_argument("search") << std::endl;
+        }
+        catch (const out_of_range& oor) {
+          std::cerr << texte.error_out_of_range("an integer") << std::endl;
+        }
+        try{
           switch(choice){
             case 0:
             case 2:
@@ -179,7 +192,6 @@ int main (int argc, char *argv[],char* en[]) {
             case 7:
             if (commandes.size() >= 3) {
               long value = stol(commandes[2]);
-
               nix.search(choice, value, 0);
             }
             else {
@@ -189,8 +201,8 @@ int main (int argc, char *argv[],char* en[]) {
             case 6:
             if (commandes.size() >= 4)  {
               long lbound, hbound;
-              lbound = stoi(commandes[2]);
-              hbound = stoi(commandes[3]);
+              lbound = stol(commandes[2]);
+              hbound = stol(commandes[3]);
               nix.search(choice, lbound, hbound);
             }
             else {
@@ -205,7 +217,7 @@ int main (int argc, char *argv[],char* en[]) {
           std::cerr << texte.error_invalid_argument("search") << std::endl;
         }
         catch (const out_of_range& oor) {
-          std::cerr << texte.error_out_of_range("an integer") << std::endl;
+          std::cerr << texte.error_out_of_range("a long") << std::endl;
         }
       }
       else {
@@ -214,7 +226,7 @@ int main (int argc, char *argv[],char* en[]) {
     }
 
 
-    // Commande "list", affiche les n valeurs trouver après recherche
+    //! Commande "list", affiche les n valeurs trouver après recherche
     if( commandes[0] == "list"){
 
       int size = 10;
@@ -236,12 +248,10 @@ int main (int argc, char *argv[],char* en[]) {
         cout << num << " : (" << it->first << ") " <<  " ==> " << it->second  << endl;
         num++;
       }
-
-      /* display the `size` first found values that matched last research */
     }
 
 
-    // Commande "alter"
+    //! Commande "alter"
     if( commandes[0] == "alter"){
       if (commandes.size() >= 3) {
         try{
@@ -266,6 +276,7 @@ int main (int argc, char *argv[],char* en[]) {
       }
     }
 
+    //! commande "fstart"
     if( commandes[0] == "fstart"){
       int sleep;
       if (commandes.size() >= 2) {
@@ -284,7 +295,7 @@ int main (int argc, char *argv[],char* en[]) {
       }
       nix.fstart(sleep);
     }
-    // Commande "help"
+    //! Commande "help"
     if( commandes[0] == "help"){
       cout << texte.quick_help() << endl;
     }

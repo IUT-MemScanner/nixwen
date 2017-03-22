@@ -1,0 +1,53 @@
+\hypertarget{commands_8h}{\section{commands.\-h File Reference}
+\label{commands_8h}\index{commands.\-h@{commands.\-h}}
+}
+
+
+Interface en ligne de commande pour nixwen.  
+
+
+{\ttfamily \#include $<$list$>$}\\*
+{\ttfamily \#include $<$map$>$}\\*
+{\ttfamily \#include $<$stdbool.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{commands_8h_af5284f8c0552fc144c88a619aee09437}{std\-::map$<$ void $\ast$, long $>$ {\bfseries fuzzsearch} (long pid, std\-::map$<$ void $\ast$, long $>$ m, int type)}\label{commands_8h_af5284f8c0552fc144c88a619aee09437}
+
+\item 
+\hypertarget{commands_8h_a2e35347df3bc6d9697880cf491ef1d07}{std\-::map$<$ void $\ast$, long $>$ {\bfseries fuzzsearch} (int op\-Id, std\-::map$<$ void $\ast$, long $>$ m, long v1, long v2, long pid, int type)}\label{commands_8h_a2e35347df3bc6d9697880cf491ef1d07}
+
+\item 
+bool \hyperlink{commands_8h_aab40cbfa427ba7b5ab2bd626816bfb6b}{alter} (void $\ast$pointer, long newvalue, long pid, int type)
+\item 
+long \hyperlink{commands_8h_ac40c4f0a40c2be4f00956394213ee89e}{get} (void $\ast$p, int type, int pid)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Interface en ligne de commande pour nixwen. \begin{DoxyVersion}{Version}
+2.\-0 
+\end{DoxyVersion}
+
+
+\subsection{Function Documentation}
+\hypertarget{commands_8h_aab40cbfa427ba7b5ab2bd626816bfb6b}{\index{commands.\-h@{commands.\-h}!alter@{alter}}
+\index{alter@{alter}!commands.h@{commands.\-h}}
+\subsubsection[{alter}]{\setlength{\rightskip}{0pt plus 5cm}bool alter (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{pointer, }
+\item[{long}]{newvalue, }
+\item[{long}]{pid, }
+\item[{int}]{type}
+\end{DoxyParamCaption}
+)}}\label{commands_8h_aab40cbfa427ba7b5ab2bd626816bfb6b}
+modifie une valeur à une addresse par une autre valeur d'un type type 1 \-: long (64b -\/ 8o) 2 \-: int (32b -\/ 4o) 3 \-: short (16b -\/ 2o) 4 \-: char (8b -\/ 1o) \hypertarget{commands_8h_ac40c4f0a40c2be4f00956394213ee89e}{\index{commands.\-h@{commands.\-h}!get@{get}}
+\index{get@{get}!commands.h@{commands.\-h}}
+\subsubsection[{get}]{\setlength{\rightskip}{0pt plus 5cm}long get (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{pointer, }
+\item[{int}]{type, }
+\item[{int}]{pid}
+\end{DoxyParamCaption}
+)}}\label{commands_8h_ac40c4f0a40c2be4f00956394213ee89e}
+getter d'une valeur à une addresse type 1 \-: long (64b -\/ 8o) 2 \-: int (32b -\/ 4o) 3 \-: short (16b -\/ 2o) 4 \-: char (8b -\/ 1o) 

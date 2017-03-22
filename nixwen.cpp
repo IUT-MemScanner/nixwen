@@ -1,3 +1,8 @@
+/**
+ * \file      nixwen.cpp
+ * \version   2.0
+ * \brief     moteur du programme nixwen
+ */
 
 #include "nixwen.hpp"
 #include <stdlib.h>
@@ -59,10 +64,17 @@ Nixwen::Nixwen(int argc, char *argv[], char *en[]) {
   }
 }
 
+/**
+ * \brief       Getter du pid du programme suivi
+ * \return    un int qui est le pid du processus suivie
+ */
 int Nixwen::getPid(){
   return Nixwen::pid;
 }
 
+/**
+*
+*/
 int Nixwen::init(){
   if (!Nixwen::running) {
     Nixwen::currentSize = dataSize;
@@ -72,6 +84,13 @@ int Nixwen::init(){
   return -1; // fail, child is not stop
 }
 
+
+/**
+ * \brief       raffine une recherche selon un critère
+ * \param    firstValue         valeur si besoin pour la commande (long)
+* \param    secondValue         valeur si besoin pour la commande (long)
+ * \return    un int, représentant : 1 = succes, -1 = choix non trouver, -2 = l'enfant n'est pas arrêter
+ */
 int Nixwen::search(int choice, long firstValue, long secondValue)
 {
   if (!Nixwen::running) {
@@ -102,6 +121,12 @@ int Nixwen::search(int choice, long firstValue, long secondValue)
   return -2; // fail, child is not stopped
 }
 
+
+/**
+ * \brief     getter une de l'image de la mémoire de n case mémoire
+ * \param     length      int représentant le nombres de ligne à retourner
+ * \return    une map contenant l'addresse et sa valeur
+ */
 map<void *, long> Nixwen::list(int length)
 {
   std::map<void *, long> mymap;
@@ -121,6 +146,14 @@ map<void *, long> Nixwen::list(int length)
   return mymap;
 }
 
+
+
+/**
+ * \brief     modifie une valeur a une addresse par une valeur
+ * \param     pointer     long représente l'addresse de la valeur à modifié
+ * \param     pointer     long nouvelle valeur (sera cast dans le type définit dans nixwen)
+ * \return    int : 1 = succes, -1 = pointer non trouver, -2 = pointer hors des bornes
+ */
 int Nixwen::replace(long pointer, long newValue)
 {
       long n;
@@ -132,17 +165,19 @@ int Nixwen::replace(long pointer, long newValue)
         if(v <= pow(2,Nixwen::currentSize)) {
           alter((void*)n, v, Nixwen::pid, Nixwen::type); }
         else{
-          // cout << texte.alter_msg("boundary") << endl;
           return -2; // fail, out of boundary
           }
       }else{
-//        cout << texte.alter_msg("not_found") << endl;
         return -1; // fail, pointer not found
       }
       return 1; //sucess
 }
 
 
+/**
+ * \brief     redémarer le programme suivi
+ * \return    int : 1 = succes, -1 = l'enfant est déja démarrer
+ */
 int Nixwen::cont()
 {
   if (!Nixwen::running) {
@@ -154,6 +189,10 @@ int Nixwen::cont()
   }
 }
 
+/**
+ * \brief     stop le programme suivi
+ * \return    int : 1 = succes, -1 = l'enfant est déja stopper
+ */
 int Nixwen::stop()
 {
   if (Nixwen::running) {
@@ -167,6 +206,12 @@ int Nixwen::stop()
   }
 }
 
+
+/**
+ * \brief     redémare le processus suivi pendant un certains temps
+ * \param     int le temps en second avant de redémarer le fils
+ * \return    int : 1 = succes (toujour 1)
+ */
 int Nixwen::fstart(int time)
 {
   ptrace(PTRACE_CONT, pid, NULL, SIGCONT);
@@ -183,19 +228,36 @@ int Nixwen::fstart(int time)
   return 1; // sucess
 }
 
+/**
+ * \brief     tuer l'enfant
+ * \return    int : 1 = succes (toujour 1)
+ */
 int Nixwen::quit(){
   kill(Nixwen::pid, 9); // Be sure to kill the child
   return 1; //sucess
 }
 
+/**
+ * \brief     getter de la taille de la map (de la recherche courrante)
+ * \return    int : la taille de la map
+ */
 int Nixwen::getCurrenSize(){
   return Nixwen::currentSize;
 }
 
+/**
+ * \brief     redémare le processus suivi pendant un certains temps
+ * \return    int le type : 0 = long; 1 = int ; 2 = short ; 3 = char
+ */
 int Nixwen::getType(){
   return Nixwen::type;
 }
 
+
+/**
+ * \brief     redémare le processus suivi pendant un certains temps
+ * \param     type    int  0 = long; 1 = int ; 2 = short ; 3 = char
+ */
 void Nixwen::setType(int type){
   Nixwen::type = type;
 }

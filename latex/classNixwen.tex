@@ -1,0 +1,226 @@
+\hypertarget{classNixwen}{\section{Nixwen Class Reference}
+\label{classNixwen}\index{Nixwen@{Nixwen}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classNixwen_a405cdb4932df71d29a9524f415b68f17}{{\bfseries Nixwen} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]}, char $\ast$en\mbox{[}$\,$\mbox{]})}\label{classNixwen_a405cdb4932df71d29a9524f415b68f17}
+
+\item 
+int \hyperlink{classNixwen_a4946a70100d56189ce4dc09558d0e06a}{search} (int choice, long first\-Value, long second\-Value)
+\begin{DoxyCompactList}\small\item\em raffine une recherche selon un critère \end{DoxyCompactList}\item 
+map$<$ void $\ast$, long $>$ \hyperlink{classNixwen_a3cc43b333344136f45a5c57e8e7d19ea}{list} (int length)
+\begin{DoxyCompactList}\small\item\em getter une de l'image de la mémoire de n case mémoire \end{DoxyCompactList}\item 
+int \hyperlink{classNixwen_a4a1f1562b9839b3954753c1457b1e7ef}{replace} (long pointer, long new\-Value)
+\begin{DoxyCompactList}\small\item\em modifie une valeur a une addresse par une valeur \end{DoxyCompactList}\item 
+int \hyperlink{classNixwen_ad1c0ae1ea84ff210bfef559604b40da9}{cont} ()
+\begin{DoxyCompactList}\small\item\em redémarer le programme suivi \end{DoxyCompactList}\item 
+int \hyperlink{classNixwen_a00280c84cf8f46b62b314489ef5f9cad}{stop} ()
+\begin{DoxyCompactList}\small\item\em stop le programme suivi \end{DoxyCompactList}\item 
+int \hyperlink{classNixwen_afe628c18cabf1396efdec287e7f3688e}{fstart} (int time)
+\begin{DoxyCompactList}\small\item\em redémare le processus suivi pendant un certains temps \end{DoxyCompactList}\item 
+int \hyperlink{classNixwen_ae698b82d160e61dbb1c7045a2a515d60}{quit} ()
+\begin{DoxyCompactList}\small\item\em tuer l'enfant \end{DoxyCompactList}\item 
+int \hyperlink{classNixwen_a62b3bbf2cd443ea3b34ab9889457191a}{get\-Curren\-Size} ()
+\begin{DoxyCompactList}\small\item\em getter de la taille de la map (de la recherche courrante) \end{DoxyCompactList}\item 
+int \hyperlink{classNixwen_abd727e44ba1e905e0de32927275e079d}{get\-Pid} ()
+\begin{DoxyCompactList}\small\item\em Getter du pid du programme suivi. \end{DoxyCompactList}\item 
+\hypertarget{classNixwen_a687000a751c78aea62c5b6bf2476c215}{int {\bfseries init} ()}\label{classNixwen_a687000a751c78aea62c5b6bf2476c215}
+
+\item 
+int \hyperlink{classNixwen_a5bbc3b7c2129921e1ad6e2e8904f3a8e}{get\-Type} ()
+\begin{DoxyCompactList}\small\item\em redémare le processus suivi pendant un certains temps \end{DoxyCompactList}\item 
+void \hyperlink{classNixwen_ad817194c5c560c30e0397f6396aa6d79}{set\-Type} (int type)
+\begin{DoxyCompactList}\small\item\em redémare le processus suivi pendant un certains temps \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classNixwen_ad1c0ae1ea84ff210bfef559604b40da9}{\index{Nixwen@{Nixwen}!cont@{cont}}
+\index{cont@{cont}!Nixwen@{Nixwen}}
+\subsubsection[{cont}]{\setlength{\rightskip}{0pt plus 5cm}int Nixwen\-::cont (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNixwen_ad1c0ae1ea84ff210bfef559604b40da9}
+
+
+redémarer le programme suivi 
+
+\begin{DoxyReturn}{Returns}
+int \-: 1 = succes, -\/1 = l'enfant est déja démarrer 
+\end{DoxyReturn}
+\hypertarget{classNixwen_afe628c18cabf1396efdec287e7f3688e}{\index{Nixwen@{Nixwen}!fstart@{fstart}}
+\index{fstart@{fstart}!Nixwen@{Nixwen}}
+\subsubsection[{fstart}]{\setlength{\rightskip}{0pt plus 5cm}int Nixwen\-::fstart (
+\begin{DoxyParamCaption}
+\item[{int}]{time}
+\end{DoxyParamCaption}
+)}}\label{classNixwen_afe628c18cabf1396efdec287e7f3688e}
+
+
+redémare le processus suivi pendant un certains temps 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & le temps en second avant de redémarer le fils \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int \-: 1 = succes (toujour 1) 
+\end{DoxyReturn}
+\hypertarget{classNixwen_a62b3bbf2cd443ea3b34ab9889457191a}{\index{Nixwen@{Nixwen}!get\-Curren\-Size@{get\-Curren\-Size}}
+\index{get\-Curren\-Size@{get\-Curren\-Size}!Nixwen@{Nixwen}}
+\subsubsection[{get\-Curren\-Size}]{\setlength{\rightskip}{0pt plus 5cm}int Nixwen\-::get\-Curren\-Size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNixwen_a62b3bbf2cd443ea3b34ab9889457191a}
+
+
+getter de la taille de la map (de la recherche courrante) 
+
+\begin{DoxyReturn}{Returns}
+int \-: la taille de la map 
+\end{DoxyReturn}
+\hypertarget{classNixwen_abd727e44ba1e905e0de32927275e079d}{\index{Nixwen@{Nixwen}!get\-Pid@{get\-Pid}}
+\index{get\-Pid@{get\-Pid}!Nixwen@{Nixwen}}
+\subsubsection[{get\-Pid}]{\setlength{\rightskip}{0pt plus 5cm}int Nixwen\-::get\-Pid (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNixwen_abd727e44ba1e905e0de32927275e079d}
+
+
+Getter du pid du programme suivi. 
+
+\begin{DoxyReturn}{Returns}
+un int qui est le pid du processus suivie 
+\end{DoxyReturn}
+\hypertarget{classNixwen_a5bbc3b7c2129921e1ad6e2e8904f3a8e}{\index{Nixwen@{Nixwen}!get\-Type@{get\-Type}}
+\index{get\-Type@{get\-Type}!Nixwen@{Nixwen}}
+\subsubsection[{get\-Type}]{\setlength{\rightskip}{0pt plus 5cm}int Nixwen\-::get\-Type (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNixwen_a5bbc3b7c2129921e1ad6e2e8904f3a8e}
+
+
+redémare le processus suivi pendant un certains temps 
+
+\begin{DoxyReturn}{Returns}
+int le type \-: 0 = long; 1 = int ; 2 = short ; 3 = char 
+\end{DoxyReturn}
+\hypertarget{classNixwen_a3cc43b333344136f45a5c57e8e7d19ea}{\index{Nixwen@{Nixwen}!list@{list}}
+\index{list@{list}!Nixwen@{Nixwen}}
+\subsubsection[{list}]{\setlength{\rightskip}{0pt plus 5cm}map$<$ void $\ast$, long $>$ Nixwen\-::list (
+\begin{DoxyParamCaption}
+\item[{int}]{length}
+\end{DoxyParamCaption}
+)}}\label{classNixwen_a3cc43b333344136f45a5c57e8e7d19ea}
+
+
+getter une de l'image de la mémoire de n case mémoire 
+
+
+\begin{DoxyParams}{Parameters}
+{\em length} & int représentant le nombres de ligne à retourner \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+une map contenant l'addresse et sa valeur 
+\end{DoxyReturn}
+\hypertarget{classNixwen_ae698b82d160e61dbb1c7045a2a515d60}{\index{Nixwen@{Nixwen}!quit@{quit}}
+\index{quit@{quit}!Nixwen@{Nixwen}}
+\subsubsection[{quit}]{\setlength{\rightskip}{0pt plus 5cm}int Nixwen\-::quit (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNixwen_ae698b82d160e61dbb1c7045a2a515d60}
+
+
+tuer l'enfant 
+
+\begin{DoxyReturn}{Returns}
+int \-: 1 = succes (toujour 1) 
+\end{DoxyReturn}
+\hypertarget{classNixwen_a4a1f1562b9839b3954753c1457b1e7ef}{\index{Nixwen@{Nixwen}!replace@{replace}}
+\index{replace@{replace}!Nixwen@{Nixwen}}
+\subsubsection[{replace}]{\setlength{\rightskip}{0pt plus 5cm}int Nixwen\-::replace (
+\begin{DoxyParamCaption}
+\item[{long}]{pointer, }
+\item[{long}]{new\-Value}
+\end{DoxyParamCaption}
+)}}\label{classNixwen_a4a1f1562b9839b3954753c1457b1e7ef}
+
+
+modifie une valeur a une addresse par une valeur 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pointer} & long représente l'addresse de la valeur à modifié \\
+\hline
+{\em pointer} & long nouvelle valeur (sera cast dans le type définit dans nixwen) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int \-: 1 = succes, -\/1 = pointer non trouver, -\/2 = pointer hors des bornes 
+\end{DoxyReturn}
+\hypertarget{classNixwen_a4946a70100d56189ce4dc09558d0e06a}{\index{Nixwen@{Nixwen}!search@{search}}
+\index{search@{search}!Nixwen@{Nixwen}}
+\subsubsection[{search}]{\setlength{\rightskip}{0pt plus 5cm}int Nixwen\-::search (
+\begin{DoxyParamCaption}
+\item[{int}]{choice, }
+\item[{long}]{first\-Value, }
+\item[{long}]{second\-Value}
+\end{DoxyParamCaption}
+)}}\label{classNixwen_a4946a70100d56189ce4dc09558d0e06a}
+
+
+raffine une recherche selon un critère 
+
+
+\begin{DoxyParams}{Parameters}
+{\em first\-Value} & valeur si besoin pour la commande (long) \\
+\hline
+{\em second\-Value} & valeur si besoin pour la commande (long) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+un int, représentant \-: 1 = succes, -\/1 = choix non trouver, -\/2 = l'enfant n'est pas arrêter 
+\end{DoxyReturn}
+\hypertarget{classNixwen_ad817194c5c560c30e0397f6396aa6d79}{\index{Nixwen@{Nixwen}!set\-Type@{set\-Type}}
+\index{set\-Type@{set\-Type}!Nixwen@{Nixwen}}
+\subsubsection[{set\-Type}]{\setlength{\rightskip}{0pt plus 5cm}void Nixwen\-::set\-Type (
+\begin{DoxyParamCaption}
+\item[{int}]{type}
+\end{DoxyParamCaption}
+)}}\label{classNixwen_ad817194c5c560c30e0397f6396aa6d79}
+
+
+redémare le processus suivi pendant un certains temps 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & int 0 = long; 1 = int ; 2 = short ; 3 = char \\
+\hline
+\end{DoxyParams}
+\hypertarget{classNixwen_a00280c84cf8f46b62b314489ef5f9cad}{\index{Nixwen@{Nixwen}!stop@{stop}}
+\index{stop@{stop}!Nixwen@{Nixwen}}
+\subsubsection[{stop}]{\setlength{\rightskip}{0pt plus 5cm}int Nixwen\-::stop (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNixwen_a00280c84cf8f46b62b314489ef5f9cad}
+
+
+stop le programme suivi 
+
+\begin{DoxyReturn}{Returns}
+int \-: 1 = succes, -\/1 = l'enfant est déja stopper 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{nixwen_8hpp}{nixwen.\-hpp}\item 
+\hyperlink{nixwen_8cpp}{nixwen.\-cpp}\end{DoxyCompactItemize}

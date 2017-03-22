@@ -1,3 +1,9 @@
+/**
+ * \file      commands.cpp
+ * \version   2.0
+ * \brief     Définit les commandes qu'utilise nixwen pour rechercher en mémoire
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -21,11 +27,9 @@
 
 using namespace std;
 
-// TODO : Fuzzy search
-/* Fuzzy search
- *
- * @return the list of the found values
- */
+/**
+* initialise une recherche. Parcoure la mémoire et rempli une map contenant les addresses et leur valeur actuel en mémoire
+*/
 map<void *, long> fuzzsearch(long pid, map<void *, long> memoire, int type){ // init
 
 	void * b = getDebutStack(pid);
@@ -79,15 +83,19 @@ map<void *, long> fuzzsearch(long pid, map<void *, long> memoire, int type){ // 
 	return memoire;
 }
 
+
+/**
+* Raffine une map en fonction des parametres
+* codeOperation codes
+* 0 : +   the value is greater
+* 1 : +?  the value is greater by
+* 2 : -   the value is lower
+* 3 : -?  the value is lower by
+* 4 : =   the value is the same
+* 5 : /=  the value has changed
+* 6 : ><  in between comparison
+*/
 map<void *, long> fuzzsearch(int codeOperation, map<void *, long> memoire, long value1, long value2, long pid,int type){ // search
-// codeOperation codes
-// 0 : +   the value is greater
-// 1 : +?  the value is greater by
-// 2 : -   the value is lower
-// 3 : -?  the value is lower by
-// 4 : =   the value is the same
-// 5 : /=  the value has changed
-// 6 : ><  in between comparison
 	map<void *, long> newM = {};
     long n;
 	for(auto it = memoire.begin(); it != memoire.end(); ++it){
@@ -155,13 +163,15 @@ void stringSearch(map<void *, long> memoire, long value1, long value2, long pid)
 		}
 }
 
+/**
+* getter d'une valeur à une addresse
+* type
+* 1 : long  (64b - 8o)
+* 2 : int   (32b - 4o)
+* 3 : short (16b - 2o)
+* 4 : char  (8b  - 1o)
+*/
 long get(void * pointer, int type, int pid){
-    /** id codes
-    1 : long  (64b - 8o)
-    2 : int   (32b - 4o)
-    3 : short (16b - 2o)
-    4 : char  (8b  - 1o)
-**/
     switch(type){
         case 1:
             return ptrace(PTRACE_PEEKDATA, pid, pointer, NULL);
@@ -178,13 +188,15 @@ long get(void * pointer, int type, int pid){
 
 
 // alter a value with a new value
+/**
+* modifie une valeur à une addresse par une autre valeur d'un type
+* type
+* 1 : long  (64b - 8o)
+* 2 : int   (32b - 4o)
+* 3 : short (16b - 2o)
+* 4 : char  (8b  - 1o)
+*/
 bool alter(void* pointer, long newvalue, long pid, int type){
-	/** id codes
-    1 : long  (64b - 8o)
-    2 : int   (32b - 4o)
-    3 : short (16b - 2o)
-    4 : char  (8b  - 1o)
-	**/
 	long curV = get(pointer, type,pid);
 	switch(type){
         case 1:

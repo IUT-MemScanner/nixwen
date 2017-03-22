@@ -62,6 +62,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -69,7 +70,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -93,51 +94,312 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a405cdb4932df71d29a9524f415b68f17"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a405cdb4932df71d29a9524f415b68f17"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Nixwen</b> (int argc, char *argv[], char *en[])</td></tr>
 <tr class="separator:a405cdb4932df71d29a9524f415b68f17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4946a70100d56189ce4dc09558d0e06a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4946a70100d56189ce4dc09558d0e06a"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>search</b> (int choice, long firstValue, long secondValue)</td></tr>
+<tr class="memitem:a4946a70100d56189ce4dc09558d0e06a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNixwen.html#a4946a70100d56189ce4dc09558d0e06a">search</a> (int choice, long firstValue, long secondValue)</td></tr>
+<tr class="memdesc:a4946a70100d56189ce4dc09558d0e06a"><td class="mdescLeft">&#160;</td><td class="mdescRight">raffine une recherche selon un critère  <a href="#a4946a70100d56189ce4dc09558d0e06a">More...</a><br/></td></tr>
 <tr class="separator:a4946a70100d56189ce4dc09558d0e06a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cc43b333344136f45a5c57e8e7d19ea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3cc43b333344136f45a5c57e8e7d19ea"></a>
-map&lt; void *, long &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>list</b> (int length)</td></tr>
+<tr class="memitem:a3cc43b333344136f45a5c57e8e7d19ea"><td class="memItemLeft" align="right" valign="top">map&lt; void *, long &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNixwen.html#a3cc43b333344136f45a5c57e8e7d19ea">list</a> (int length)</td></tr>
+<tr class="memdesc:a3cc43b333344136f45a5c57e8e7d19ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter une de l'image de la mémoire de n case mémoire  <a href="#a3cc43b333344136f45a5c57e8e7d19ea">More...</a><br/></td></tr>
 <tr class="separator:a3cc43b333344136f45a5c57e8e7d19ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a1f1562b9839b3954753c1457b1e7ef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4a1f1562b9839b3954753c1457b1e7ef"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>replace</b> (long pointer, long newValue)</td></tr>
+<tr class="memitem:a4a1f1562b9839b3954753c1457b1e7ef"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNixwen.html#a4a1f1562b9839b3954753c1457b1e7ef">replace</a> (long pointer, long newValue)</td></tr>
+<tr class="memdesc:a4a1f1562b9839b3954753c1457b1e7ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">modifie une valeur a une addresse par une valeur  <a href="#a4a1f1562b9839b3954753c1457b1e7ef">More...</a><br/></td></tr>
 <tr class="separator:a4a1f1562b9839b3954753c1457b1e7ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1c0ae1ea84ff210bfef559604b40da9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad1c0ae1ea84ff210bfef559604b40da9"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>cont</b> ()</td></tr>
+<tr class="memitem:ad1c0ae1ea84ff210bfef559604b40da9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNixwen.html#ad1c0ae1ea84ff210bfef559604b40da9">cont</a> ()</td></tr>
+<tr class="memdesc:ad1c0ae1ea84ff210bfef559604b40da9"><td class="mdescLeft">&#160;</td><td class="mdescRight">redémarer le programme suivi  <a href="#ad1c0ae1ea84ff210bfef559604b40da9">More...</a><br/></td></tr>
 <tr class="separator:ad1c0ae1ea84ff210bfef559604b40da9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00280c84cf8f46b62b314489ef5f9cad"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a00280c84cf8f46b62b314489ef5f9cad"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> ()</td></tr>
+<tr class="memitem:a00280c84cf8f46b62b314489ef5f9cad"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNixwen.html#a00280c84cf8f46b62b314489ef5f9cad">stop</a> ()</td></tr>
+<tr class="memdesc:a00280c84cf8f46b62b314489ef5f9cad"><td class="mdescLeft">&#160;</td><td class="mdescRight">stop le programme suivi  <a href="#a00280c84cf8f46b62b314489ef5f9cad">More...</a><br/></td></tr>
 <tr class="separator:a00280c84cf8f46b62b314489ef5f9cad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe628c18cabf1396efdec287e7f3688e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe628c18cabf1396efdec287e7f3688e"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>fstart</b> (int time)</td></tr>
+<tr class="memitem:afe628c18cabf1396efdec287e7f3688e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNixwen.html#afe628c18cabf1396efdec287e7f3688e">fstart</a> (int time)</td></tr>
+<tr class="memdesc:afe628c18cabf1396efdec287e7f3688e"><td class="mdescLeft">&#160;</td><td class="mdescRight">redémare le processus suivi pendant un certains temps  <a href="#afe628c18cabf1396efdec287e7f3688e">More...</a><br/></td></tr>
 <tr class="separator:afe628c18cabf1396efdec287e7f3688e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae698b82d160e61dbb1c7045a2a515d60"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae698b82d160e61dbb1c7045a2a515d60"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>quit</b> ()</td></tr>
+<tr class="memitem:ae698b82d160e61dbb1c7045a2a515d60"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNixwen.html#ae698b82d160e61dbb1c7045a2a515d60">quit</a> ()</td></tr>
+<tr class="memdesc:ae698b82d160e61dbb1c7045a2a515d60"><td class="mdescLeft">&#160;</td><td class="mdescRight">tuer l'enfant  <a href="#ae698b82d160e61dbb1c7045a2a515d60">More...</a><br/></td></tr>
 <tr class="separator:ae698b82d160e61dbb1c7045a2a515d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62b3bbf2cd443ea3b34ab9889457191a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a62b3bbf2cd443ea3b34ab9889457191a"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getCurrenSize</b> ()</td></tr>
+<tr class="memitem:a62b3bbf2cd443ea3b34ab9889457191a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNixwen.html#a62b3bbf2cd443ea3b34ab9889457191a">getCurrenSize</a> ()</td></tr>
+<tr class="memdesc:a62b3bbf2cd443ea3b34ab9889457191a"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter de la taille de la map (de la recherche courrante)  <a href="#a62b3bbf2cd443ea3b34ab9889457191a">More...</a><br/></td></tr>
 <tr class="separator:a62b3bbf2cd443ea3b34ab9889457191a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd727e44ba1e905e0de32927275e079d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd727e44ba1e905e0de32927275e079d"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getPid</b> ()</td></tr>
+<tr class="memitem:abd727e44ba1e905e0de32927275e079d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNixwen.html#abd727e44ba1e905e0de32927275e079d">getPid</a> ()</td></tr>
+<tr class="memdesc:abd727e44ba1e905e0de32927275e079d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter du pid du programme suivi.  <a href="#abd727e44ba1e905e0de32927275e079d">More...</a><br/></td></tr>
 <tr class="separator:abd727e44ba1e905e0de32927275e079d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a687000a751c78aea62c5b6bf2476c215"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a687000a751c78aea62c5b6bf2476c215"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> ()</td></tr>
 <tr class="separator:a687000a751c78aea62c5b6bf2476c215"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bbc3b7c2129921e1ad6e2e8904f3a8e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5bbc3b7c2129921e1ad6e2e8904f3a8e"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getType</b> ()</td></tr>
+<tr class="memitem:a5bbc3b7c2129921e1ad6e2e8904f3a8e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNixwen.html#a5bbc3b7c2129921e1ad6e2e8904f3a8e">getType</a> ()</td></tr>
+<tr class="memdesc:a5bbc3b7c2129921e1ad6e2e8904f3a8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">redémare le processus suivi pendant un certains temps  <a href="#a5bbc3b7c2129921e1ad6e2e8904f3a8e">More...</a><br/></td></tr>
 <tr class="separator:a5bbc3b7c2129921e1ad6e2e8904f3a8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad817194c5c560c30e0397f6396aa6d79"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad817194c5c560c30e0397f6396aa6d79"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setType</b> (int type)</td></tr>
+<tr class="memitem:ad817194c5c560c30e0397f6396aa6d79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNixwen.html#ad817194c5c560c30e0397f6396aa6d79">setType</a> (int type)</td></tr>
+<tr class="memdesc:ad817194c5c560c30e0397f6396aa6d79"><td class="mdescLeft">&#160;</td><td class="mdescRight">redémare le processus suivi pendant un certains temps  <a href="#ad817194c5c560c30e0397f6396aa6d79">More...</a><br/></td></tr>
 <tr class="separator:ad817194c5c560c30e0397f6396aa6d79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ad1c0ae1ea84ff210bfef559604b40da9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Nixwen::cont </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>redémarer le programme suivi </p>
+<dl class="section return"><dt>Returns</dt><dd>int : 1 = succes, -1 = l'enfant est déja démarrer </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="afe628c18cabf1396efdec287e7f3688e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Nixwen::fstart </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>time</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>redémare le processus suivi pendant un certains temps </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">int</td><td>le temps en second avant de redémarer le fils </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int : 1 = succes (toujour 1) </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a62b3bbf2cd443ea3b34ab9889457191a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Nixwen::getCurrenSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>getter de la taille de la map (de la recherche courrante) </p>
+<dl class="section return"><dt>Returns</dt><dd>int : la taille de la map </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abd727e44ba1e905e0de32927275e079d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Nixwen::getPid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getter du pid du programme suivi. </p>
+<dl class="section return"><dt>Returns</dt><dd>un int qui est le pid du processus suivie </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5bbc3b7c2129921e1ad6e2e8904f3a8e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Nixwen::getType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>redémare le processus suivi pendant un certains temps </p>
+<dl class="section return"><dt>Returns</dt><dd>int le type : 0 = long; 1 = int ; 2 = short ; 3 = char </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a3cc43b333344136f45a5c57e8e7d19ea"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">map&lt; void *, long &gt; Nixwen::list </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>length</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>getter une de l'image de la mémoire de n case mémoire </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">length</td><td>int représentant le nombres de ligne à retourner </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>une map contenant l'addresse et sa valeur </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae698b82d160e61dbb1c7045a2a515d60"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Nixwen::quit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>tuer l'enfant </p>
+<dl class="section return"><dt>Returns</dt><dd>int : 1 = succes (toujour 1) </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4a1f1562b9839b3954753c1457b1e7ef"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Nixwen::replace </td>
+          <td>(</td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>pointer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>newValue</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>modifie une valeur a une addresse par une valeur </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pointer</td><td>long représente l'addresse de la valeur à modifié </td></tr>
+    <tr><td class="paramname">pointer</td><td>long nouvelle valeur (sera cast dans le type définit dans nixwen) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int : 1 = succes, -1 = pointer non trouver, -2 = pointer hors des bornes </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4946a70100d56189ce4dc09558d0e06a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Nixwen::search </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>choice</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>firstValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>secondValue</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>raffine une recherche selon un critère </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">firstValue</td><td>valeur si besoin pour la commande (long) </td></tr>
+    <tr><td class="paramname">secondValue</td><td>valeur si besoin pour la commande (long) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>un int, représentant : 1 = succes, -1 = choix non trouver, -2 = l'enfant n'est pas arrêter </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad817194c5c560c30e0397f6396aa6d79"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Nixwen::setType </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>redémare le processus suivi pendant un certains temps </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>int 0 = long; 1 = int ; 2 = short ; 3 = char </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a00280c84cf8f46b62b314489ef5f9cad"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Nixwen::stop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>stop le programme suivi </p>
+<dl class="section return"><dt>Returns</dt><dd>int : 1 = succes, -1 = l'enfant est déja stopper </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="nixwen_8hpp_source.html">nixwen.hpp</a></li>
-<li>nixwen.cpp</li>
+<li><a class="el" href="nixwen_8cpp.html">nixwen.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 15 2017 08:39:55 for Nixwen by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 22 2017 16:59:41 for Nixwen by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

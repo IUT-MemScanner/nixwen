@@ -1,0 +1,32 @@
+\subsection*{À propos de \hyperlink{classNixwen}{Nixwen}}
+
+\subsection*{Commandes}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily exit} -- Quitter le programme
+\item {\ttfamily cont} -- Reprendre l'exécution du programme
+\item {\ttfamily stop} -- Stoper l'exécution du programme
+\item {\ttfamily fuzzysearch} -- Initialiser une recherche fuzzy
+\item {\ttfamily search} -- Continuer une recherche commencer avec fsearch ou fuzzysearch
+\item {\ttfamily list} -- Afficher les résultats de la recherche
+\item {\ttfamily fstart} -- Reprendre l'exécution du programme puis le stopper 1 seconde plus tard
+\item {\ttfamily alter} -- Modifier le contenu à une adresse choisi parmi celles proposées par la commande list
+\item {\ttfamily help} -- Afficher les commandes disponibles
+\end{DoxyItemize}
+
+\subsection*{T\-O\-D\-O}
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/IUT-MemScanner/nixwen/wiki/projet-S4}{\tt voir wiki}
+\item Pouvoir spécifier un pid à attacher au lieu de lancer un nouveau programme =$>$ Imposible avec un ordinateur de l'I\-U\-T (L\-S\-M yama/ptrace\-\_\-scope)
+\end{DoxyItemize}
+
+\subsection*{Installation et utilisation}
+
+Installer avec git\-: ``` bash git clone \href{https://github.com/IUT-MemScanner/nixwen.git}{\tt https\-://github.\-com/\-I\-U\-T-\/\-Mem\-Scanner/nixwen.\-git} cd nixwen make ``` Utilisation \-: Dans le dossier, saisir la commande \-: ``` bash ./nixwen programme ``` \char`\"{}programme\char`\"{} est le programme que vous souhaitez observer.
+
+\subsection*{Programme de test {\ttfamily dummy}}
+
+Aller dans le dossier contenant le programme (par défaut sous {\ttfamily nixwen/dummy/qt/}) ```bash cd dummy/qt/ ``{\ttfamily  Puis créer le Makefile avec}qmake{\ttfamily  }``bash qmake ``` Enfin, exécuter le makefile \-: ```bash make ``` L'exécutable généré aura alors pour nom \char`\"{}dummy\char`\"{}. 

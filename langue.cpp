@@ -1,3 +1,8 @@
+/**
+ * \file      langue.cpp
+ * \version   2.0
+ * \brief     classe de recherche de string dans un fichier de config
+ */
 #include <map>
 #include <fstream>
 #include <vector>
@@ -10,7 +15,9 @@
 
 
 //using namespace std;
-
+/**
+*
+*/
 Langue::  Langue(string langue, string interface)
 {
   Langue::langue = langue;
@@ -127,15 +134,15 @@ string Langue::search_help()
 string Langue::missing_argument(string commande)
 {
   if (commande == "alter") {
-    return getString("missing_argument_alter","");
+    return getString("missing_argument_alter","argument manquant");
   }
   else if(commande == "search")
   {
-    return getString("missing_argument_search","");
+    return getString("missing_argument_search","argument manquant");
   }
   else
   {
-    return getString("missing_argument","");
+    return getString("missing_argument","argument manquant");
   }
 }
 
@@ -150,7 +157,7 @@ string Langue::alter_msg(string msg)
   }
   else
   {
-    return "texte not found";
+    return "texte non trouvé";
   }
 }
 

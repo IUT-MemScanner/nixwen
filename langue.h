@@ -1,3 +1,8 @@
+/**
+ * \file      langue.h
+ * \version   2.0
+ * \brief     header de la classe de recherche de string dans un fichier de config
+ */
 #ifndef LANGUE_H_INCLUDED
 #define LANGUE_H_INCLUDED
 #include <iostream>
