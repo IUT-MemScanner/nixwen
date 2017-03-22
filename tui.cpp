@@ -75,7 +75,7 @@ int main (int argc, char *argv[],char* en[]) {
     //initialisation of the text
 		Langue texte = Langue("fr","tui");
 		cout << texte.welcome_msg() << endl;
-
+    
 	   // main loop
 		while((line = readline("> "))){
 			c = string(line);
@@ -95,7 +95,7 @@ int main (int argc, char *argv[],char* en[]) {
 				break;
 			}
 
- 			// Commande "cont"
+      // Commande "cont"
 			if(commandes[0] == "cont"){
         if (-1 == nix.cont()) {
           std::cout << texte.getString("isrunning","running") << std::endl;
@@ -166,6 +166,7 @@ int main (int argc, char *argv[],char* en[]) {
 							case 7:
   							if (commandes.size() >= 3) {
   								long value = stol(commandes[2]);
+
                   nix.search(choice, value, 0);
   							}
   							else {

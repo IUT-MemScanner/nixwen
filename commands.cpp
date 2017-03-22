@@ -47,7 +47,7 @@ map<void *, long> fuzzsearch(long pid, map<void *, long> m, int type){ // init
             p = p + sizeof((short)(0));
             break;
         case 4:
-            m[p] = (long)((char)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
+            m[p] = static_cast<long>((char)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
             p = p + sizeof((char)(0));
             break;
         }
@@ -73,7 +73,7 @@ map<void *, long> fuzzsearch(long pid, map<void *, long> m, int type){ // init
             p = p + sizeof((short)(0));
             break;
         case 4:
-            m[p] = (long)((char)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
+            m[p] = static_cast<long>((char)ptrace(PTRACE_PEEKDATA, pid, p, NULL));
             p = p + sizeof((char)(0));
             break;
         }
@@ -106,7 +106,7 @@ map<void *, long> fuzzsearch(int opId, map<void *, long> m, long v1, long v2, lo
             n = (long)((short)ptrace(PTRACE_PEEKDATA, pid, it->first, NULL));
             break;
         case 4:
-            n = (long)((char)ptrace(PTRACE_PEEKDATA, pid, it->first, NULL));
+            n = static_cast<long>((char)ptrace(PTRACE_PEEKDATA, pid, it->first, NULL));
             break;
         }
 // long n = ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF;
@@ -203,7 +203,7 @@ bool alter(void* pointer, long newvalue, long pid, int type){
     3 : short (16b - 2o)
     4 : char  (8b  - 1o)
 	**/
-	long curV = get(pointer, 2,pid);
+	long curV = get(pointer, type,pid);
 	switch(type){
         case 1:
             return ptrace(PTRACE_POKEDATA, pid, pointer, newvalue) != -1;

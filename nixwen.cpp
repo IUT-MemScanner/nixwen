@@ -107,8 +107,15 @@ map<void *, long> Nixwen::list(int length)
   std::map<void *, long> mymap;
   int num = 0;
   for(auto it = Nixwen::mapR.begin(); it != Nixwen::mapR.end() && num < length; ++it){
-    mymap.insert ( std::pair<void *,long>(it->first,(ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF)) );
-    //cout << num << " : (" << it->first << ") " << it->second  << " ==> " << (ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF) << endl;
+    if (Nixwen::type==1) { // long
+      mymap.insert ( std::pair<void *,long>(it->first,(ptrace(PTRACE_PEEKDATA, pid, it->first, NULL)) ));
+    }else if (Nixwen::type==2) { //int
+      mymap.insert ( std::pair<void *,long>(it->first,(ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF)) );
+    }else if (Nixwen::type==3) {
+      mymap.insert ( std::pair<void *,long>(it->first,(ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFF)) );
+    }else if (Nixwen::type==4) {
+      mymap.insert ( std::pair<void *,long>(it->first,(static_cast<long>((char) ptrace(PTRACE_PEEKDATA, pid, it->first, NULL)))) );
+    }
     num++;
   }
   return mymap;
