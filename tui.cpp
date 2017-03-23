@@ -120,11 +120,11 @@ int main (int argc, char *argv[],char* en[]) {
     //! Commande "fuzzysearch"
     if( commandes[0] == "fuzzysearch"){
       int resultat = nix.init();
-      if(-1 == resultat){
+      if(resultat == -1){
         std::cout << texte.getString("isrunning","running") << std::endl;
       }else{
-        cout << resultat<<endl;
-        std::cout << texte.getString("fuzzysearch","") << std::endl;
+        string msg = texte.getString("fuzzysearch","");
+        std::cout << to_string(resultat) << msg << endl;
       }
     }
 
@@ -161,8 +161,8 @@ int main (int argc, char *argv[],char* en[]) {
         case 4: type = "char";
           break;
       }
-      std::cout << texte.getString("type","")<< endl;
-      cout << type << endl;
+      string msgtype =  texte.getString("type","") + type;
+      cout << msgtype << endl;
     }
 
     //! Commande "search"

@@ -16,8 +16,12 @@
 
 //using namespace std;
 /**
-*
-*/
+ *   \brief "constru"
+ *   \brief "Description"
+ *   \param langue    string langue du fichier a charger de préférence
+ *   \param interface    string interface 
+ */
+
 Langue::  Langue(string langue, string interface)
 {
   Langue::langue = langue;
