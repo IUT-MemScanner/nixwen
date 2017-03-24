@@ -7,7 +7,6 @@
 #include <fstream>
 #include <vector>
 #include <iostream>
-#include <string>
 #include <algorithm>
 
 #include "langue.h"
@@ -19,7 +18,7 @@
  *   \brief "constru"
  *   \brief "Description"
  *   \param langue    string langue du fichier a charger de préférence
- *   \param interface    string interface 
+ *   \param interface    string interface
  */
 
 Langue::  Langue(string langue, string interface)

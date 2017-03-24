@@ -121,6 +121,16 @@ int Nixwen::search(int choice, long firstValue, long secondValue)
   return -2; // fail, child is not stopped
 }
 
+int Nixwen::store(long addresse) {
+  try{
+    mapR[(void*)addresse];
+    Nixwen::mapStore.emplace((void*)addresse, get((void*)addresse, Nixwen::type, Nixwen::pid));
+    return 1;
+  } catch (const out_of_range& oor) {
+    return -1;
+  }
+}
+
 
 /**
  * \brief     getter une de l'image de la mémoire de n case mémoire
@@ -133,19 +143,36 @@ map<void *, long> Nixwen::list(int length)
   int num = 0;
   for(auto it = Nixwen::mapR.begin(); it != Nixwen::mapR.end() && num < length; ++it){
     if (Nixwen::type==1) { // long
-      mymap.insert ( std::pair<void *,long>(it->first,(ptrace(PTRACE_PEEKDATA, pid, it->first, NULL)) ));
+      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid) ));
     }else if (Nixwen::type==2) { //int
-      mymap.insert ( std::pair<void *,long>(it->first,(ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFFFFFF)) );
+      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid) ));
     }else if (Nixwen::type==3) {
-      mymap.insert ( std::pair<void *,long>(it->first,(ptrace(PTRACE_PEEKDATA, pid, it->first, NULL) & 0xFFFF)) );
+      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid) ));
     }else if (Nixwen::type==4) {
-      mymap.insert ( std::pair<void *,long>(it->first,(static_cast<long>((char) ptrace(PTRACE_PEEKDATA, pid, it->first, NULL)))) );
+      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid)) );
     }
     num++;
   }
   return mymap;
 }
 
+map<void *, long> Nixwen::list_store(int length) {
+  map<void *, long> mymap;
+  int num = 0;
+  for(auto it = Nixwen::mapStore.begin(); it != Nixwen::mapStore.end() && num < length; ++it){
+    if (Nixwen::type==1) { // long
+      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid) ));
+    }else if (Nixwen::type==2) { //int
+      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid) ));
+    }else if (Nixwen::type==3) {
+      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid) ));
+    }else if (Nixwen::type==4) {
+      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid)) );
+    }
+    num++;
+  }
+  return mymap;
+}
 
 
 /**
@@ -162,7 +189,7 @@ int Nixwen::replace(long pointer, long newValue)
 
       if(Nixwen::mapR.end() != Nixwen::mapR.find((void*)n)){
         v = newValue;
-        if(v <= pow(2,Nixwen::currentSize)) {
+        if(v <= pow(2,Nixwen::currentSize)) { //TOMODIFY
           alter((void*)n, v, Nixwen::pid, Nixwen::type); }
         else{
           return -2; // fail, out of boundary
@@ -241,8 +268,8 @@ int Nixwen::quit(){
  * \brief     getter de la taille de la map (de la recherche courrante)
  * \return    int : la taille de la map
  */
-int Nixwen::getCurrenSize(){
-  return Nixwen::currentSize;
+int Nixwen::getMapSize(){
+  return Nixwen::mapR.size();
 }
 
 /**
