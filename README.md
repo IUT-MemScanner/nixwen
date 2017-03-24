@@ -9,7 +9,11 @@
 * `search` -- Continuer une recherche commencer avec fsearch ou fuzzysearch
 * `list` -- Afficher les résultats de la recherche
 * `fstart` -- Reprendre l'exécution du programme puis le stopper 1 seconde plus tard
-* `alter` -- Modifier le contenu à une adresse choisi parmi celles proposées par la commande list
+* `alter` -- Modifier le contenu à une adresse choisi parmi les addresses proposées par la commande list
+* `type` -- Modifie le type lors des recherche. (choix parmi : long | int | short | char ) 
+* `gtype` -- Affiche le type courrant des future recherches
+* `store` -- Sauvegarde une addresse qui est affiché par list
+* `list_store` -- Affiche les l'élements enregistrés avec store
 * `help` -- Afficher les commandes disponibles
 
 ## TODO
