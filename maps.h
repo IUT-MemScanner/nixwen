@@ -12,7 +12,21 @@
 #ifndef MAPS_H
 #define MAPS_H
 
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string>
+/*fichier*/
+#include <dirent.h>
+/* isdigit */
+#include <ctype.h>
+#include <iostream>
+#include <sstream>
+#include <vector>
 
+#include "utils.hpp"
+
+using namespace std;
 // Stack bounds
 
 void * getDebutStack(long pid);

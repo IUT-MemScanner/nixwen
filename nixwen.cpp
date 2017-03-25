@@ -1,35 +1,10 @@
 /**
- * \file      nixwen.cpp
- * \version   2.0
- * \brief     moteur du programme nixwen
- */
+* \file      nixwen.cpp
+* \version   2.0
+* \brief     moteur du programme nixwen
+*/
 
 #include "nixwen.hpp"
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <iostream>
-#include <sstream>
-#include <unistd.h>
-#include <sys/types.h>
-#include <wait.h>
-#include <sys/ptrace.h>
-#include <sys/reg.h>
-#include <sys/user.h>
-#include <sys/signal.h>
-#include <sys/signal.h>
-#include <algorithm>
-#include <cctype>
-#include <regex>
-
-#include <list>
-#include <map>
-#include <math.h>
-
-#include <sys/stat.h>
-#include <fcntl.h>
-
-#include <stdexcept>
 
 Nixwen::Nixwen(int argc, char *argv[], char *en[]) {
   int status = 0;
@@ -60,14 +35,15 @@ Nixwen::Nixwen(int argc, char *argv[], char *en[]) {
     Nixwen::dataSize = 16;
     Nixwen::currentSize = 16;
     Nixwen::type = 1;
+    Nixwen::nextType = Nixwen::type;
     Nixwen::cont();
   }
 }
 
 /**
- * \brief       Getter du pid du programme suivi
- * \return    un int qui est le pid du processus suivie
- */
+* \brief       Getter du pid du programme suivi
+* \return    un int qui est le pid du processus suivie
+*/
 int Nixwen::getPid(){
   return Nixwen::pid;
 }
@@ -77,7 +53,7 @@ int Nixwen::getPid(){
 */
 int Nixwen::init(){
   if (!Nixwen::running) {
-    Nixwen::currentSize = dataSize;
+    Nixwen::type = Nixwen::nextType;
     Nixwen::mapR = fuzzsearch(Nixwen::pid, Nixwen::mapR, Nixwen::type);
     return Nixwen::mapR.size();
   }
@@ -86,11 +62,11 @@ int Nixwen::init(){
 
 
 /**
- * \brief       raffine une recherche selon un critère
- * \param    firstValue         valeur si besoin pour la commande (long)
+* \brief       raffine une recherche selon un critère
+* \param    firstValue         valeur si besoin pour la commande (long)
 * \param    secondValue         valeur si besoin pour la commande (long)
- * \return    un int, représentant : 1 = succes, -1 = choix non trouver, -2 = l'enfant n'est pas arrêter
- */
+* \return    un int, représentant : 1 = succes, -1 = choix non trouver, -2 = l'enfant n'est pas arrêter
+*/
 int Nixwen::search(int choice, long firstValue, long secondValue)
 {
   if (!Nixwen::running) {
@@ -121,10 +97,15 @@ int Nixwen::search(int choice, long firstValue, long secondValue)
   return -2; // fail, child is not stopped
 }
 
+/**
+* \brief     enregistre une adresse mérmoire avec le type courant de recherche
+* \param     addresse      long représentant une adresse
+* \return    int 1 si succes sinon -1 echec
+*/
 int Nixwen::store(long addresse) {
   try{
     mapR[(void*)addresse];
-    Nixwen::mapStore.emplace((void*)addresse, get((void*)addresse, Nixwen::type, Nixwen::pid));
+    Nixwen::mapStore.emplace((void*)addresse, Nixwen::type);
     return 1;
   } catch (const out_of_range& oor) {
     return -1;
@@ -133,24 +114,16 @@ int Nixwen::store(long addresse) {
 
 
 /**
- * \brief     getter une de l'image de la mémoire de n case mémoire
- * \param     length      int représentant le nombres de ligne à retourner
- * \return    une map contenant l'addresse et sa valeur
- */
+* \brief     getter une de l'image de la mémoire de n case mémoire
+* \param     length      int représentant le nombres de ligne à retourner
+* \return    une map contenant l'addresse et sa valeur
+*/
 map<void *, long> Nixwen::list(int length)
 {
   std::map<void *, long> mymap;
   int num = 0;
   for(auto it = Nixwen::mapR.begin(); it != Nixwen::mapR.end() && num < length; ++it){
-    if (Nixwen::type==1) { // long
-      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid) ));
-    }else if (Nixwen::type==2) { //int
-      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid) ));
-    }else if (Nixwen::type==3) {
-      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid) ));
-    }else if (Nixwen::type==4) {
-      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid)) );
-    }
+    mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid)) );
     num++;
   }
   return mymap;
@@ -160,15 +133,7 @@ map<void *, long> Nixwen::list_store(int length) {
   map<void *, long> mymap;
   int num = 0;
   for(auto it = Nixwen::mapStore.begin(); it != Nixwen::mapStore.end() && num < length; ++it){
-    if (Nixwen::type==1) { // long
-      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid) ));
-    }else if (Nixwen::type==2) { //int
-      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid) ));
-    }else if (Nixwen::type==3) {
-      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid) ));
-    }else if (Nixwen::type==4) {
-      mymap.insert ( std::pair<void *,long>(it->first,get(it->first, Nixwen::type, Nixwen::pid)) );
-    }
+    mymap.insert ( std::pair<void *,long>(it->first,get(it->first, it->second, Nixwen::pid)) );
     num++;
   }
   return mymap;
@@ -176,35 +141,29 @@ map<void *, long> Nixwen::list_store(int length) {
 
 
 /**
- * \brief     modifie une valeur a une addresse par une valeur
- * \param     pointer     long représente l'addresse de la valeur à modifié
- * \param     pointer     long nouvelle valeur (sera cast dans le type définit dans nixwen)
- * \return    int : 1 = succes, -1 = pointer non trouver, -2 = pointer hors des bornes
- */
+* \brief     modifie une valeur a une addresse par une valeur
+* \param     pointer     long représente l'addresse de la valeur à modifié
+* \param     pointer     long nouvelle valeur (sera cast dans le type définit dans nixwen)
+* \return    int : 1 = succes, -1 = pointer non trouver, -2 = pointer hors des bornes
+*/
 int Nixwen::replace(long pointer, long newValue)
 {
-      long n;
-      long v;
-      n = pointer;
-
-      if(Nixwen::mapR.end() != Nixwen::mapR.find((void*)n)){
-        v = newValue;
-        if(v <= pow(2,Nixwen::currentSize)) { //TOMODIFY
-          alter((void*)n, v, Nixwen::pid, Nixwen::type); }
-        else{
-          return -2; // fail, out of boundary
-          }
-      }else{
-        return -1; // fail, pointer not found
-      }
-      return 1; //sucess
+  if(Nixwen::mapStore.end() != Nixwen::mapStore.find((void*)pointer)){
+    alter((void*)pointer, newValue, Nixwen::pid, Nixwen::mapStore[(void*)pointer]);
+    return 1; //sucess
+  }else if(Nixwen::mapR.end() != Nixwen::mapR.find((void*)pointer)){
+    alter((void*)pointer, newValue, Nixwen::pid, Nixwen::type);
+    return 1; //sucess
+  }else{
+    return -1; // fail, pointer not found
+  }
 }
 
 
 /**
- * \brief     redémarer le programme suivi
- * \return    int : 1 = succes, -1 = l'enfant est déja démarrer
- */
+* \brief     redémarer le programme suivi
+* \return    int : 1 = succes, -1 = l'enfant est déja démarrer
+*/
 int Nixwen::cont()
 {
   if (!Nixwen::running) {
@@ -217,9 +176,9 @@ int Nixwen::cont()
 }
 
 /**
- * \brief     stop le programme suivi
- * \return    int : 1 = succes, -1 = l'enfant est déja stopper
- */
+* \brief     stop le programme suivi
+* \return    int : 1 = succes, -1 = l'enfant est déja stopper
+*/
 int Nixwen::stop()
 {
   if (Nixwen::running) {
@@ -235,10 +194,10 @@ int Nixwen::stop()
 
 
 /**
- * \brief     redémare le processus suivi pendant un certains temps
- * \param     int le temps en second avant de redémarer le fils
- * \return    int : 1 = succes (toujour 1)
- */
+* \brief     redémare le processus suivi pendant un certains temps
+* \param     int le temps en second avant de redémarer le fils
+* \return    int : 1 = succes (toujour 1)
+*/
 int Nixwen::fstart(int time)
 {
   ptrace(PTRACE_CONT, pid, NULL, SIGCONT);
@@ -256,35 +215,44 @@ int Nixwen::fstart(int time)
 }
 
 /**
- * \brief     tuer l'enfant
- * \return    int : 1 = succes (toujour 1)
- */
+* \brief     tuer l'enfant
+* \return    int : 1 = succes (toujour 1)
+*/
 int Nixwen::quit(){
   kill(Nixwen::pid, 9); // Be sure to kill the child
   return 1; //sucess
 }
 
 /**
- * \brief     getter de la taille de la map (de la recherche courrante)
- * \return    int : la taille de la map
- */
+* \brief     getter de la taille de la map (de la recherche courrante)
+* \return    int : la taille de la map
+*/
 int Nixwen::getMapSize(){
   return Nixwen::mapR.size();
 }
 
 /**
- * \brief     redémare le processus suivi pendant un certains temps
- * \return    int le type : 0 = long; 1 = int ; 2 = short ; 3 = char
- */
+* \brief     getter du type
+* \return    int le type
+*/
 int Nixwen::getType(){
   return Nixwen::type;
 }
 
 
 /**
- * \brief     redémare le processus suivi pendant un certains temps
- * \param     type    int  0 = long; 1 = int ; 2 = short ; 3 = char
- */
-void Nixwen::setType(int type){
-  Nixwen::type = type;
+* \brief     redémare le processus suivi pendant un certains temps
+* \param     type    int  0 = long; 1 = int ; 2 = short ; 3 = char
+* \return    int : 1 si succes sinon -1
+*/
+int Nixwen::setType(int type){
+  switch (type) {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    Nixwen::nextType = type;
+    return 1;
+  }
+  return -1;
 }

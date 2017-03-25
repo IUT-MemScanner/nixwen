@@ -6,7 +6,10 @@
 #ifndef LANGUE_H_INCLUDED
 #define LANGUE_H_INCLUDED
 #include <iostream>
-
+#include <map>
+#include <fstream>
+#include <vector>
+#include <algorithm>
 #include <string>
 #include <map>
 #include "utils.hpp"

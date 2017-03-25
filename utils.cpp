@@ -1,8 +1,4 @@
 #include "utils.hpp"
-#include <vector>
-#include <string>
-using namespace std;
-
 
 vector<string> utils::explode(const string &str, const string &delimiter)
 {
@@ -33,4 +29,10 @@ vector<string> utils::explode(const string &str, const string &delimiter)
   }
   arr.push_back(  str.substr(k, i-k) );
   return arr;
+}
+
+bool utils::is_number(const std::string& s)
+{
+    return !s.empty() && std::find_if(s.begin(),
+        s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
 }

@@ -3,11 +3,7 @@
  * \version   2.0
  * \brief     classe de recherche de string dans un fichier de config
  */
-#include <map>
-#include <fstream>
-#include <vector>
-#include <iostream>
-#include <algorithm>
+
 
 #include "langue.h"
 
@@ -75,7 +71,7 @@ bool Langue::load(string file)
         }
         else
         {
-            cout << "Trying to load a invalide config" << endl;
+            cerr << "Trying to load a invalide config" << endl;
         }
       }
     f.close();

@@ -5,11 +5,32 @@
  */
 #ifndef NIXWEN_HPP_INCLUDED
 #define NIXWEN_HPP_INCLUDED
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
 #include <iostream>
+#include <sstream>
+#include <unistd.h>
+#include <sys/types.h>
+#include <wait.h>
+#include <sys/ptrace.h>
+#include <sys/reg.h>
+#include <sys/user.h>
+#include <sys/signal.h>
+#include <sys/signal.h>
+#include <algorithm>
+#include <cctype>
+#include <regex>
 
-#include <string>
+#include <list>
 #include <map>
+#include <math.h>
 
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#include <stdexcept>
 #include "commands.h"
 
 
@@ -32,16 +53,17 @@ public:
   int getPid();
   int init();
   int getType();
-  void setType(int type);
+  int setType(int type);
 
 private:
   bool running;
   int dataSize;
   int currentSize;
-  map<void*, long> mapStore;
+  map<void*, int> mapStore;
   map<void*, long> mapR;
   long pid;
   int type;
+  int nextType;
 };
 
 #endif // NIXWEN_HPP_INCLUDED

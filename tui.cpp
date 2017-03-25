@@ -1,8 +1,8 @@
 /**
- * \file      tui.cpp
- * \version   2.0
- * \brief     Interface en ligne de commande pour nixwen
- */
+* \file      tui.cpp
+* \version   2.0
+* \brief     Interface en ligne de commande pour nixwen
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -106,14 +106,14 @@ int main (int argc, char *argv[],char* en[]) {
     }
 
     //! Commande "cont"
-    if(commandes[0] == "cont"){
+    else if(commandes[0] == "cont"){
       if (-1 == nix.cont()) {
         std::cout << texte.getString("isrunning","running") << std::endl;
       }
     }
 
     //! Commande "stop"
-    if( commandes[0] == "stop"){
+    else if( commandes[0] == "stop"){
       if (-1 == nix.stop()) {
         std::cout << texte.getString("isstop","stopped") << std::endl;
       }
@@ -121,7 +121,7 @@ int main (int argc, char *argv[],char* en[]) {
     }
 
     //! Commande "fuzzysearch"
-    if( commandes[0] == "fuzzysearch"){
+    else if( commandes[0] == "fuzzysearch"){
       int resultat = nix.init();
       if(resultat == -1){
         std::cout << texte.getString("isrunning","running") << std::endl;
@@ -131,19 +131,21 @@ int main (int argc, char *argv[],char* en[]) {
     }
 
     //! commande "type"
-    if(commandes[0] == "type"){
+    else if(commandes[0] == "type"){
       if(commandes.size() >= 2){
         string c = commandes[1];
-        if("long"==c){
-          nix.setType(1);
-        }else if("int"==c){
-          nix.setType(2);
-        }else if("short"==c){
-          nix.setType(3);
-        }else if("char"==c){
-          nix.setType(4);
+        int type = -1;
+        if("long"==c){ type = 1;
+        }else if("int"==c){ type = 2;
+        }else if("short"==c){ type = 3;
+        }else if("char"==c){ type = 4;
         }else{
           cout << texte.getString("wrongType","parrametre invalide") << endl;
+        }
+        if(nix.setType(type)==-1){
+          cout << texte.getString("wrongType","parrametre invalide") << endl;
+        }else{
+          cout << texte.getString("setType","Set type : ") << c << '\n' <<texte.getString("activateType","") << endl;
         }
       }else{
         cout << texte.getString("typeHelp","invalide syntax") << endl;
@@ -151,23 +153,23 @@ int main (int argc, char *argv[],char* en[]) {
     }
 
     //! commande "gtype"
-    if(commandes[0] == "gtype"){
+    else if(commandes[0] == "gtype"){
       string type = "indéfini";
       switch (nix.getType()) {
         case 1: type = "long";
-          break;
+        break;
         case 2: type = "int";
-          break;
+        break;
         case 3: type = "short";
-          break;
+        break;
         case 4: type = "char";
-          break;
+        break;
       }
       cout << texte.getString("type","")  << type << endl;
     }
 
     //! Commande "search"
-    if( commandes[0] == "search"){
+    else if( commandes[0] == "search"){
       if (commandes.size() >= 2) {
         int choice=10;
         try{
@@ -185,35 +187,35 @@ int main (int argc, char *argv[],char* en[]) {
             case 2:
             case 4:
             case 5:
-              nix.search(choice, 0, 0);
-              std::cout << to_string(nix.getMapSize()) <<texte.getString("search_info","") << endl;
-              break;
+            nix.search(choice, 0, 0);
+            std::cout << to_string(nix.getMapSize()) <<texte.getString("search_info","") << endl;
+            break;
             case 1:
             case 3:
             case 7:
-              if (commandes.size() >= 3) {
-                long value = stol(commandes[2]);
-                nix.search(choice, value, 0);
-                std::cout << to_string(nix.getMapSize()) <<texte.getString("search_info","") << endl;
-              }
-              else {
-                cerr << texte.missing_argument("") << endl;
-              }
-              break;
+            if (commandes.size() >= 3) {
+              long value = stol(commandes[2]);
+              nix.search(choice, value, 0);
+              std::cout << to_string(nix.getMapSize()) <<texte.getString("search_info","") << endl;
+            }
+            else {
+              cerr << texte.missing_argument("") << endl;
+            }
+            break;
             case 6:
-              if (commandes.size() >= 4)  {
-                long lbound, hbound;
-                lbound = stol(commandes[2]);
-                hbound = stol(commandes[3]);
-                nix.search(choice, lbound, hbound);
-                std::cout << to_string(nix.getMapSize()) <<texte.getString("search_info","") << endl;
-              }
-              else {
-                cerr << texte.missing_argument("search") << endl;
-              }
-              break;
+            if (commandes.size() >= 4)  {
+              long lbound, hbound;
+              lbound = stol(commandes[2]);
+              hbound = stol(commandes[3]);
+              nix.search(choice, lbound, hbound);
+              std::cout << to_string(nix.getMapSize()) <<texte.getString("search_info","") << endl;
+            }
+            else {
+              cerr << texte.missing_argument("search") << endl;
+            }
+            break;
             default:
-              cout << texte.search_help() << endl;
+            cout << texte.search_help() << endl;
           }
         }
         catch (const invalid_argument& ia) {
@@ -229,7 +231,7 @@ int main (int argc, char *argv[],char* en[]) {
     }
 
     //! Commande "store"
-    if ( commandes[0] == "store") {
+    else if ( commandes[0] == "store") {
       if (commandes.size() >= 2) {
         try{
           long adresse = stol(commandes[1],NULL,16);
@@ -246,8 +248,7 @@ int main (int argc, char *argv[],char* en[]) {
 
 
     //! Commande "list", affiche les n valeurs trouver après recherche
-    if( commandes[0] == "list"){
-
+    else if( commandes[0] == "list"){
       int size = 10;
       if ((commandes.size() >= 2))
       {
@@ -270,7 +271,7 @@ int main (int argc, char *argv[],char* en[]) {
     }
 
     //! Commande "list_store"
-    if ( commandes[0] == "list_store") {
+    else if ( commandes[0] == "list_store") {
       int size = 10;
       if ((commandes.size() >= 2))
       {
@@ -292,7 +293,7 @@ int main (int argc, char *argv[],char* en[]) {
     }
 
     //! Commande "alter"
-    if( commandes[0] == "alter"){
+    else if( commandes[0] == "alter"){
       if (commandes.size() >= 3) {
         try{
           long n;
@@ -300,9 +301,11 @@ int main (int argc, char *argv[],char* en[]) {
           n = stol(commandes[1],NULL,16);
 
           v = stol(commandes[2],NULL,10);
-
-          nix.replace(n, v) ;
-
+          if (nix.replace(n, v)==1) {
+            std::cout << texte.getString("alter_Success","Success") << '\n';
+          }else{
+            std::cout << texte.getString("alter_fail","Fail") << '\n';
+          }
         }
         catch (const invalid_argument& ia) {
           std::cerr << texte.error_invalid_argument("alter") << std::endl;
@@ -317,7 +320,7 @@ int main (int argc, char *argv[],char* en[]) {
     }
 
     //! commande "fstart"
-    if( commandes[0] == "fstart"){
+    else if( commandes[0] == "fstart"){
       int sleep;
       if (commandes.size() >= 2) {
         try{
@@ -335,8 +338,8 @@ int main (int argc, char *argv[],char* en[]) {
       }
       nix.fstart(sleep);
     }
-    //! Commande "help"
-    if( commandes[0] == "help"){
+    //! Commande "help" ou Commande inconue
+    else{
       cout << texte.quick_help() << endl;
     }
 

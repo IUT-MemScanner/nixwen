@@ -1,29 +1,4 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <string>
-/*fichier*/
-#include <dirent.h>
-/* isdigit */
-#include <ctype.h>
-#include <iostream>
-#include <sstream>
-#include <vector>
-
-
-using namespace std;
-/*
- * split une chaine string avec un delimiter et modifie un vector
- */
-void split(const string &s, char delim, vector<string> &elems) {
-   stringstream ss;
-   ss.str(s);
-   string item;
-   while (std::getline(ss, item, delim)) {
-      elems.push_back(item);
-   }
-}
-
+#include "maps.h"
 /*
 * Récupère le nom du prossessus qui a le pid egale au pid en parametre
 */
@@ -33,8 +8,8 @@ string fichier(long pid) {
   if (fichier != NULL) {
     char sub[50] = "";
     fgets(sub, 50, fichier);
-    vector<string> contenu;
-    split(sub,' ',contenu);
+    string substr = sub;
+    vector<string> contenu = utils::explode(substr," ");
     string nom = contenu[1];
     nom = nom.substr (1,nom.find(")")-1);
 

@@ -4,30 +4,10 @@
  * \brief     Définit les commandes qu'utilise nixwen pour rechercher en mémoire
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <wait.h>
-#include <sys/ptrace.h>
-#include <sys/reg.h>
-#include <sys/user.h>
-#include <sys/signal.h>
-
-#include <list>
-#include <map>
-#include <math.h>
-
-#include <sys/stat.h>
-#include <fcntl.h>
-
-#include "maps.h"
-
-using namespace std;
+#include "commands.h"
 
 /**
-* initialise une recherche. Parcoure la mémoire et rempli une map contenant les addresses et leur valeur actuel en mémoire
+* \fn initialise une recherche. Parcoure la mémoire et rempli une map contenant les addresses et leur valeur actuel en mémoire
 */
 map<void *, long> fuzzsearch(long pid, map<void *, long> memoire, int type){ // init
 
@@ -36,22 +16,23 @@ map<void *, long> fuzzsearch(long pid, map<void *, long> memoire, int type){ // 
 	void * pointer = b;
 
 	while (pointer < e){
+
         switch(type){
         case 1:
             memoire[pointer] = ptrace(PTRACE_PEEKDATA, pid, pointer, NULL);
-            pointer = pointer + sizeof((long)(0));
+            pointer = (void*)((long)pointer + sizeof((long)(0)));
             break;
         case 2:
             memoire[pointer]  = (long)((int)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
-            pointer = pointer + sizeof((int)(0));
+            pointer = (void*)((long)pointer + sizeof((int)(0)));
             break;
         case 3:
             memoire[pointer] = (long)((short)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
-            pointer = pointer + sizeof((short)(0));
+            pointer = (void*)((long)pointer + sizeof((short)(0)));
             break;
         case 4:
             memoire[pointer] = static_cast<long>((char)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
-            pointer = pointer + sizeof((char)(0));
+            pointer = (void*)((long)pointer + sizeof((char)(0)));
             break;
         }
 	}
@@ -63,19 +44,19 @@ map<void *, long> fuzzsearch(long pid, map<void *, long> memoire, int type){ // 
         switch(type){
         case 1:
             memoire[pointer] = ptrace(PTRACE_PEEKDATA, pid, pointer, NULL);
-            pointer = pointer + sizeof((long)(0));
+            pointer = (void*)((long)pointer + sizeof((long)(0)));
             break;
         case 2:
             memoire[pointer]  = (long)((int)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
-            pointer = pointer + sizeof((int)(0));
+            pointer = (void*)((long)pointer + sizeof((int)(0)));
             break;
         case 3:
             memoire[pointer] = (long)((short)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
-            pointer = pointer + sizeof((short)(0));
+            pointer = (void*)((long)pointer + sizeof((short)(0)));
             break;
         case 4:
             memoire[pointer] = static_cast<long>((char)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
-            pointer = pointer + sizeof((char)(0));
+            pointer = (void*)((long)pointer + sizeof((char)(0)));
             break;
         }
 	}
@@ -84,7 +65,7 @@ map<void *, long> fuzzsearch(long pid, map<void *, long> memoire, int type){ // 
 
 
 /**
-* Raffine une map en fonction des parametres
+* \fn Raffine une map en fonction des parametres
 * codeOperation codes
 * 0 : +   the value is greater
 * 1 : +?  the value is greater by
@@ -163,14 +144,14 @@ void stringSearch(map<void *, long> memoire, long value1, long value2, long pid)
 }
 
 /**
-* getter d'une valeur à une addresse
+* \fn getter d'une valeur à une addresse
 * type
 * 1 : long  (64b - 8o)
 * 2 : int   (32b - 4o)
 * 3 : short (16b - 2o)
 * 4 : char  (8b  - 1o)
 */
-long get(void * pointer, int type, int pid){
+long get(void * pointer, int type, long pid){
     switch(type){
         case 1:
             return ptrace(PTRACE_PEEKDATA, pid, pointer, NULL);
@@ -179,7 +160,7 @@ long get(void * pointer, int type, int pid){
         case 3:
             return (long)((short)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
         case 4:
-            return (long)((char)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
+            return static_cast<long>((char)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
         default:
             return 0xDEADBEEF;
     }
@@ -188,7 +169,7 @@ long get(void * pointer, int type, int pid){
 
 // alter a value with a new value
 /**
-* modifie une valeur à une addresse par une autre valeur d'un type
+* \fn modifie une valeur à une addresse par une autre valeur d'un type
 * type
 * 1 : long  (64b - 8o)
 * 2 : int   (32b - 4o)
