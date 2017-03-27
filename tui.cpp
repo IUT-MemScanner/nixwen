@@ -45,6 +45,7 @@
 using namespace std;
 
 /* Prototype */
+string customLine(int);
 char **commands_completion(const char *, int, int);
 char *commands_generator(const char *, int);
 
@@ -53,10 +54,8 @@ char *commands[] = {
   (char *)"cont", // continuer
   (char *)"stop", // stopper
   (char *)"exit", //sortir
-  //   (char *)"fsearch",
   (char *)"fuzzysearch", //initialisation recherche
   (char *)"search", //chercher
-  //   (char *)"size",
   (char *)"alter", //modifier
   (char *)"list",  //afficher
   (char *)"help",  //aide
@@ -65,6 +64,7 @@ char *commands[] = {
   (char *)"gtype",  // récupérer le type (getter)
   (char *)"store",
   (char *)"list_store",
+  (char *)"force_type",
   NULL
 };
 
@@ -87,7 +87,7 @@ int main (int argc, char *argv[],char* en[]) {
   cout << texte.welcome_msg() << endl;
 
   // main loop
-  while((line = readline("> "))){
+  while((line = readline(customLine(nix.getType()).c_str()))){
 
     c = string(line);
     vector<string> commandes = utils::explode(c, " ");
@@ -152,6 +152,28 @@ int main (int argc, char *argv[],char* en[]) {
       }
     }
 
+    //! commande "force_type"
+    else if(commandes[0] == "force_type"){
+      if(commandes.size() >= 2){
+        string c = commandes[1];
+        int type = -1;
+        if("long"==c){ type = 1;
+        }else if("int"==c){ type = 2;
+        }else if("short"==c){ type = 3;
+        }else if("char"==c){ type = 4;
+        }else{
+          cout << texte.getString("wrongType","parrametre invalide") << endl;
+        }
+        if(nix.setCurrentType(type)==-1){
+          cout << texte.getString("wrongType","parrametre invalide") << endl;
+        }else{
+          cout << texte.getString("setTypeCurrent","Set type : ") << c << endl;
+        }
+      }else{
+        cout << texte.getString("typeHelp","invalide syntax") << endl;
+      }
+    }
+
     //! commande "gtype"
     else if(commandes[0] == "gtype"){
       string type = "indéfini";
@@ -182,12 +204,20 @@ int main (int argc, char *argv[],char* en[]) {
           std::cerr << texte.error_out_of_range("an integer") << std::endl;
         }
         try{
+          int returnCode;
           switch(choice){
             case 0:
             case 2:
             case 4:
             case 5:
-            nix.search(choice, 0, 0);
+            returnCode = nix.search(choice, 0, 0);
+            if (1 == returnCode) {
+              std::cout << to_string(nix.getMapSize()) <<texte.getString("search_info","") << endl;
+            } else if (-1 == returnCode) {
+              cout << texte.missing_argument("search") << endl;
+            } else {
+              std::cout << texte.getString("isrunning","running") << std::endl;
+            }
             std::cout << to_string(nix.getMapSize()) <<texte.getString("search_info","") << endl;
             break;
             case 1:
@@ -195,11 +225,17 @@ int main (int argc, char *argv[],char* en[]) {
             case 7:
             if (commandes.size() >= 3) {
               long value = stol(commandes[2]);
-              nix.search(choice, value, 0);
-              std::cout << to_string(nix.getMapSize()) <<texte.getString("search_info","") << endl;
+              returnCode = nix.search(choice, value, 0);
+              if (1 == returnCode) {
+                std::cout << to_string(nix.getMapSize()) <<texte.getString("search_info","") << endl;
+              } else if (-1 == returnCode) {
+                cout << texte.missing_argument("search") << endl;
+              } else {
+                std::cout << texte.getString("isrunning","running") << std::endl;
+              }
             }
             else {
-              cerr << texte.missing_argument("") << endl;
+              cout << texte.missing_argument("") << endl;
             }
             break;
             case 6:
@@ -207,11 +243,17 @@ int main (int argc, char *argv[],char* en[]) {
               long lbound, hbound;
               lbound = stol(commandes[2]);
               hbound = stol(commandes[3]);
-              nix.search(choice, lbound, hbound);
-              std::cout << to_string(nix.getMapSize()) <<texte.getString("search_info","") << endl;
+              returnCode = nix.search(choice, lbound, hbound);
+              if (1 == returnCode) {
+                std::cout << to_string(nix.getMapSize()) <<texte.getString("search_info","") << endl;
+              } else if (-1 == returnCode) {
+                cout << texte.missing_argument("search") << endl;
+              } else {
+                std::cout << texte.getString("isrunning","running") << std::endl;
+              }
             }
             else {
-              cerr << texte.missing_argument("search") << endl;
+              cout << texte.missing_argument("search") << endl;
             }
             break;
             default:
@@ -301,10 +343,13 @@ int main (int argc, char *argv[],char* en[]) {
           n = stol(commandes[1],NULL,16);
 
           v = stol(commandes[2],NULL,10);
-          if (nix.replace(n, v)==1) {
+          int returnCode = nix.replace(n, v);
+          if (1 == returnCode) {
             std::cout << texte.getString("alter_Success","Success") << '\n';
-          }else{
+          }else if(-1 == returnCode){
             std::cout << texte.getString("alter_fail","Fail") << '\n';
+          }else{
+            std::cout << texte.getString("isrunning","running") << std::endl;
           }
         }
         catch (const invalid_argument& ia) {
@@ -354,6 +399,21 @@ int main (int argc, char *argv[],char* en[]) {
   return 0;
 }
 
+string customLine(int type) {
+  string stype = "indéfini";
+  switch (type) {
+    case 1: stype = "long";
+    break;
+    case 2: stype = "int";
+    break;
+    case 3: stype = "short";
+    break;
+    case 4: stype = "char";
+    break;
+  }
+  return "type : \033[1;33m" + stype +"\033[0m > ";
+}
+
 char **commands_completion(const char *text, int start, int end)
 {
   rl_attempted_completion_over = 1;
@@ -369,12 +429,10 @@ char *commands_generator(const char *text, int state)
     list_index = 0;
     len = strlen(text);
   }
-
   while ((name = commands[list_index++])) {
     if (strncmp(name, text, len) == 0) {
       return strdup(name);
     }
   }
-
   return NULL;
 }

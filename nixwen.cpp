@@ -32,8 +32,6 @@ Nixwen::Nixwen(int argc, char *argv[], char *en[]) {
   {
     wait(&status);
     Nixwen::running = false;
-    Nixwen::dataSize = 16;
-    Nixwen::currentSize = 16;
     Nixwen::type = 1;
     Nixwen::nextType = Nixwen::type;
     Nixwen::cont();
@@ -144,19 +142,22 @@ map<void *, long> Nixwen::list_store(int length) {
 * \brief     modifie une valeur a une addresse par une valeur
 * \param     pointer     long représente l'addresse de la valeur à modifié
 * \param     pointer     long nouvelle valeur (sera cast dans le type définit dans nixwen)
-* \return    int : 1 = succes, -1 = pointer non trouver, -2 = pointer hors des bornes
+* \return    int : 1 = succes, -1 = pointer non trouver, -2 = le programme suivie n'est pas stopper
 */
 int Nixwen::replace(long pointer, long newValue)
 {
-  if(Nixwen::mapStore.end() != Nixwen::mapStore.find((void*)pointer)){
-    alter((void*)pointer, newValue, Nixwen::pid, Nixwen::mapStore[(void*)pointer]);
-    return 1; //sucess
-  }else if(Nixwen::mapR.end() != Nixwen::mapR.find((void*)pointer)){
-    alter((void*)pointer, newValue, Nixwen::pid, Nixwen::type);
-    return 1; //sucess
-  }else{
-    return -1; // fail, pointer not found
+  if (!Nixwen::running) {
+    if(Nixwen::mapStore.end() != Nixwen::mapStore.find((void*)pointer)){
+      alter((void*)pointer, newValue, Nixwen::pid, Nixwen::mapStore[(void*)pointer]);
+      return 1; //sucess
+    }else if(Nixwen::mapR.end() != Nixwen::mapR.find((void*)pointer)){
+      alter((void*)pointer, newValue, Nixwen::pid, Nixwen::type);
+      return 1; //sucess
+    }else{
+      return -1; // fail, pointer not found
+    }
   }
+  return -2; // fail, , child is not stopped
 }
 
 
@@ -241,7 +242,7 @@ int Nixwen::getType(){
 
 
 /**
-* \brief     redémare le processus suivi pendant un certains temps
+* \brief     affecte un nouveau type a la prochaine recherche
 * \param     type    int  0 = long; 1 = int ; 2 = short ; 3 = char
 * \return    int : 1 si succes sinon -1
 */
@@ -252,6 +253,23 @@ int Nixwen::setType(int type){
     case 3:
     case 4:
     Nixwen::nextType = type;
+    return 1;
+  }
+  return -1;
+}
+
+/**
+* \brief     affecte un nouveau type a la recherche courrante
+* \param     type    int  0 = long; 1 = int ; 2 = short ; 3 = char
+* \return    int : 1 si succes sinon -1
+*/
+int Nixwen::setCurrentType(int type){
+  switch (type) {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    Nixwen::type = type;
     return 1;
   }
   return -1;

@@ -54,11 +54,10 @@ public:
   int init();
   int getType();
   int setType(int type);
+  int setCurrentType(int type);
 
 private:
   bool running;
-  int dataSize;
-  int currentSize;
   map<void*, int> mapStore;
   map<void*, long> mapR;
   long pid;

@@ -71,7 +71,7 @@ bool Langue::load(string file)
         }
         else
         {
-            cerr << "Trying to load a invalide config" << endl;
+            cerr << "Trying to load a invalide config at :" + vect[0] << endl;
         }
       }
     f.close();
