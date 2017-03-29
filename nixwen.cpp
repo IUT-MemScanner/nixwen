@@ -59,6 +59,7 @@ int Nixwen::init(){
 }
 
 
+
 /**
 * \brief       raffine une recherche selon un critère
 * \param    firstValue         valeur si besoin pour la commande (long)
@@ -127,6 +128,14 @@ map<void *, long> Nixwen::list(int length)
   return mymap;
 }
 
+map<void *, char>  Nixwen::stringSearcher(string value){
+  return stringSearch(value, Nixwen::pid);
+}
+
+
+/**
+*
+*/
 map<void *, long> Nixwen::list_store(int length) {
   map<void *, long> mymap;
   int num = 0;

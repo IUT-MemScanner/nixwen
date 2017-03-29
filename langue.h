@@ -1,25 +1,25 @@
 /**
  * \file      langue.h
  * \version   2.0
- * \brief     header de la classe de recherche de string dans un fichier de config
+ * \brief     header de la classe de recherche de string dans un fichier de
+ * config
  */
 #ifndef LANGUE_H_INCLUDED
 #define LANGUE_H_INCLUDED
+#include "utils.hpp"
+#include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <map>
-#include <fstream>
-#include <vector>
-#include <algorithm>
-#include <string>
 #include <map>
-#include "utils.hpp"
+#include <string>
+#include <vector>
 
 #define COMM_CHAR '#'
 
 using namespace std;
 
-class Langue
-{
+class Langue {
 public:
   Langue(string langue, string interface);
   string getLangue();

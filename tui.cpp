@@ -65,6 +65,7 @@ char *commands[] = {
   (char *)"store",
   (char *)"list_store",
   (char *)"force_type",
+  (char *)"stringSearch",
   NULL
 };
 
@@ -80,6 +81,8 @@ int main (int argc, char *argv[],char* en[]) {
   string c = "";
   char *line;
 
+  char a = 'a';
+  std::cout << sizeof(a) << '\n';
   cout << "Child PID : " << nix.getPid() << endl;
 
   //initialisation of the text
@@ -305,6 +308,15 @@ int main (int argc, char *argv[],char* en[]) {
         }
       }
       map<void * , long> m = nix.list(size);
+      int num = 0;
+      for(auto it = m.begin(); it != m.end(); ++it){
+        cout << num << " : (" << it->first << ") " <<  " ==> " << it->second  << endl;
+        num++;
+      }
+    }
+
+    else if( commandes[0] == "stringSearch"){
+      map<void * , char> m = nix.stringSearcher(commandes[1]);
       int num = 0;
       for(auto it = m.begin(); it != m.end(); ++it){
         cout << num << " : (" << it->first << ") " <<  " ==> " << it->second  << endl;

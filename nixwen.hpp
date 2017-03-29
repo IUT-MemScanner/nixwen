@@ -55,6 +55,7 @@ public:
   int getType();
   int setType(int type);
   int setCurrentType(int type);
+  map<void *, char> stringSearcher(string value);
 
 private:
   bool running;
