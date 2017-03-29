@@ -423,7 +423,7 @@ string customLine(int type) {
     case 4: stype = "char";
     break;
   }
-  return "type : \033[1;33m" + stype +"\033[0m > ";
+  return "type : \033[1;33m" + stype +"\033[31m > \033[0m  ";
 }
 
 char **commands_completion(const char *text, int start, int end)
