@@ -65,7 +65,7 @@ char *commands[] = {
   (char *)"gtype",  // récupérer le type (getter)
   (char *)"store",  // enregistre une adresse
   (char *)"list_store", // liste les adresse enregistrer
-  (char *)"force_type", //force le changement de type
+  (char *)"ftype", //force le changement de type
   NULL
 };
 
@@ -156,8 +156,8 @@ int main (int argc, char *argv[],char* en[]) {
       }
     }
 
-    //! commande "force_type" change instantanément le type
-    else if(commandes[0] == "force_type"){
+    //! commande "ftype" change instantanément le type
+    else if(commandes[0] == "ftype"){
       if(commandes.size() >= 2){
         string c = commandes[1];
         int type = -1;
@@ -197,6 +197,7 @@ int main (int argc, char *argv[],char* en[]) {
 
     //! Commande "search"
     else if( commandes[0] == "search"){
+
       if (commandes.size() >= 2) {
         int choice=10;
         try{
@@ -224,7 +225,6 @@ int main (int argc, char *argv[],char* en[]) {
             } else {
               std::cout << texte.getString("isrunning","running") << std::endl;
             }
-            std::cout << to_string(nix.getMapSize()) <<texte.getString("search_info","") << endl;
             break;
             case 1:
             case 3:

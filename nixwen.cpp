@@ -140,7 +140,7 @@ map<void *, pair<long, int>> Nixwen::list_store(int length) {
   map<void *, pair<long, int>> mymap;
   int num = 0;
   for(auto it = Nixwen::mapStore.begin(); it != Nixwen::mapStore.end() && num < length; ++it){
-    mymap.insert( pair<void *, pair<long,int> >(it->first, make_pair( get(it->first, it->second, Nixwen::pid), Nixwen::type)));
+    mymap.insert( pair<void *, pair<long,int> >(it->first, make_pair( get(it->first, it->second, Nixwen::pid), it->second)));
     num++;
   }
   return mymap;

@@ -3,6 +3,9 @@
 * \version   2.0
 * \brief     Définit les commandes qu'utilise nixwen pour rechercher en mémoire
 */
+#include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
 
 #include "commands.h"
 
@@ -45,6 +48,32 @@ map<void *, long> fuzzsearch(long pid, map<void *, long> memoire, int type) {
   pointer = getDebutHeap(pid);
   e = getFinHeap(pid);
 
+  while (pointer < e) {
+    switch (type) { // incrémente le pointeur en fonction du type actuel
+    case 1:
+      memoire[pointer] = ptrace(PTRACE_PEEKDATA, pid, pointer, NULL);
+      pointer = (void *)((long)pointer + sizeof((long)(0)));
+      break;
+    case 2:
+      memoire[pointer] =
+          (long)((int)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
+      pointer = (void *)((long)pointer + sizeof((int)(0)));
+      break;
+    case 3:
+      memoire[pointer] =
+          (long)((short)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
+      pointer = (void *)((long)pointer + sizeof((short)(0)));
+      break;
+    case 4:
+      memoire[pointer] =
+          static_cast<long>((char)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL));
+      pointer = (void *)((long)pointer + sizeof((char)(0)));
+      break;
+    }
+  }
+
+  pointer = getDebutData(pid);
+  e = getFinData(pid);
   while (pointer < e) {
     switch (type) { // incrémente le pointeur en fonction du type actuel
     case 1:
@@ -171,10 +200,6 @@ map<void *, char> stringSearch(string value, long pid) {
               memoire[pointer] = (char)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL);
               pointer = (void *)((long)pointer + sizeof((char)(0)));
   }
-  map<void *, char> memoire2 = {};
-	for (auto it = memoire.begin(); it != memoire.end(); ++it) {
-      memoire2[(it->first)-(value.length()-1)] = get(((it->first)-(value.length()-1)),4,pid);
-  }
   return memoire;
 }
 
@@ -213,25 +238,25 @@ long get(void *pointer, int type, long pid) {
 * 4 : char  (8b  - 1o)
 */
 bool alter(void *pointer, long newvalue, long pid, int type) {
-  long curV = get(pointer, type, pid);
+  long curV = get(pointer, 1, pid);
   switch (type) {
   case 1:
     return ptrace(PTRACE_POKEDATA, pid, pointer, newvalue) != -1;
     break;
   case 2:
     return ptrace(PTRACE_POKEDATA, pid, pointer,
-                  (curV & (((1 << 32) - 1) << 32)) +
-                      ((unsigned int)newvalue)) != -1;
+                  (curV & 0xFFFFFFFF00000000) +
+                      (newvalue)) != -1;
     break;
   case 3:
     return ptrace(PTRACE_POKEDATA, pid, pointer,
-                  (curV & (((1 << 48) - 1) << 16)) +
-                      ((unsigned short)newvalue)) != -1;
+                  (curV & 0xFFFFFFFFFFFF0000) +
+                      (newvalue)) != -1;
     break;
   case 4:
     return ptrace(PTRACE_POKEDATA, pid, pointer,
-                  (curV & (((1 << 56) - 1) << 16)) +
-                      ((unsigned char)newvalue)) != -1;
+                  (curV & 0xFFFFFFFFFFFFFF00) +
+                      (newvalue)) != -1;
     break;
   default:
     return false;
