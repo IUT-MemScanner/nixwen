@@ -3,6 +3,7 @@
 * \version   2.0
 * \brief     Interface en ligne de commande pour nixwen
 */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -62,15 +63,15 @@ char *commands[] = {
   (char *)"fstart", //demarage arrêt auto après une durrée
   (char *)"type",  // definir le type de la prochaine recherche (setter)
   (char *)"gtype",  // récupérer le type (getter)
-  (char *)"store",
-  (char *)"list_store",
-  (char *)"force_type",
-  (char *)"stringSearch",
+  (char *)"store",  // enregistre une adresse
+  (char *)"list_store", // liste les adresse enregistrer
+  (char *)"force_type", //force le changement de type
   NULL
 };
 
 int main (int argc, char *argv[],char* en[]) {
 
+  // Créer une instance de Nixwen
   Nixwen nix = Nixwen(argc,argv,en);
 
 
@@ -81,25 +82,24 @@ int main (int argc, char *argv[],char* en[]) {
   string c = "";
   char *line;
 
-  char a = 'a';
-  std::cout << sizeof(a) << '\n';
-  cout << "Child PID : " << nix.getPid() << endl;
 
-  //initialisation of the text
+  cout << "Child PID : " << nix.getPid() << endl; // Afficher le PID de l'enfant lié a Nixwen
+
+  // Initialisation de la langue affichée
   Langue texte = Langue("fr","tui");
   cout << texte.welcome_msg() << endl;
 
-  // main loop
+  // boucle principale
   while((line = readline(customLine(nix.getType()).c_str()))){
+    // On lit en continu l'entrée standard (ce qui permet de faire des scripts)
+    // ReadLine permet l'utilisation de l'autocomplétion
 
     c = string(line);
     vector<string> commandes = utils::explode(c, " ");
 
-    // Ajoute les commandes a l'historique
+    // Ajoute les commandes à l'historique si elle n'est pas vide
     if(c != ""){
       add_history(line);
-    }else{
-      cout << texte.quick_help() << endl;
     }
 
 
@@ -126,7 +126,7 @@ int main (int argc, char *argv[],char* en[]) {
     //! Commande "fuzzysearch"
     else if( commandes[0] == "fuzzysearch"){
       int resultat = nix.init();
-      if(resultat == -1){
+      if(resultat == -1){ // si le programme est démarré
         std::cout << texte.getString("isrunning","running") << std::endl;
       }else{
         std::cout << to_string(resultat) << texte.getString("fuzzysearch_msg", "") << endl;
@@ -145,6 +145,7 @@ int main (int argc, char *argv[],char* en[]) {
         }else{
           cout << texte.getString("wrongType","parrametre invalide") << endl;
         }
+
         if(nix.setType(type)==-1){
           cout << texte.getString("wrongType","parrametre invalide") << endl;
         }else{
@@ -155,7 +156,7 @@ int main (int argc, char *argv[],char* en[]) {
       }
     }
 
-    //! commande "force_type"
+    //! commande "force_type" change instantanément le type
     else if(commandes[0] == "force_type"){
       if(commandes.size() >= 2){
         string c = commandes[1];
@@ -165,19 +166,20 @@ int main (int argc, char *argv[],char* en[]) {
         }else if("short"==c){ type = 3;
         }else if("char"==c){ type = 4;
         }else{
-          cout << texte.getString("wrongType","parrametre invalide") << endl;
+          cout << texte.getString("wrongType","paramètre invalide") << endl;
         }
-        if(nix.setCurrentType(type)==-1){
-          cout << texte.getString("wrongType","parrametre invalide") << endl;
+
+        if(nix.setCurrentType(type)==-1){ // effectue le changement
+          cout << texte.getString("wrongType","paramètre invalide") << endl;
         }else{
           cout << texte.getString("setTypeCurrent","Set type : ") << c << endl;
         }
       }else{
-        cout << texte.getString("typeHelp","invalide syntax") << endl;
+        cout << texte.getString("typeHelp","invalid syntax") << endl;
       }
     }
 
-    //! commande "gtype"
+    //! commande "gtype" : affiche le type
     else if(commandes[0] == "gtype"){
       string type = "indéfini";
       switch (nix.getType()) {
@@ -208,6 +210,7 @@ int main (int argc, char *argv[],char* en[]) {
         }
         try{
           int returnCode;
+          // Lance les modes correspondants aux choix
           switch(choice){
             case 0:
             case 2:
@@ -275,7 +278,7 @@ int main (int argc, char *argv[],char* en[]) {
       }
     }
 
-    //! Commande "store"
+    //! Commande "store" pour stocker une zone mémoire du type actuel
     else if ( commandes[0] == "store") {
       if (commandes.size() >= 2) {
         try{
@@ -292,7 +295,7 @@ int main (int argc, char *argv[],char* en[]) {
     }
 
 
-    //! Commande "list", affiche les n valeurs trouver après recherche
+    //! Commande "list", affiche les n valeurs trouvées après recherche
     else if( commandes[0] == "list"){
       int size = 10;
       if ((commandes.size() >= 2))
@@ -310,7 +313,8 @@ int main (int argc, char *argv[],char* en[]) {
       map<void * , long> m = nix.list(size);
       int num = 0;
       for(auto it = m.begin(); it != m.end(); ++it){
-        cout << num << " : (" << it->first << ") " <<  " ==> " << it->second  << endl;
+//        cout << num << " : (" << it->first << ") " <<  " ==> " << it->second  << endl;
+        cout << num << "\033[1;32m : (\033[0m" << it->first << "\033[1;32m) " <<  " ==> \033[0m" << it->second << endl;
         num++;
       }
     }
@@ -319,12 +323,13 @@ int main (int argc, char *argv[],char* en[]) {
       map<void * , char> m = nix.stringSearcher(commandes[1]);
       int num = 0;
       for(auto it = m.begin(); it != m.end(); ++it){
-        cout << num << " : (" << it->first << ") " <<  " ==> " << it->second  << endl;
+        cout << " " <<it->second;
         num++;
       }
+      std::cout << endl;
     }
 
-    //! Commande "list_store"
+    //! Commande "list_store" affiche les données stockées
     else if ( commandes[0] == "list_store") {
       int size = 10;
       if ((commandes.size() >= 2))
@@ -338,10 +343,22 @@ int main (int argc, char *argv[],char* en[]) {
           std::cerr << texte.error_out_of_range("an integer") << std::endl;
         }
       }
-      map<void * , long> m = nix.list_store(size);
+      map<void * , pair<long,int> > m = nix.list_store(size);
       int num = 0;
       for(auto it = m.begin(); it != m.end(); ++it){
-        cout << num << " : (" << it->first << ") " <<  " ==> " << it->second  << endl;
+        auto info = it->second;
+        string stype = "indéfini";
+        switch (info.second) {
+          case 1: stype = "long";
+          break;
+          case 2: stype = "int";
+          break;
+          case 3: stype = "short";
+          break;
+          case 4: stype = "char";
+          break;
+        }
+        cout << num <<"\033[1;31m : \033[1;32m"<< stype <<"\033[31m (\033[0m" << it->first << "\033[1;31m) " <<  " ==> \033[0m" << info.first << endl;
         num++;
       }
     }
@@ -376,7 +393,7 @@ int main (int argc, char *argv[],char* en[]) {
       }
     }
 
-    //! commande "fstart"
+    //! commande "fstart" lance le programme pour un temps donné
     else if( commandes[0] == "fstart"){
       int sleep;
       if (commandes.size() >= 2) {
@@ -406,12 +423,13 @@ int main (int argc, char *argv[],char* en[]) {
 
   }
 
+  // Finalisation du programme
   nix.quit();
   cout << "Father "<< getpid() <<" died, child was "<< nix.getPid() << endl;
   return 0;
 }
 
-string customLine(int type) {
+string customLine(int type) { // Début de la ligne
   string stype = "indéfini";
   switch (type) {
     case 1: stype = "long";
@@ -423,7 +441,7 @@ string customLine(int type) {
     case 4: stype = "char";
     break;
   }
-  return "type : \033[1;33m" + stype +"\033[31m > \033[0m  ";
+  return "type : \033[1;33m" + stype +"\033[31m > \033[0m";
 }
 
 char **commands_completion(const char *text, int start, int end)
@@ -432,8 +450,7 @@ char **commands_completion(const char *text, int start, int end)
   return rl_completion_matches(text, commands_generator);
 }
 
-char *commands_generator(const char *text, int state)
-{
+char *commands_generator(const char *text, int state) {
   static int list_index, len;
   char *name;
 

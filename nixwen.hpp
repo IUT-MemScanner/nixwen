@@ -43,7 +43,7 @@ public:
   int search(int choice, long firstValue, long secondValue);
   int store(long addresse);
   map<void *, long>list(int length);
-  map<void *, long>list_store(int length);
+  map<void *, pair<long,int> >list_store(int length);
   int replace(long pointer, long newValue);
   int cont();
   int stop();

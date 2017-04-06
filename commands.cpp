@@ -7,11 +7,11 @@
 #include "commands.h"
 
 /**
-* \fn initialise une recherche. Parcoure la mémoire et rempli une map contenant
-* les addresses et leur valeur actuel en mémoire
+* \fn initialise une recherche. Parcoure la mémoire et remplis une map contenant
+* les adresses et leur valeurs actuelles en mémoire
 */
-map<void *, long> fuzzsearch(long pid, map<void *, long> memoire,
-                             int type) { // init
+map<void *, long> fuzzsearch(long pid, map<void *, long> memoire, int type) {
+  // init
 
   void *b = getDebutStack(pid);
   void *e = getFinStack(pid);
@@ -46,7 +46,7 @@ map<void *, long> fuzzsearch(long pid, map<void *, long> memoire,
   e = getFinHeap(pid);
 
   while (pointer < e) {
-    switch (type) {
+    switch (type) { // incrémente le pointeur en fonction du type actuel
     case 1:
       memoire[pointer] = ptrace(PTRACE_PEEKDATA, pid, pointer, NULL);
       pointer = (void *)((long)pointer + sizeof((long)(0)));
@@ -143,7 +143,11 @@ map<void *, long> fuzzsearch(int codeOperation, map<void *, long> memoire,
   return newM;
 }
 
-// recherche d'un string
+
+  /*!
+     \brief "recherche d'un string"
+     \return "Retourne une map de charactère"
+  */
 map<void *, char> stringSearch(string value, long pid) {
   map<void *, char> memoire = {};
   void *b = getDebutStack(pid);
@@ -161,18 +165,17 @@ map<void *, char> stringSearch(string value, long pid) {
               memoire[pointer] = (char)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL);
               pointer = (void *)((long)pointer + sizeof((char)(0)));
   }
-  map<void *, char> memoire2 = {};
-  long n;
-  int counter = 0;
-	for (auto it = memoire.begin(); it != memoire.end(); ++it) {
-		if (it->second == value[0]) {
-			counter ++;
-		}
-    if (counter >= value.length()) {
-      memoire2[(it->first)-(value.length()-1)] = get(((it->first)-(value.length()-1)),4,pid);
-    }
+  pointer = getDebutData(pid);
+  e = getFinData(pid);
+  while (pointer < e) {
+              memoire[pointer] = (char)ptrace(PTRACE_PEEKDATA, pid, pointer, NULL);
+              pointer = (void *)((long)pointer + sizeof((char)(0)));
   }
-  return memoire2;
+  map<void *, char> memoire2 = {};
+	for (auto it = memoire.begin(); it != memoire.end(); ++it) {
+      memoire2[(it->first)-(value.length()-1)] = get(((it->first)-(value.length()-1)),4,pid);
+  }
+  return memoire;
 }
 
 /**

@@ -36,6 +36,9 @@ void * getFinStack(long pid);
 void * getDebutHeap(long pid);
 void * getFinHeap(long pid);
 
+void * getDebutData(long pid);
+void * getFinData(long pid);
+
 // Program bound
 void * getDebutProc(long pid);
 void * getFinProc(long pid);

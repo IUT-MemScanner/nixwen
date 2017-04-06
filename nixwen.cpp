@@ -136,11 +136,11 @@ map<void *, char>  Nixwen::stringSearcher(string value){
 /**
 *
 */
-map<void *, long> Nixwen::list_store(int length) {
-  map<void *, long> mymap;
+map<void *, pair<long, int>> Nixwen::list_store(int length) {
+  map<void *, pair<long, int>> mymap;
   int num = 0;
   for(auto it = Nixwen::mapStore.begin(); it != Nixwen::mapStore.end() && num < length; ++it){
-    mymap.insert ( std::pair<void *,long>(it->first,get(it->first, it->second, Nixwen::pid)) );
+    mymap.insert( pair<void *, pair<long,int> >(it->first, make_pair( get(it->first, it->second, Nixwen::pid), Nixwen::type)));
     num++;
   }
   return mymap;
