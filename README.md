@@ -1,5 +1,7 @@
 # Nixwen
 ## À propos de Nixwen
+lien github : https://github.com/IUT-MemScanner/nixwen
+La documentation est disponible en format html dans `html/index.html` -> Classes ou Files
 
 ## Commandes
 * `exit` -- Quitter le programme
@@ -46,3 +48,14 @@ Enfin, exécuter le makefile :
 make
 ```
 L'exécutable généré aura alors pour nom "dummy".
+
+## Debut de l'interface graphique `guinix`
+
+Le debut de l'interface graphique est disponible dans `gui\guinix`
+Un fichier README.txt est present pour aider a compilé et a l'éxécuté le programme
+
+## Recherche de chaine de charactère
+
+Nous avons laissé la commande de nixwen `stringSearch` avec aucun parametre,
+elle affiche la mémoire et l'affiche charctère par charactère
+(il n'y a pas d'autocompletion pour cette commande)
