@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['fstart',['fstart',['../classNixwen.html#afe628c18cabf1396efdec287e7f3688e',1,'Nixwen']]],
-  ['fuzzsearch',['fuzzsearch',['../commands_8cpp.html#a8343df464d2a25bfb2b09d392185bda9',1,'fuzzsearch(long pid, map&lt; void *, long &gt; memoire, int type):&#160;commands.cpp'],['../commands_8cpp.html#a7c8ab861cb80b879eb643478233575c7',1,'fuzzsearch(int codeOperation, map&lt; void *, long &gt; memoire, long value1, long value2, long pid, int type):&#160;commands.cpp']]]
+  ['getmapsize',['getMapSize',['../classNixwen.html#a897285f7340ae457980d2b56fcf0cfd6',1,'Nixwen']]],
+  ['getpid',['getPid',['../classNixwen.html#abd727e44ba1e905e0de32927275e079d',1,'Nixwen']]],
+  ['gettype',['getType',['../classNixwen.html#a5bbc3b7c2129921e1ad6e2e8904f3a8e',1,'Nixwen']]]
 ];

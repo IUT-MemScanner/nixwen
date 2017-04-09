@@ -149,7 +149,7 @@ int main (int argc, char *argv[],char* en[]) {
         if(nix.setType(type)==-1){
           cout << texte.getString("wrongType","parrametre invalide") << endl;
         }else{
-          cout << texte.getString("setType","Set type : ") << c << '\n' <<texte.getString("activateType","") << endl;
+          cout << texte.getString("setType","Set type : ") << c << '\n' << texte.getString("activateType","") << endl;
         }
       }else{
         cout << texte.getString("typeHelp","invalide syntax") << endl;
@@ -320,10 +320,10 @@ int main (int argc, char *argv[],char* en[]) {
     }
 
     else if( commandes[0] == "stringSearch"){
-      map<void * , char> m = nix.stringSearcher(commandes[1]);
+      map<void * , char> m = nix.stringSearcher("");
       int num = 0;
       for(auto it = m.begin(); it != m.end(); ++it){
-        cout << " " <<it->second;
+        cout <<it->second;
         num++;
       }
       std::cout << endl;
