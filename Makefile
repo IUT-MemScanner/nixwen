@@ -3,11 +3,11 @@ DEBUG = -g
 CFLAGS = -c -Wall  $(DEBUG) -std=c++11
 LFLAGS = -Wall $(DEBUG) -std=c++11
 LIB = -lreadline
-EXEC=nixwen_tui
+EXEC=nixwen
 
 all: $(EXEC) clean
 
-nixwen_tui: nixwen.cpp maps.cpp commands.cpp utils.cpp langue.cpp tui.cpp
+nixwen: nixwen.cpp maps.cpp commands.cpp utils.cpp langue.cpp tui.cpp
 	$(CC) $(LFLAGS) $^ -o $@ $(LIB)
 
 
@@ -17,4 +17,4 @@ clean:
 	rm -rf *.o
 
 cleanAll: clean
-	rm -rf nixwen nixwen_tui nohup
+	rm -rf nixwen nohup
